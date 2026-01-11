@@ -39,6 +39,7 @@ export type UserSumAggregateOutputType = {
 export type UserMinAggregateOutputType = {
   id: string | null
   email: string | null
+  name: string | null
   password: string | null
   referralCode: string | null
   tier: string | null
@@ -52,6 +53,7 @@ export type UserMinAggregateOutputType = {
 export type UserMaxAggregateOutputType = {
   id: string | null
   email: string | null
+  name: string | null
   password: string | null
   referralCode: string | null
   tier: string | null
@@ -65,6 +67,7 @@ export type UserMaxAggregateOutputType = {
 export type UserCountAggregateOutputType = {
   id: number
   email: number
+  name: number
   password: number
   referralCode: number
   tier: number
@@ -90,6 +93,7 @@ export type UserSumAggregateInputType = {
 export type UserMinAggregateInputType = {
   id?: true
   email?: true
+  name?: true
   password?: true
   referralCode?: true
   tier?: true
@@ -103,6 +107,7 @@ export type UserMinAggregateInputType = {
 export type UserMaxAggregateInputType = {
   id?: true
   email?: true
+  name?: true
   password?: true
   referralCode?: true
   tier?: true
@@ -116,6 +121,7 @@ export type UserMaxAggregateInputType = {
 export type UserCountAggregateInputType = {
   id?: true
   email?: true
+  name?: true
   password?: true
   referralCode?: true
   tier?: true
@@ -216,6 +222,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type UserGroupByOutputType = {
   id: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier: string
@@ -252,6 +259,7 @@ export type UserWhereInput = {
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
+  name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   referralCode?: Prisma.StringFilter<"User"> | string
   tier?: Prisma.StringFilter<"User"> | string
@@ -271,6 +279,7 @@ export type UserWhereInput = {
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   password?: Prisma.SortOrder
   referralCode?: Prisma.SortOrder
   tier?: Prisma.SortOrder
@@ -294,6 +303,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
+  name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   tier?: Prisma.StringFilter<"User"> | string
   storeCredit?: Prisma.FloatFilter<"User"> | number
@@ -312,6 +322,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   password?: Prisma.SortOrder
   referralCode?: Prisma.SortOrder
   tier?: Prisma.SortOrder
@@ -333,6 +344,7 @@ export type UserScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
+  name?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
   referralCode?: Prisma.StringWithAggregatesFilter<"User"> | string
   tier?: Prisma.StringWithAggregatesFilter<"User"> | string
@@ -346,6 +358,7 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -364,6 +377,7 @@ export type UserCreateInput = {
 export type UserUncheckedCreateInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -382,6 +396,7 @@ export type UserUncheckedCreateInput = {
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -400,6 +415,7 @@ export type UserUpdateInput = {
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -418,6 +434,7 @@ export type UserUncheckedUpdateInput = {
 export type UserCreateManyInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -431,6 +448,7 @@ export type UserCreateManyInput = {
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -443,6 +461,7 @@ export type UserUpdateManyMutationInput = {
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -471,6 +490,7 @@ export type UserOrderByRelationAggregateInput = {
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   password?: Prisma.SortOrder
   referralCode?: Prisma.SortOrder
   tier?: Prisma.SortOrder
@@ -489,6 +509,7 @@ export type UserAvgOrderByAggregateInput = {
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   password?: Prisma.SortOrder
   referralCode?: Prisma.SortOrder
   tier?: Prisma.SortOrder
@@ -502,6 +523,7 @@ export type UserMaxOrderByAggregateInput = {
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   password?: Prisma.SortOrder
   referralCode?: Prisma.SortOrder
   tier?: Prisma.SortOrder
@@ -667,6 +689,7 @@ export type UserUpdateOneRequiredWithoutCommissionsFromNestedInput = {
 export type UserCreateWithoutReferralsInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -684,6 +707,7 @@ export type UserCreateWithoutReferralsInput = {
 export type UserUncheckedCreateWithoutReferralsInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -706,6 +730,7 @@ export type UserCreateOrConnectWithoutReferralsInput = {
 export type UserCreateWithoutReferrerInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -723,6 +748,7 @@ export type UserCreateWithoutReferrerInput = {
 export type UserUncheckedCreateWithoutReferrerInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -761,6 +787,7 @@ export type UserUpdateToOneWithWhereWithoutReferralsInput = {
 export type UserUpdateWithoutReferralsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -778,6 +805,7 @@ export type UserUpdateWithoutReferralsInput = {
 export type UserUncheckedUpdateWithoutReferralsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -814,6 +842,7 @@ export type UserScalarWhereInput = {
   NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
+  name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   referralCode?: Prisma.StringFilter<"User"> | string
   tier?: Prisma.StringFilter<"User"> | string
@@ -827,6 +856,7 @@ export type UserScalarWhereInput = {
 export type UserCreateWithoutCheckoutSessionsInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -844,6 +874,7 @@ export type UserCreateWithoutCheckoutSessionsInput = {
 export type UserUncheckedCreateWithoutCheckoutSessionsInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -877,6 +908,7 @@ export type UserUpdateToOneWithWhereWithoutCheckoutSessionsInput = {
 export type UserUpdateWithoutCheckoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -894,6 +926,7 @@ export type UserUpdateWithoutCheckoutSessionsInput = {
 export type UserUncheckedUpdateWithoutCheckoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -911,6 +944,7 @@ export type UserUncheckedUpdateWithoutCheckoutSessionsInput = {
 export type UserCreateWithoutOrdersInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -928,6 +962,7 @@ export type UserCreateWithoutOrdersInput = {
 export type UserUncheckedCreateWithoutOrdersInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -961,6 +996,7 @@ export type UserUpdateToOneWithWhereWithoutOrdersInput = {
 export type UserUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -978,6 +1014,7 @@ export type UserUpdateWithoutOrdersInput = {
 export type UserUncheckedUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -995,6 +1032,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
 export type UserCreateWithoutCommissionsEarnedInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -1012,6 +1050,7 @@ export type UserCreateWithoutCommissionsEarnedInput = {
 export type UserUncheckedCreateWithoutCommissionsEarnedInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -1034,6 +1073,7 @@ export type UserCreateOrConnectWithoutCommissionsEarnedInput = {
 export type UserCreateWithoutCommissionsFromInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -1051,6 +1091,7 @@ export type UserCreateWithoutCommissionsFromInput = {
 export type UserUncheckedCreateWithoutCommissionsFromInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -1084,6 +1125,7 @@ export type UserUpdateToOneWithWhereWithoutCommissionsEarnedInput = {
 export type UserUpdateWithoutCommissionsEarnedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1101,6 +1143,7 @@ export type UserUpdateWithoutCommissionsEarnedInput = {
 export type UserUncheckedUpdateWithoutCommissionsEarnedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1129,6 +1172,7 @@ export type UserUpdateToOneWithWhereWithoutCommissionsFromInput = {
 export type UserUpdateWithoutCommissionsFromInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1146,6 +1190,7 @@ export type UserUpdateWithoutCommissionsFromInput = {
 export type UserUncheckedUpdateWithoutCommissionsFromInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1163,6 +1208,7 @@ export type UserUncheckedUpdateWithoutCommissionsFromInput = {
 export type UserCreateManyReferrerInput = {
   id?: string
   email: string
+  name: string
   password: string
   referralCode: string
   tier?: string
@@ -1175,6 +1221,7 @@ export type UserCreateManyReferrerInput = {
 export type UserUpdateWithoutReferrerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1192,6 +1239,7 @@ export type UserUpdateWithoutReferrerInput = {
 export type UserUncheckedUpdateWithoutReferrerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1209,6 +1257,7 @@ export type UserUncheckedUpdateWithoutReferrerInput = {
 export type UserUncheckedUpdateManyWithoutReferrerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1288,6 +1337,7 @@ export type UserCountOutputTypeCountCheckoutSessionsArgs<ExtArgs extends runtime
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  name?: boolean
   password?: boolean
   referralCode?: boolean
   tier?: boolean
@@ -1308,6 +1358,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  name?: boolean
   password?: boolean
   referralCode?: boolean
   tier?: boolean
@@ -1322,6 +1373,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  name?: boolean
   password?: boolean
   referralCode?: boolean
   tier?: boolean
@@ -1336,6 +1388,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectScalar = {
   id?: boolean
   email?: boolean
+  name?: boolean
   password?: boolean
   referralCode?: boolean
   tier?: boolean
@@ -1346,7 +1399,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "referralCode" | "tier" | "storeCredit" | "referralCount" | "referrerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "password" | "referralCode" | "tier" | "storeCredit" | "referralCount" | "referrerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   referrer?: boolean | Prisma.User$referrerArgs<ExtArgs>
   referrals?: boolean | Prisma.User$referralsArgs<ExtArgs>
@@ -1376,6 +1429,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
+    name: string
     password: string
     referralCode: string
     tier: string
@@ -1815,6 +1869,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly name: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
   readonly referralCode: Prisma.FieldRef<"User", 'String'>
   readonly tier: Prisma.FieldRef<"User", 'String'>
