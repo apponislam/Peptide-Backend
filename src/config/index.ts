@@ -11,6 +11,8 @@ export default {
     jwt_access_expire: process.env.JWT_ACCESS_EXPIRE,
     jwt_refresh_secret: process.env.Jwt_REFRESH_SECRET,
     jwt_refresh_expire: process.env.JWT_REFRESH_EXPIRE,
+    // B
+    bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
     // Stripe
     stripe_secret_key: process.env.STRIPE_SECRET_KEY,
     stripe_publishable_key: process.env.STRIPE_PUBLISHABLE_KEY,

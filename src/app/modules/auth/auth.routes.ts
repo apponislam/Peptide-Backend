@@ -1,11 +1,14 @@
 import express from "express";
-import { authController } from "./auth.controllers";
 import auth from "../../middlewares/auth";
+import { authControllers } from "./auth.controllers";
 
 const router = express.Router();
 
-router.post("/register", authController.register);
-router.post("/login", authController.login);
-router.get("/me", auth, authController.getCurrentUser);
+// Public routes
+router.post("/register", authControllers.register);
+router.post("/login", authControllers.login);
+router.post("/refresh-token", authControllers.refreshAccessToken);
+router.post("/logout", authControllers.logout);
+router.get("/me", auth, authControllers.getCurrentUser);
 
 export const authRoutes = router;

@@ -1,34 +1,114 @@
 import { Request, Response } from "express";
-import { authService } from "./auth.services";
+import catchAsync from "../../../utils/catchAsync";
+import { authServices } from "./auth.services";
+import sendResponse from "../../../utils/sendResponse.";
 
-export const authController = {
-    async register(req: Request, res: Response) {
-        try {
-            const { email, password, referralCode } = req.body;
-            const result = await authService.register(email, password, referralCode);
-            res.status(201).json(result);
-        } catch (error: any) {
-            res.status(400).json({ error: error.message });
-        }
-    },
+const register = catchAsync(async (req: Request, res: Response) => {
+    const { email, password, referralCode } = req.body;
 
-    async login(req: Request, res: Response) {
-        try {
-            const { email, password } = req.body;
-            const result = await authService.login(email, password);
-            res.json(result);
-        } catch (error: any) {
-            res.status(401).json({ error: error.message });
-        }
-    },
+    const result = await authServices.register(email, password, referralCode);
 
-    async getCurrentUser(req: Request, res: Response) {
-        try {
-            const userId = (req as any).userId;
-            const user = await authService.getCurrentUser(userId);
-            res.json(user);
-        } catch (error: any) {
-            res.status(404).json({ error: error.message });
-        }
-    },
+    res.cookie("refreshToken", result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    sendResponse(res, {
+        statusCode: 201,
+        success: true,
+        message: "User registered successfully",
+        data: {
+            user: result.user,
+            accessToken: result.accessToken,
+        },
+    });
+});
+
+const login = catchAsync(async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    const result = await authServices.login(email, password);
+
+    // Set refresh token as HTTP-only cookie
+    res.cookie("refreshToken", result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Login successful",
+        data: {
+            user: result.user,
+            accessToken: result.accessToken,
+        },
+    });
+});
+
+const getCurrentUser = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user?.id || (req.user as any)?.userId;
+
+    const user = await authServices.getCurrentUser(userId);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "User retrieved successfully",
+        data: user,
+    });
+});
+
+const refreshAccessToken = catchAsync(async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+        return sendResponse(res, {
+            statusCode: 401,
+            success: false,
+            message: "Refresh token not found",
+            data: null,
+        });
+    }
+
+    const result = await authServices.refreshToken(refreshToken);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Access token refreshed successfully",
+        data: {
+            user: result.user,
+            accessToken: result.accessToken,
+        },
+    });
+});
+
+const logout = catchAsync(async (req: Request, res: Response) => {
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+    });
+
+    const result = await authServices.logout();
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: result.message,
+        data: null,
+    });
+});
+
+export const authControllers = {
+    register,
+    login,
+    getCurrentUser,
+    refreshAccessToken,
+    logout,
 };

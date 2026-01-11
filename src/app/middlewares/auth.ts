@@ -1,23 +1,50 @@
-import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
+import catchAsync from "../../utils/catchAsync";
+import config from "../../config";
+import ApiError from "../../errors/ApiError";
+import { prisma } from "../../lib/prisma";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const auth = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    let token = req.headers.authorization;
 
-export const auth = (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
+    if (token?.startsWith("Bearer ")) token = token.slice(7);
 
     if (!token) {
-        return res.status(401).json({ error: "No token provided" });
+        throw new ApiError(401, "Authentication failed: No token provided");
     }
 
+    let decoded: jwt.JwtPayload;
     try {
-        const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
-        (req as any).userId = decoded.userId;
-        next();
-    } catch (error) {
-        return res.status(403).json({ error: "Invalid token" });
+        decoded = jwt.verify(token, config.jwt_access_secret as string) as { userId: string };
+    } catch (err: any) {
+        if (err.name === "TokenExpiredError") {
+            throw new ApiError(401, "Authentication failed: Token expired");
+        }
+        throw new ApiError(401, "Authentication failed: Invalid token");
     }
-};
+
+    // Fetch user from database
+    const user = await prisma.user.findUnique({
+        where: { id: decoded.userId },
+        select: {
+            id: true,
+            email: true,
+            tier: true,
+            storeCredit: true,
+            referralCount: true,
+            referralCode: true,
+            createdAt: true,
+        },
+    });
+
+    if (!user) {
+        throw new ApiError(404, "Authentication failed: User not found");
+    }
+
+    // Attach user to request object
+    req.user = user;
+    next();
+});
 
 export default auth;

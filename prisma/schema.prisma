@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -17,12 +11,12 @@ datasource db {
 model User {
   id               String   @id @default(uuid())
   email            String   @unique
+  name             String
   password         String
   referralCode     String   @unique
   tier             String   @default("Member")
   storeCredit      Float    @default(0)
   referralCount    Int      @default(0)
-
   // Referral relationships (self relation)
   referrerId       String?
   referrer         User?    @relation("UserReferrals", fields: [referrerId], references: [id])
@@ -45,7 +39,6 @@ model Product {
   desc       String
   details    String   @db.Text
   references Json     // [{ url: String, title: String }]
-
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
@@ -68,7 +61,7 @@ model CheckoutSession {
   shippingName        String
   shippingAddress     String
 
-  status              String   @default("pending") // pending | completed | expired
+  status              String   @default("pending")
   orderId             Int?
 
   createdAt           DateTime @default(now())
