@@ -12,7 +12,7 @@ export default {
     jwt_refresh_secret: process.env.Jwt_REFRESH_SECRET,
     jwt_refresh_expire: process.env.JWT_REFRESH_EXPIRE,
     // B
-    bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
+    bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS || 12,
     // Stripe
     stripe_secret_key: process.env.STRIPE_SECRET_KEY,
     stripe_publishable_key: process.env.STRIPE_PUBLISHABLE_KEY,
@@ -20,6 +20,7 @@ export default {
     // Frontend
     frontend_url: process.env.FRONTEND_URL,
     // Admin
+    admin_name: process.env.ADMIN_NAME,
     admin_email: process.env.ADMIN_EMAIL,
     admin_password: process.env.ADMIN_PASSWORD,
     // Resend

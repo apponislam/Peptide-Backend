@@ -43,6 +43,7 @@ export type UserMinAggregateOutputType = {
   password: string | null
   referralCode: string | null
   tier: string | null
+  role: $Enums.UserRole | null
   storeCredit: number | null
   referralCount: number | null
   referrerId: string | null
@@ -57,6 +58,7 @@ export type UserMaxAggregateOutputType = {
   password: string | null
   referralCode: string | null
   tier: string | null
+  role: $Enums.UserRole | null
   storeCredit: number | null
   referralCount: number | null
   referrerId: string | null
@@ -71,6 +73,7 @@ export type UserCountAggregateOutputType = {
   password: number
   referralCode: number
   tier: number
+  role: number
   storeCredit: number
   referralCount: number
   referrerId: number
@@ -97,6 +100,7 @@ export type UserMinAggregateInputType = {
   password?: true
   referralCode?: true
   tier?: true
+  role?: true
   storeCredit?: true
   referralCount?: true
   referrerId?: true
@@ -111,6 +115,7 @@ export type UserMaxAggregateInputType = {
   password?: true
   referralCode?: true
   tier?: true
+  role?: true
   storeCredit?: true
   referralCount?: true
   referrerId?: true
@@ -125,6 +130,7 @@ export type UserCountAggregateInputType = {
   password?: true
   referralCode?: true
   tier?: true
+  role?: true
   storeCredit?: true
   referralCount?: true
   referrerId?: true
@@ -226,6 +232,7 @@ export type UserGroupByOutputType = {
   password: string
   referralCode: string
   tier: string
+  role: $Enums.UserRole
   storeCredit: number
   referralCount: number
   referrerId: string | null
@@ -263,6 +270,7 @@ export type UserWhereInput = {
   password?: Prisma.StringFilter<"User"> | string
   referralCode?: Prisma.StringFilter<"User"> | string
   tier?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   storeCredit?: Prisma.FloatFilter<"User"> | number
   referralCount?: Prisma.IntFilter<"User"> | number
   referrerId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -283,6 +291,7 @@ export type UserOrderByWithRelationInput = {
   password?: Prisma.SortOrder
   referralCode?: Prisma.SortOrder
   tier?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
   referrerId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -306,6 +315,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   tier?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   storeCredit?: Prisma.FloatFilter<"User"> | number
   referralCount?: Prisma.IntFilter<"User"> | number
   referrerId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -326,6 +336,7 @@ export type UserOrderByWithAggregationInput = {
   password?: Prisma.SortOrder
   referralCode?: Prisma.SortOrder
   tier?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
   referrerId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -348,6 +359,7 @@ export type UserScalarWhereWithAggregatesInput = {
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
   referralCode?: Prisma.StringWithAggregatesFilter<"User"> | string
   tier?: Prisma.StringWithAggregatesFilter<"User"> | string
+  role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   storeCredit?: Prisma.FloatWithAggregatesFilter<"User"> | number
   referralCount?: Prisma.IntWithAggregatesFilter<"User"> | number
   referrerId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -362,6 +374,7 @@ export type UserCreateInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   createdAt?: Date | string
@@ -381,6 +394,7 @@ export type UserUncheckedCreateInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   referrerId?: string | null
@@ -400,6 +414,7 @@ export type UserUpdateInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -419,6 +434,7 @@ export type UserUncheckedUpdateInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -438,6 +454,7 @@ export type UserCreateManyInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   referrerId?: string | null
@@ -452,6 +469,7 @@ export type UserUpdateManyMutationInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -465,6 +483,7 @@ export type UserUncheckedUpdateManyInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -494,6 +513,7 @@ export type UserCountOrderByAggregateInput = {
   password?: Prisma.SortOrder
   referralCode?: Prisma.SortOrder
   tier?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
@@ -513,6 +533,7 @@ export type UserMaxOrderByAggregateInput = {
   password?: Prisma.SortOrder
   referralCode?: Prisma.SortOrder
   tier?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
@@ -527,6 +548,7 @@ export type UserMinOrderByAggregateInput = {
   password?: Prisma.SortOrder
   referralCode?: Prisma.SortOrder
   tier?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
@@ -566,6 +588,10 @@ export type UserUncheckedCreateNestedManyWithoutReferrerInput = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type EnumUserRoleFieldUpdateOperationsInput = {
+  set?: $Enums.UserRole
 }
 
 export type FloatFieldUpdateOperationsInput = {
@@ -693,6 +719,7 @@ export type UserCreateWithoutReferralsInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   createdAt?: Date | string
@@ -711,6 +738,7 @@ export type UserUncheckedCreateWithoutReferralsInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   referrerId?: string | null
@@ -734,6 +762,7 @@ export type UserCreateWithoutReferrerInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   createdAt?: Date | string
@@ -752,6 +781,7 @@ export type UserUncheckedCreateWithoutReferrerInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   createdAt?: Date | string
@@ -791,6 +821,7 @@ export type UserUpdateWithoutReferralsInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -809,6 +840,7 @@ export type UserUncheckedUpdateWithoutReferralsInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -846,6 +878,7 @@ export type UserScalarWhereInput = {
   password?: Prisma.StringFilter<"User"> | string
   referralCode?: Prisma.StringFilter<"User"> | string
   tier?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   storeCredit?: Prisma.FloatFilter<"User"> | number
   referralCount?: Prisma.IntFilter<"User"> | number
   referrerId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -860,6 +893,7 @@ export type UserCreateWithoutCheckoutSessionsInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   createdAt?: Date | string
@@ -878,6 +912,7 @@ export type UserUncheckedCreateWithoutCheckoutSessionsInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   referrerId?: string | null
@@ -912,6 +947,7 @@ export type UserUpdateWithoutCheckoutSessionsInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -930,6 +966,7 @@ export type UserUncheckedUpdateWithoutCheckoutSessionsInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -948,6 +985,7 @@ export type UserCreateWithoutOrdersInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   createdAt?: Date | string
@@ -966,6 +1004,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   referrerId?: string | null
@@ -1000,6 +1039,7 @@ export type UserUpdateWithoutOrdersInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1018,6 +1058,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1036,6 +1077,7 @@ export type UserCreateWithoutCommissionsEarnedInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   createdAt?: Date | string
@@ -1054,6 +1096,7 @@ export type UserUncheckedCreateWithoutCommissionsEarnedInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   referrerId?: string | null
@@ -1077,6 +1120,7 @@ export type UserCreateWithoutCommissionsFromInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   createdAt?: Date | string
@@ -1095,6 +1139,7 @@ export type UserUncheckedCreateWithoutCommissionsFromInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   referrerId?: string | null
@@ -1129,6 +1174,7 @@ export type UserUpdateWithoutCommissionsEarnedInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1147,6 +1193,7 @@ export type UserUncheckedUpdateWithoutCommissionsEarnedInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1176,6 +1223,7 @@ export type UserUpdateWithoutCommissionsFromInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1194,6 +1242,7 @@ export type UserUncheckedUpdateWithoutCommissionsFromInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1212,6 +1261,7 @@ export type UserCreateManyReferrerInput = {
   password: string
   referralCode: string
   tier?: string
+  role?: $Enums.UserRole
   storeCredit?: number
   referralCount?: number
   createdAt?: Date | string
@@ -1225,6 +1275,7 @@ export type UserUpdateWithoutReferrerInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1243,6 +1294,7 @@ export type UserUncheckedUpdateWithoutReferrerInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1261,6 +1313,7 @@ export type UserUncheckedUpdateManyWithoutReferrerInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   tier?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1341,6 +1394,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   password?: boolean
   referralCode?: boolean
   tier?: boolean
+  role?: boolean
   storeCredit?: boolean
   referralCount?: boolean
   referrerId?: boolean
@@ -1362,6 +1416,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   password?: boolean
   referralCode?: boolean
   tier?: boolean
+  role?: boolean
   storeCredit?: boolean
   referralCount?: boolean
   referrerId?: boolean
@@ -1377,6 +1432,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   password?: boolean
   referralCode?: boolean
   tier?: boolean
+  role?: boolean
   storeCredit?: boolean
   referralCount?: boolean
   referrerId?: boolean
@@ -1392,6 +1448,7 @@ export type UserSelectScalar = {
   password?: boolean
   referralCode?: boolean
   tier?: boolean
+  role?: boolean
   storeCredit?: boolean
   referralCount?: boolean
   referrerId?: boolean
@@ -1399,7 +1456,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "password" | "referralCode" | "tier" | "storeCredit" | "referralCount" | "referrerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "password" | "referralCode" | "tier" | "role" | "storeCredit" | "referralCount" | "referrerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   referrer?: boolean | Prisma.User$referrerArgs<ExtArgs>
   referrals?: boolean | Prisma.User$referralsArgs<ExtArgs>
@@ -1433,6 +1490,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     password: string
     referralCode: string
     tier: string
+    role: $Enums.UserRole
     storeCredit: number
     referralCount: number
     referrerId: string | null
@@ -1873,6 +1931,7 @@ export interface UserFieldRefs {
   readonly password: Prisma.FieldRef<"User", 'String'>
   readonly referralCode: Prisma.FieldRef<"User", 'String'>
   readonly tier: Prisma.FieldRef<"User", 'String'>
+  readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly storeCredit: Prisma.FieldRef<"User", 'Float'>
   readonly referralCount: Prisma.FieldRef<"User", 'Int'>
   readonly referrerId: Prisma.FieldRef<"User", 'String'>

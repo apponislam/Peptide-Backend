@@ -8,6 +8,10 @@ datasource db {
   // url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
 model User {
   id               String   @id @default(uuid())
   email            String   @unique
@@ -15,6 +19,8 @@ model User {
   password         String
   referralCode     String   @unique
   tier             String   @default("Member")
+  role             UserRole @default(USER)
+
   storeCredit      Float    @default(0)
   referralCount    Int      @default(0)
   // Referral relationships (self relation)

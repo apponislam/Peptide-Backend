@@ -1,34 +1,39 @@
 import bcrypt from "bcryptjs";
+import config from "../../config";
 import { prisma } from "../../lib/prisma";
 
-async function main() {
-    // await prisma.commission.deleteMany();
-    // await prisma.order.deleteMany();
-    // await prisma.checkoutSession.deleteMany();
-    // await prisma.user.deleteMany();
-    // await prisma.product.deleteMany();
+export async function createAdmin() {
+    try {
+        const adminEmail = config.admin_email || "master@peptide.club";
 
-    const hashedPassword = await bcrypt.hash("master123", 10);
+        const existingAdmin = await prisma.user.findUnique({
+            where: { email: adminEmail },
+        });
 
-    const masterUser = await prisma.user.create({
-        data: {
-            email: "master@peptide.club",
-            password: hashedPassword,
-            referralCode: "JAKE",
-            tier: "Founder",
-            storeCredit: 0,
-            referralCount: 0,
-        },
-    });
+        if (existingAdmin) {
+            console.log("✅ Admin already exists");
+            return existingAdmin;
+        }
 
-    console.log("✅ Master user created:", masterUser.id);
+        const hashedPassword = await bcrypt.hash(config.admin_password || "master123", Number(config.bcrypt_salt_rounds));
+
+        const masterUser = await prisma.user.create({
+            data: {
+                name: config.admin_name || "Jacob Vlance",
+                email: adminEmail,
+                password: hashedPassword,
+                referralCode: "JAKE",
+                role: "ADMIN",
+                tier: "Founder",
+                storeCredit: 0,
+                referralCount: 0,
+            },
+        });
+
+        console.log("✅ Admin created:", masterUser.email);
+        return masterUser;
+    } catch (error: any) {
+        console.error("❌ Error creating admin:", error.message);
+        throw error;
+    }
 }
-
-main()
-    .catch((e) => {
-        console.error("❌ Seeding failed:", e);
-        process.exit(1);
-    })
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
