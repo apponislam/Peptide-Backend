@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -15,17 +9,111 @@ datasource db {
 
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id               String   @id @default(uuid())
+  email            String   @unique
+  password         String
+  referralCode     String   @unique
+  tier             String   @default("Member")
+  storeCredit      Float    @default(0)
+  referralCount    Int      @default(0)
+  
+  // Referral relationships
+  referrerId       String?
+  referrer         User?    @relation("UserReferrals", fields: [referrerId], references: [id])
+  referrals        User[]   @relation("UserReferrals")
+  
+  // Relations
+  orders           Order[]
+  commissionsEarned Commission[] @relation("ReferrerCommissions")
+  commissionsFrom   Commission[] @relation("BuyerCommissions")
+  checkoutSessions CheckoutSession[]
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model Product {
+  id               Int      @id @default(autoincrement())
+  name             String
+  sizes            Json     // Array of { mg: Int, price: Float }
+  desc             String
+  details          String   @db.Text
+  references       Json     // Array of { url: String, title: String }
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model CheckoutSession {
+  id                  Int      @id @default(autoincrement())
+  sessionId           String   @unique
+  userId              String
+  user                User     @relation(fields: [userId], references: [id])
+  
+  items               Json     // Array of cart items
+  originalSubtotal    Float
+  discountedSubtotal  Float
+  discount            Float
+  shipping            Float
+  storeCreditsApplied Float
+  total               Float
+  
+  shippingName        String
+  shippingAddress     String
+  
+  status              String   @default("pending") // pending, completed, expired
+  orderId             Int?
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([sessionId])
+}
+
+model Order {
+  id                  Int      @id @default(autoincrement())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id])
+  
+  items               Json     // Array of { productId, mg, quantity, price }
+  originalSubtotal    Float
+  subtotal            Float    // After discount
+  discount            Float
+  shipping            Float
+  storeCreditsApplied Float
+  total               Float
+  
+  shippingName        String
+  shippingAddress     String
+  
+  // Stripe fields
+  stripeSessionId     String?  @unique
+  stripePaymentIntentId String?
+  
+  status              String   @default("pending") // pending, processing, shipped, completed, cancelled
+  
+  commissions         Commission[]
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Commission {
+  id          Int      @id @default(autoincrement())
+  referrerId  String
+  referrer    User     @relation("ReferrerCommissions", fields: [referrerId], references: [id])
+  buyerId     String
+  buyer       User     @relation("BuyerCommissions", fields: [buyerId], references: [id])
+  orderId     Int
+  order       Order    @relation(fields: [orderId], references: [id])
+  amount      Float
+  createdAt   DateTime @default(now())
+  @@index([referrerId])
+  @@index([buyerId])
+  @@index([orderId])
 }
