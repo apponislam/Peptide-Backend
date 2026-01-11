@@ -60,5 +60,5 @@ const getReferralStats = async (userId: string) => {
 
 export const referralServices = {
     getReferralStats,
-    getTierData, // Export if needed elsewhere
+    getTierData,
 };
