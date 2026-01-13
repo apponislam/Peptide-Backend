@@ -26,7 +26,7 @@ export async function createAdmin() {
                 role: "ADMIN",
                 tier: "Founder",
                 storeCredit: 0,
-                referralCount: 0,
+                referralCount: 99999999,
             },
         });
 
