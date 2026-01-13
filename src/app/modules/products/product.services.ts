@@ -2,16 +2,80 @@ import { prisma } from "../../../lib/prisma";
 import ApiError from "../../../errors/ApiError";
 import { Prisma } from "../../../generated/prisma/client";
 
-// Get all products
-const getAllProducts = async () => {
+interface GetProductsQuery {
+    search?: string;
+    page?: number;
+    limit?: number;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+}
+
+const getAllProducts = async (query: GetProductsQuery) => {
     try {
-        const products = await prisma.product.findMany({
-            orderBy: {
-                id: "asc",
+        const { search = "", page = 1, limit = 10, sortBy = "id", sortOrder = "asc" } = query;
+
+        // Convert to numbers and validate
+        const pageNumber = Math.max(1, Number(page));
+        const pageSize = Math.min(Math.max(1, Number(limit)), 100); // Max 100 items per page
+        const skip = (pageNumber - 1) * pageSize;
+
+        // Build where clause for search
+        const where: Prisma.ProductWhereInput = {};
+
+        if (search) {
+            where.OR = [
+                {
+                    name: {
+                        contains: search,
+                        mode: "insensitive",
+                    },
+                },
+                {
+                    desc: {
+                        contains: search,
+                        mode: "insensitive",
+                    },
+                },
+                {
+                    details: {
+                        contains: search,
+                        mode: "insensitive",
+                    },
+                },
+            ];
+        }
+
+        // Validate sort field to prevent SQL injection
+        const allowedSortFields = ["id", "name", "createdAt", "updatedAt"];
+        const validSortBy = allowedSortFields.includes(sortBy) ? sortBy : "id";
+        const validSortOrder = sortOrder === "desc" ? "desc" : "asc";
+
+        // Execute queries in parallel
+        const [products, total] = await Promise.all([
+            prisma.product.findMany({
+                where,
+                skip,
+                take: pageSize,
+                orderBy: {
+                    [validSortBy]: validSortOrder,
+                },
+            }),
+            prisma.product.count({ where }),
+        ]);
+
+        const totalPages = Math.ceil(total / pageSize);
+
+        return {
+            data: products,
+            meta: {
+                page: pageNumber,
+                limit: pageSize,
+                total,
+                totalPages,
             },
-        });
-        return products;
+        };
     } catch (error) {
+        console.error("Error fetching products:", error);
         throw new ApiError(500, "Failed to fetch products");
     }
 };

@@ -3,15 +3,26 @@ import catchAsync from "../../../utils/catchAsync";
 import { productServices } from "./product.services";
 import sendResponse from "../../../utils/sendResponse.";
 
-// Get all products
 const getAllProducts = catchAsync(async (req: Request, res: Response) => {
-    const products = await productServices.getAllProducts();
+    const search = req.query.search?.toString() || "";
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const sortBy = req.query.sortBy?.toString() || "id";
+    const sortOrder = (req.query.sortOrder as "asc" | "desc") || "asc";
 
+    const result = await productServices.getAllProducts({
+        search,
+        page,
+        limit,
+        sortBy,
+        sortOrder,
+    });
     sendResponse(res, {
         statusCode: 200,
         success: true,
         message: "Products retrieved successfully",
-        data: products,
+        data: result.data,
+        meta: result.meta,
     });
 });
 
