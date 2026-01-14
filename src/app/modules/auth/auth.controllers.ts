@@ -4,9 +4,11 @@ import { authServices } from "./auth.services";
 import sendResponse from "../../../utils/sendResponse.";
 
 const register = catchAsync(async (req: Request, res: Response) => {
-    const { email, password, referralCode } = req.body;
+    const { name, email, password, referralCode } = req.body;
+    console.log(req.body);
+    console.log(referralCode);
 
-    const result = await authServices.register(email, password, referralCode);
+    const result = await authServices.register(name, email, password, referralCode);
 
     res.cookie("refreshToken", result.refreshToken, {
         httpOnly: true,
