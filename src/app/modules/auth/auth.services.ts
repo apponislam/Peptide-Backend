@@ -65,10 +65,13 @@ const register = async (name: string, email: string, password: string, referralC
 };
 
 const login = async (email: string, password: string) => {
+    console.log(email, password);
+
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
         throw new ApiError(401, "Invalid credentials");
     }
+    console.log(user);
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
@@ -88,10 +91,15 @@ const login = async (email: string, password: string) => {
         createdAt: user.createdAt,
     };
 
-    // Generate JWT tokens with full user data
-    const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret!, config.jwt_access_expire || "30d");
+    console.log(config.jwt_access_secret);
+    console.log(config.jwt_access_expire);
+    console.log(config.jwt_refresh_secret);
+    console.log(config.jwt_refresh_expire);
 
-    const refreshToken = jwtHelper.generateToken({ userId: user.id }, config.jwt_refresh_secret!, config.jwt_refresh_expire || "365d");
+    // Generate JWT tokens with full user data
+    const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret!, config.jwt_access_expire! || "30d");
+
+    const refreshToken = jwtHelper.generateToken({ userId: user.id }, config.jwt_refresh_secret!, config.jwt_refresh_expire! || "365d");
 
     return {
         accessToken,
