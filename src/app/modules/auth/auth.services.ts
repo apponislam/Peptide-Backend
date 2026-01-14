@@ -113,6 +113,27 @@ const getCurrentUser = async (userId: string) => {
             storeCredit: true,
             referralCount: true,
             createdAt: true,
+            orders: {
+                orderBy: { createdAt: "desc" },
+                take: 10,
+                select: {
+                    id: true,
+                    items: true,
+                    originalSubtotal: true,
+                    subtotal: true,
+                    discount: true,
+                    shipping: true,
+                    storeCreditsApplied: true,
+                    total: true,
+                    shippingName: true,
+                    shippingAddress: true,
+                    stripeSessionId: true,
+                    stripePaymentIntentId: true,
+                    status: true,
+                    createdAt: true,
+                    updatedAt: true,
+                },
+            },
         },
     });
 
@@ -169,10 +190,70 @@ const logout = async (refreshToken?: string) => {
     return { message: "Logged out successfully" };
 };
 
+// Update user's referral code
+const updateReferralCode = async (userId: string, newCode: string) => {
+    if (!newCode || newCode.trim().length < 4) {
+        throw new ApiError(400, "Referral code must be at least 4 characters");
+    }
+
+    const cleanedCode = newCode.toUpperCase().replace(/[^A-Z0-9]/g, "");
+
+    if (cleanedCode.length < 4 || cleanedCode.length > 20) {
+        throw new ApiError(400, "Referral code must be 4-20 characters");
+    }
+
+    const existingUser = await prisma.user.findUnique({
+        where: { referralCode: cleanedCode },
+    });
+
+    if (existingUser) {
+        throw new ApiError(400, "This referral code is already taken");
+    }
+
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { referralCode: cleanedCode },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            referralCode: true,
+            tier: true,
+            storeCredit: true,
+            referralCount: true,
+            createdAt: true,
+        },
+    });
+
+    return updatedUser;
+};
+
+const checkReferralCodeAvailability = async (code: string) => {
+    if (!code || code.trim().length < 1) {
+        return false;
+    }
+
+    const cleanedCode = code.toUpperCase().replace(/[^A-Z0-9]/g, "");
+
+    // Return false if code is less than 4 characters
+    if (cleanedCode.length < 4) {
+        return false;
+    }
+
+    const existingUser = await prisma.user.findUnique({
+        where: { referralCode: cleanedCode },
+    });
+
+    return !existingUser;
+};
+
 export const authServices = {
     register,
     login,
     getCurrentUser,
     refreshToken,
     logout,
+    updateReferralCode,
+    checkReferralCodeAvailability,
 };

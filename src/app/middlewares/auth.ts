@@ -15,6 +15,7 @@ const auth = catchAsync(async (req: Request, res: Response, next: NextFunction) 
     }
 
     let decoded: jwt.JwtPayload;
+
     try {
         decoded = jwt.verify(token, config.jwt_access_secret as string) as { userId: string };
     } catch (err: any) {
@@ -24,9 +25,8 @@ const auth = catchAsync(async (req: Request, res: Response, next: NextFunction) 
         throw new ApiError(401, "Authentication failed: Invalid token");
     }
 
-    // Fetch user from database
     const user = await prisma.user.findUnique({
-        where: { id: decoded.userId },
+        where: { id: decoded.id },
         select: {
             id: true,
             email: true,

@@ -105,10 +105,56 @@ const logout = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// NEW: Update referral code
+const updateReferralCode = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user?.id || (req.user as any)?.userId;
+    const { newCode } = req.body;
+
+    const updatedUser = await authServices.updateReferralCode(userId, newCode);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Referral code updated successfully",
+        data: updatedUser,
+    });
+});
+
+// NEW: Check if referral code is available
+const checkReferralCode = catchAsync(async (req: Request, res: Response) => {
+    const code = req.params.code as string;
+
+    const isAvailable = await authServices.checkReferralCodeAvailability(code);
+
+    // Clean the code to check length
+    const cleanedCode = code.toUpperCase().replace(/[^A-Z0-9]/g, "");
+
+    let message = "";
+    if (cleanedCode.length < 4) {
+        message = "Code must be at least 4 characters";
+    } else if (isAvailable) {
+        message = "Code is available";
+    } else {
+        message = "Code is already taken";
+    }
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: message,
+        data: {
+            available: cleanedCode.length >= 4 ? isAvailable : false,
+            validLength: cleanedCode.length >= 4,
+        },
+    });
+});
+
 export const authControllers = {
     register,
     login,
     getCurrentUser,
     refreshAccessToken,
     logout,
+    updateReferralCode,
+    checkReferralCode,
 };

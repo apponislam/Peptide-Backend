@@ -2,7 +2,7 @@ import "dotenv/config";
 import app from "./app";
 import { prisma } from "./lib/prisma";
 import { createAdmin } from "./app/script/seed";
-import seedProducts from "./app/script/products";
+// import seedProducts from "./app/script/products";
 
 const PORT = Number(process.env.PORT) || 5050;
 
@@ -12,7 +12,7 @@ async function main() {
         console.log("✅ Database connected successfully");
 
         await createAdmin();
-        await seedProducts();
+        // await seedProducts();
 
         // Start server
         app.listen(PORT, () => {
