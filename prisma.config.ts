@@ -11,5 +11,6 @@ export default defineConfig({
     // engine: "classic",
     datasource: {
         url: env("DATABASE_URL"),
+        shadowDatabaseUrl: env("DATABASE_URL"),
     },
 });
