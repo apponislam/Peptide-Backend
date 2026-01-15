@@ -13,7 +13,7 @@
         "target": "ES2023",
         "strict": true,
         "esModuleInterop": true,
-        "ignoreDeprecations": "6.0",
+        // "ignoreDeprecations": "6.0",
         // "types": [],
         // For nodejs:
         "lib": ["esnext"],
@@ -47,3 +47,18 @@
         "skipLibCheck": true
     }
 }
+
+// {
+//     "compilerOptions": {
+//         "module": "CommonJS",
+//         "moduleResolution": "node",
+
+//         "target": "ES2023",
+//         "outDir": "./dist",
+//         "rootDir": ".",
+
+//         "strict": true,
+//         "esModuleInterop": true,
+//         "skipLibCheck": true
+//     }
+// }
