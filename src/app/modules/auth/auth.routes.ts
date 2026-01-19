@@ -14,4 +14,8 @@ router.get("/me", auth, authControllers.getCurrentUser);
 router.patch("/update-referral-code", auth, authControllers.updateReferralCode);
 router.get("/check-referral-code/:code", authControllers.checkReferralCode);
 
+// Admin
+
+router.post("/admin/login", authControllers.adminLogin);
+
 export const authRoutes = router;

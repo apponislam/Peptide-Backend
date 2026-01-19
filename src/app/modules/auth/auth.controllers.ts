@@ -151,6 +151,31 @@ const checkReferralCode = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// Admin
+
+const adminLogin = catchAsync(async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    const result = await authServices.adminLogin(email, password);
+
+    res.cookie("refreshToken", result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Admin login successful",
+        data: {
+            user: result.user,
+            accessToken: result.accessToken,
+        },
+    });
+});
+
 export const authControllers = {
     register,
     login,
@@ -159,4 +184,5 @@ export const authControllers = {
     logout,
     updateReferralCode,
     checkReferralCode,
+    adminLogin,
 };

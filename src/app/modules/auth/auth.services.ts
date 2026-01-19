@@ -24,7 +24,6 @@ const register = async (name: string, email: string, password: string, referralC
         referrerId = referrer.id;
     }
 
-    // Create user
     const user = await prisma.user.create({
         data: {
             name,
@@ -39,7 +38,6 @@ const register = async (name: string, email: string, password: string, referralC
         },
     });
 
-    // Prepare user data without password
     const userData = {
         id: user.id,
         name: user.name,
@@ -52,7 +50,6 @@ const register = async (name: string, email: string, password: string, referralC
         createdAt: user.createdAt,
     };
 
-    // Generate JWT tokens with full user data
     const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret!, config.jwt_access_expire || "1h");
 
     const refreshToken = jwtHelper.generateToken({ userId: user.id }, config.jwt_refresh_secret!, config.jwt_refresh_expire || "7d");
@@ -69,13 +66,13 @@ const login = async (email: string, password: string) => {
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-        throw new ApiError(401, "Invalid credentials");
+        throw new ApiError(401, "Invalid email or password");
     }
     // console.log(user);
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-        throw new ApiError(401, "Invalid credentials");
+        throw new ApiError(401, "Invalid email or password");
     }
 
     // Prepare user data without password
@@ -91,12 +88,6 @@ const login = async (email: string, password: string) => {
         createdAt: user.createdAt,
     };
 
-    // console.log(config.jwt_access_secret);
-    // console.log(config.jwt_access_expire);
-    // console.log(config.jwt_refresh_secret);
-    // console.log(config.jwt_refresh_expire);
-
-    // Generate JWT tokens with full user data
     const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret!, config.jwt_access_expire! || "30d");
 
     const refreshToken = jwtHelper.generateToken({ userId: user.id }, config.jwt_refresh_secret!, config.jwt_refresh_expire! || "365d");
@@ -256,6 +247,49 @@ const checkReferralCodeAvailability = async (code: string) => {
     return !existingUser;
 };
 
+// Admin
+
+const adminLogin = async (email: string, password: string) => {
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+        throw new ApiError(401, "Invalid email or password");
+    }
+
+    // Check if user is admin
+    if (user.role !== "ADMIN") {
+        throw new ApiError(403, "Access denied. Admin only.");
+    }
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+        throw new ApiError(401, "Invalid email or password");
+    }
+
+    // Prepare admin user data
+    const userData = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        referralCode: user.referralCode,
+        tier: user.tier,
+        storeCredit: user.storeCredit,
+        referralCount: user.referralCount,
+        createdAt: user.createdAt,
+    };
+
+    const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret!, config.jwt_access_expire! || "30d");
+
+    const refreshToken = jwtHelper.generateToken({ userId: user.id }, config.jwt_refresh_secret!, config.jwt_refresh_expire! || "365d");
+
+    return {
+        accessToken,
+        refreshToken,
+        user: userData,
+    };
+};
+
 export const authServices = {
     register,
     login,
@@ -264,4 +298,5 @@ export const authServices = {
     logout,
     updateReferralCode,
     checkReferralCodeAvailability,
+    adminLogin,
 };
