@@ -12,18 +12,29 @@ enum UserRole {
   USER
   ADMIN
 }
+
+enum UserTier {
+  Member
+  Founder
+  VIP
+}
 model User {
   id               String   @id @default(uuid())
   email            String   @unique
   name             String
   password         String
   referralCode     String   @unique
-  tier             String   @default("Member")
+  tier             UserTier  @default(Member)
   role             UserRole @default(USER)
+
+  // Soft delete for user accounts
+  isActive         Boolean  @default(true)
+  deletedAt        DateTime?
 
   storeCredit      Float    @default(0)
   referralCount    Int      @default(0)
   // Referral relationships (self relation)
+  isReferralValid  Boolean   @default(false)
   referrerId       String?
   referrer         User?    @relation("UserReferrals", fields: [referrerId], references: [id])
   referrals        User[]   @relation("UserReferrals")
@@ -48,6 +59,11 @@ model Product {
   sizes      Json 
   desc       String
   details    String   @db.Text
+  references Json
+
+  isDeleted   Boolean  @default(false)
+  deletedAt  DateTime?
+
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
