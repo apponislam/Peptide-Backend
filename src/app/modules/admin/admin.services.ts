@@ -4,18 +4,6 @@ import config from "../../../config";
 import { jwtHelper } from "../../../utils/jwtHelpers";
 import { Prisma, UserRole, UserTier } from "../../../generated/prisma/client";
 
-// Admin login
-const adminLogin = async (data: { email: string; password: string }) => {
-    // Hardcoded admin credentials (from your Express app)
-    if (data.email === "admin@peptide.club" && data.password === "123456") {
-        const token = jwtHelper.generateToken({ admin: true }, config.jwt_access_secret!, "7d");
-
-        return { token, admin: true };
-    }
-
-    throw new ApiError(401, "Invalid credentials");
-};
-
 // Get dashboard stats
 const getDashboardStats = async () => {
     const totalOrders = await prisma.order.count();
@@ -183,7 +171,6 @@ const updateUser = async (id: string, data: { storeCredit?: number; tier?: UserT
 };
 
 export const adminServices = {
-    adminLogin,
     getDashboardStats,
     getAllOrders,
     updateOrderStatus,

@@ -4,9 +4,6 @@ import { adminControllers } from "./admin.controllers";
 
 const router = express.Router();
 
-// Admin login (public)
-router.post("/login", adminControllers.adminLogin);
-
 // Admin routes (protected - admin only)
 router.get("/stats", auth, adminControllers.getDashboardStats);
 router.get("/orders", auth, adminControllers.getAllOrders);

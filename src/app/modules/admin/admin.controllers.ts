@@ -4,18 +4,6 @@ import { adminServices } from "./admin.services";
 import sendResponse from "../../../utils/sendResponse.";
 import { UserRole, UserTier } from "../../../generated/prisma/enums";
 
-// Admin login
-const adminLogin = catchAsync(async (req: Request, res: Response) => {
-    const result = await adminServices.adminLogin(req.body);
-
-    sendResponse(res, {
-        statusCode: 200,
-        success: true,
-        message: "Admin login successful",
-        data: result,
-    });
-});
-
 // Get dashboard stats
 const getDashboardStats = catchAsync(async (req: Request, res: Response) => {
     const stats = await adminServices.getDashboardStats();
@@ -112,7 +100,6 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const adminControllers = {
-    adminLogin,
     getDashboardStats,
     getAllOrders,
     updateOrderStatus,
