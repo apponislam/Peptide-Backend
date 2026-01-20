@@ -111,7 +111,7 @@ const getAllProducts = catchAsync(async (req: Request, res: Response) => {
     const limitNum = parseInt(limit as string);
     const skip = (pageNum - 1) * limitNum;
 
-    const products = await productServices.getAllProducts({
+    const result = await productServices.getAllProducts({
         search: search as string,
         skip,
         take: limitNum,
@@ -123,7 +123,8 @@ const getAllProducts = catchAsync(async (req: Request, res: Response) => {
         statusCode: 200,
         success: true,
         message: "Products retrieved successfully",
-        data: products,
+        data: result.products,
+        meta: result.meta,
     });
 });
 
