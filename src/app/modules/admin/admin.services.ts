@@ -73,32 +73,17 @@ const getAllUsers = async (params: { page?: number; limit?: number; search?: str
         where.tier = params.tier;
     }
 
-    // Type-safe sorting with allowed fields
-    let orderBy: Prisma.UserOrderByWithRelationInput = { createdAt: "desc" };
+    // Declare orderBy with default
+    const orderBy: Prisma.UserOrderByWithRelationInput = { createdAt: "desc" };
 
+    // Handle sorting with validation
     if (params.sortBy) {
-        switch (params.sortBy) {
-            case "name":
-                orderBy = { name: params.sortOrder || "desc" };
-                break;
-            case "email":
-                orderBy = { email: params.sortOrder || "desc" };
-                break;
-            case "createdAt":
-                orderBy = { createdAt: params.sortOrder || "desc" };
-                break;
-            case "role":
-                orderBy = { role: params.sortOrder || "desc" };
-                break;
-            case "tier":
-                orderBy = { tier: params.sortOrder || "desc" };
-                break;
-            case "referralCount":
-                orderBy = { referralCount: params.sortOrder || "desc" };
-                break;
-            case "storeCredit":
-                orderBy = { storeCredit: params.sortOrder || "desc" };
-                break;
+        // Define allowed sort fields
+        const allowedSortFields = ["name", "email", "createdAt", "role", "tier", "referralCount", "storeCredit"];
+
+        if (allowedSortFields.includes(params.sortBy)) {
+            const sortField = params.sortBy as keyof Prisma.UserOrderByWithRelationInput;
+            orderBy[sortField] = params.sortOrder || "desc";
         }
     }
 
@@ -118,7 +103,7 @@ const getAllUsers = async (params: { page?: number; limit?: number; search?: str
                 orders: {
                     select: {
                         id: true,
-                        totalAmount: true,
+                        total: true, // CHANGED: totalAmount → total
                         status: true,
                         createdAt: true,
                     },
@@ -149,7 +134,14 @@ export default {
     getAllUsers,
 };
 
-const updateUser = async (id: string, data: { storeCredit?: number; tier?: UserTier; referralCount?: number }) => {
+const updateUser = async (
+    id: string,
+    data: {
+        storeCredit?: number;
+        tier?: string;
+        referralCount?: number;
+    },
+) => {
     const existingUser = await prisma.user.findUnique({
         where: { id },
     });
@@ -162,7 +154,7 @@ const updateUser = async (id: string, data: { storeCredit?: number; tier?: UserT
         where: { id },
         data: {
             ...(data.storeCredit !== undefined && { storeCredit: data.storeCredit }),
-            ...(data.tier !== undefined && { tier: data.tier }),
+            ...(data.tier !== undefined && { tier: data.tier as UserTier }),
             ...(data.referralCount !== undefined && { referralCount: data.referralCount }),
         },
     });
