@@ -82,8 +82,11 @@ export const UserScalarFieldEnum = {
   referralCode: 'referralCode',
   tier: 'tier',
   role: 'role',
+  isActive: 'isActive',
+  deletedAt: 'deletedAt',
   storeCredit: 'storeCredit',
   referralCount: 'referralCount',
+  isReferralValid: 'isReferralValid',
   referrerId: 'referrerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -99,6 +102,9 @@ export const ProductScalarFieldEnum = {
   desc: 'desc',
   details: 'details',
   references: 'references',
+  coa: 'coa',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -175,6 +181,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull'
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {

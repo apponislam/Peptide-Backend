@@ -15,3 +15,12 @@ export const UserRole = {
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const UserTier = {
+  Member: 'Member',
+  Founder: 'Founder',
+  VIP: 'VIP'
+} as const
+
+export type UserTier = (typeof UserTier)[keyof typeof UserTier]

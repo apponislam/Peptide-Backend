@@ -1,12 +1,23 @@
+-- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('USER', 'ADMIN');
+
+-- CreateEnum
+CREATE TYPE "UserTier" AS ENUM ('Member', 'Founder', 'VIP');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "referralCode" TEXT NOT NULL,
-    "tier" TEXT NOT NULL DEFAULT 'Member',
+    "tier" "UserTier" NOT NULL DEFAULT 'Member',
+    "role" "UserRole" NOT NULL DEFAULT 'USER',
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "deletedAt" TIMESTAMP(3),
     "storeCredit" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "referralCount" INTEGER NOT NULL DEFAULT 0,
+    "isReferralValid" BOOLEAN NOT NULL DEFAULT false,
     "referrerId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -22,6 +33,9 @@ CREATE TABLE "Product" (
     "desc" TEXT NOT NULL,
     "details" TEXT NOT NULL,
     "references" JSONB NOT NULL,
+    "coa" JSONB,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "deletedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -89,6 +103,27 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_referralCode_key" ON "User"("referralCode");
+
+-- CreateIndex
+CREATE INDEX "User_id_idx" ON "User"("id");
+
+-- CreateIndex
+CREATE INDEX "User_email_idx" ON "User"("email");
+
+-- CreateIndex
+CREATE INDEX "User_referrerId_idx" ON "User"("referrerId");
+
+-- CreateIndex
+CREATE INDEX "Product_isDeleted_idx" ON "Product"("isDeleted");
+
+-- CreateIndex
+CREATE INDEX "Product_createdAt_idx" ON "Product"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "Product_name_idx" ON "Product"("name");
+
+-- CreateIndex
+CREATE INDEX "Product_isDeleted_createdAt_idx" ON "Product"("isDeleted", "createdAt");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "CheckoutSession_sessionId_key" ON "CheckoutSession"("sessionId");
