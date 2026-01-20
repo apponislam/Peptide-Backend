@@ -1,8 +1,8 @@
 import { prisma } from "../../../lib/prisma";
 import ApiError from "../../../errors/ApiError";
 import config from "../../../config";
-import bcrypt from "bcryptjs";
 import { jwtHelper } from "../../../utils/jwtHelpers";
+import { Prisma, UserRole, UserTier } from "../../../generated/prisma/client";
 
 // Admin login
 const adminLogin = async (data: { email: string; password: string }) => {
@@ -33,7 +33,6 @@ const getDashboardStats = async () => {
     };
 };
 
-// Get all orders
 const getAllOrders = async () => {
     const orders = await prisma.order.findMany({
         include: {
@@ -66,27 +65,103 @@ const updateOrderStatus = async (id: number, data: { status: string }) => {
 };
 
 // Get all users
-const getAllUsers = async () => {
-    const users = await prisma.user.findMany({
-        select: {
-            id: true,
-            name: true,
-            email: true,
-            referralCode: true,
-            tier: true,
-            storeCredit: true,
-            referralCount: true,
-            createdAt: true,
-            role: true,
-        },
-        orderBy: { createdAt: "desc" },
-    });
+const getAllUsers = async (params: { page?: number; limit?: number; search?: string; role?: UserRole; tier?: UserTier; sortBy?: string; sortOrder?: "asc" | "desc" }) => {
+    const page = params.page || 1;
+    const limit = params.limit || 10;
+    const skip = (page - 1) * limit;
 
-    return users;
+    // Build where clause for filtering
+    const where: Prisma.UserWhereInput = {};
+
+    if (params.search) {
+        where.OR = [{ name: { contains: params.search, mode: "insensitive" } }, { email: { contains: params.search, mode: "insensitive" } }, { referralCode: { contains: params.search, mode: "insensitive" } }];
+    }
+
+    if (params.role) {
+        where.role = params.role;
+    }
+
+    if (params.tier) {
+        where.tier = params.tier;
+    }
+
+    // Type-safe sorting with allowed fields
+    let orderBy: Prisma.UserOrderByWithRelationInput = { createdAt: "desc" };
+
+    if (params.sortBy) {
+        switch (params.sortBy) {
+            case "name":
+                orderBy = { name: params.sortOrder || "desc" };
+                break;
+            case "email":
+                orderBy = { email: params.sortOrder || "desc" };
+                break;
+            case "createdAt":
+                orderBy = { createdAt: params.sortOrder || "desc" };
+                break;
+            case "role":
+                orderBy = { role: params.sortOrder || "desc" };
+                break;
+            case "tier":
+                orderBy = { tier: params.sortOrder || "desc" };
+                break;
+            case "referralCount":
+                orderBy = { referralCount: params.sortOrder || "desc" };
+                break;
+            case "storeCredit":
+                orderBy = { storeCredit: params.sortOrder || "desc" };
+                break;
+        }
+    }
+
+    // Get users with pagination
+    const [users, total] = await Promise.all([
+        prisma.user.findMany({
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                referralCode: true,
+                tier: true,
+                storeCredit: true,
+                referralCount: true,
+                createdAt: true,
+                role: true,
+                orders: {
+                    select: {
+                        id: true,
+                        totalAmount: true,
+                        status: true,
+                        createdAt: true,
+                    },
+                },
+            },
+            where,
+            orderBy,
+            skip,
+            take: limit,
+        }),
+        prisma.user.count({ where }),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+        users,
+        meta: {
+            page,
+            limit,
+            total,
+            totalPages,
+        },
+    };
 };
 
-// Update user
-const updateUser = async (id: string, data: { storeCredit?: number; tier?: string; referralCount?: number }) => {
+export default {
+    getAllUsers,
+};
+
+const updateUser = async (id: string, data: { storeCredit?: number; tier?: UserTier; referralCount?: number }) => {
     const existingUser = await prisma.user.findUnique({
         where: { id },
     });

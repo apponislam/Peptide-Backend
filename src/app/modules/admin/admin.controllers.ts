@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../../../utils/catchAsync";
 import { adminServices } from "./admin.services";
 import sendResponse from "../../../utils/sendResponse.";
+import { UserRole, UserTier } from "../../../generated/prisma/enums";
 
 // Admin login
 const adminLogin = catchAsync(async (req: Request, res: Response) => {
@@ -63,14 +64,36 @@ const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
 });
 
 // Get all users
+// const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+//     const users = await adminServices.getAllUsers();
+
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Users retrieved successfully",
+//         data: users,
+//     });
+// });
+
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-    const users = await adminServices.getAllUsers();
+    const { page = 1, limit = 10, search = "", role, tier, sortBy = "createdAt", sortOrder = "desc" } = req.query;
+
+    const result = await adminServices.getAllUsers({
+        page: Number(page),
+        limit: Number(limit),
+        search: search as string,
+        role: role as UserRole,
+        tier: tier as UserTier,
+        sortBy: sortBy as string,
+        sortOrder: sortOrder as "asc" | "desc",
+    });
 
     sendResponse(res, {
         statusCode: 200,
         success: true,
         message: "Users retrieved successfully",
-        data: users,
+        data: result.users,
+        meta: result.meta,
     });
 });
 
