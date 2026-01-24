@@ -10,8 +10,17 @@ const getDashboardStats = async () => {
     const totalRevenue = await prisma.order.aggregate({
         _sum: { total: true },
     });
-    const totalCustomers = await prisma.user.count();
-    const totalProducts = await prisma.product.count();
+    const totalCustomers = await prisma.user.count({
+        where: {
+            isActive: true,
+        },
+    });
+
+    const totalProducts = await prisma.product.count({
+        where: {
+            isDeleted: false,
+        },
+    });
 
     return {
         totalOrders,
