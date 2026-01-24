@@ -33,7 +33,7 @@ model User {
 
   storeCredit      Float    @default(0)
   referralCount    Int      @default(0)
-  // Referral relationships (self relation)
+  
   isReferralValid  Boolean   @default(false)
   referrerId       String?
   referrer         User?    @relation("UserReferrals", fields: [referrerId], references: [id])
