@@ -1,7 +1,5 @@
 import { prisma } from "../../../lib/prisma";
 import ApiError from "../../../errors/ApiError";
-import config from "../../../config";
-import { jwtHelper } from "../../../utils/jwtHelpers";
 import { Prisma, UserRole, UserTier } from "../../../generated/prisma/client";
 
 // Get dashboard stats
