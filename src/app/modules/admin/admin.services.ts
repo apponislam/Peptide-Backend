@@ -65,7 +65,6 @@ const getAllUsers = async (params: { page?: number; limit?: number; search?: str
     const limit = params.limit || 10;
     const skip = (page - 1) * limit;
 
-    // Build where clause for filtering
     const where: Prisma.UserWhereInput = {};
 
     if (params.search) {
@@ -80,12 +79,9 @@ const getAllUsers = async (params: { page?: number; limit?: number; search?: str
         where.tier = params.tier;
     }
 
-    // Declare orderBy with default
     const orderBy: Prisma.UserOrderByWithRelationInput = { createdAt: "desc" };
 
-    // Handle sorting with validation
     if (params.sortBy) {
-        // Define allowed sort fields
         const allowedSortFields = ["name", "email", "createdAt", "role", "tier", "referralCount", "storeCredit"];
 
         if (allowedSortFields.includes(params.sortBy)) {
@@ -110,7 +106,7 @@ const getAllUsers = async (params: { page?: number; limit?: number; search?: str
                 orders: {
                     select: {
                         id: true,
-                        total: true, // CHANGED: totalAmount → total
+                        total: true,
                         status: true,
                         createdAt: true,
                     },
