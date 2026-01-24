@@ -27,83 +27,87 @@ export type AggregateCommission = {
 }
 
 export type CommissionAvgAggregateOutputType = {
-  id: number | null
-  orderId: number | null
   amount: number | null
 }
 
 export type CommissionSumAggregateOutputType = {
-  id: number | null
-  orderId: number | null
   amount: number | null
 }
 
 export type CommissionMinAggregateOutputType = {
-  id: number | null
+  id: string | null
+  orderId: string | null
   referrerId: string | null
   buyerId: string | null
-  orderId: number | null
   amount: number | null
+  status: $Enums.CommissionStatus | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type CommissionMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
+  orderId: string | null
   referrerId: string | null
   buyerId: string | null
-  orderId: number | null
   amount: number | null
+  status: $Enums.CommissionStatus | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type CommissionCountAggregateOutputType = {
   id: number
+  orderId: number
   referrerId: number
   buyerId: number
-  orderId: number
   amount: number
+  status: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
 export type CommissionAvgAggregateInputType = {
-  id?: true
-  orderId?: true
   amount?: true
 }
 
 export type CommissionSumAggregateInputType = {
-  id?: true
-  orderId?: true
   amount?: true
 }
 
 export type CommissionMinAggregateInputType = {
   id?: true
+  orderId?: true
   referrerId?: true
   buyerId?: true
-  orderId?: true
   amount?: true
+  status?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type CommissionMaxAggregateInputType = {
   id?: true
+  orderId?: true
   referrerId?: true
   buyerId?: true
-  orderId?: true
   amount?: true
+  status?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type CommissionCountAggregateInputType = {
   id?: true
+  orderId?: true
   referrerId?: true
   buyerId?: true
-  orderId?: true
   amount?: true
+  status?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -194,12 +198,14 @@ export type CommissionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 export type CommissionGroupByOutputType = {
-  id: number
+  id: string
+  orderId: string
   referrerId: string
   buyerId: string
-  orderId: number
   amount: number
+  status: $Enums.CommissionStatus
   createdAt: Date
+  updatedAt: Date
   _count: CommissionCountAggregateOutputType | null
   _avg: CommissionAvgAggregateOutputType | null
   _sum: CommissionSumAggregateOutputType | null
@@ -226,51 +232,59 @@ export type CommissionWhereInput = {
   AND?: Prisma.CommissionWhereInput | Prisma.CommissionWhereInput[]
   OR?: Prisma.CommissionWhereInput[]
   NOT?: Prisma.CommissionWhereInput | Prisma.CommissionWhereInput[]
-  id?: Prisma.IntFilter<"Commission"> | number
+  id?: Prisma.StringFilter<"Commission"> | string
+  orderId?: Prisma.StringFilter<"Commission"> | string
   referrerId?: Prisma.StringFilter<"Commission"> | string
   buyerId?: Prisma.StringFilter<"Commission"> | string
-  orderId?: Prisma.IntFilter<"Commission"> | number
   amount?: Prisma.FloatFilter<"Commission"> | number
+  status?: Prisma.EnumCommissionStatusFilter<"Commission"> | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFilter<"Commission"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Commission"> | Date | string
+  order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
   referrer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   buyer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
 }
 
 export type CommissionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  order?: Prisma.OrderOrderByWithRelationInput
   referrer?: Prisma.UserOrderByWithRelationInput
   buyer?: Prisma.UserOrderByWithRelationInput
-  order?: Prisma.OrderOrderByWithRelationInput
 }
 
 export type CommissionWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   AND?: Prisma.CommissionWhereInput | Prisma.CommissionWhereInput[]
   OR?: Prisma.CommissionWhereInput[]
   NOT?: Prisma.CommissionWhereInput | Prisma.CommissionWhereInput[]
+  orderId?: Prisma.StringFilter<"Commission"> | string
   referrerId?: Prisma.StringFilter<"Commission"> | string
   buyerId?: Prisma.StringFilter<"Commission"> | string
-  orderId?: Prisma.IntFilter<"Commission"> | number
   amount?: Prisma.FloatFilter<"Commission"> | number
+  status?: Prisma.EnumCommissionStatusFilter<"Commission"> | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFilter<"Commission"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Commission"> | Date | string
+  order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
   referrer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   buyer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
 }, "id">
 
 export type CommissionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.CommissionCountOrderByAggregateInput
   _avg?: Prisma.CommissionAvgOrderByAggregateInput
   _max?: Prisma.CommissionMaxOrderByAggregateInput
@@ -282,69 +296,88 @@ export type CommissionScalarWhereWithAggregatesInput = {
   AND?: Prisma.CommissionScalarWhereWithAggregatesInput | Prisma.CommissionScalarWhereWithAggregatesInput[]
   OR?: Prisma.CommissionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CommissionScalarWhereWithAggregatesInput | Prisma.CommissionScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Commission"> | number
+  id?: Prisma.StringWithAggregatesFilter<"Commission"> | string
+  orderId?: Prisma.StringWithAggregatesFilter<"Commission"> | string
   referrerId?: Prisma.StringWithAggregatesFilter<"Commission"> | string
   buyerId?: Prisma.StringWithAggregatesFilter<"Commission"> | string
-  orderId?: Prisma.IntWithAggregatesFilter<"Commission"> | number
   amount?: Prisma.FloatWithAggregatesFilter<"Commission"> | number
+  status?: Prisma.EnumCommissionStatusWithAggregatesFilter<"Commission"> | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Commission"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Commission"> | Date | string
 }
 
 export type CommissionCreateInput = {
+  id?: string
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
+  order: Prisma.OrderCreateNestedOneWithoutCommissionsInput
   referrer: Prisma.UserCreateNestedOneWithoutCommissionsEarnedInput
   buyer: Prisma.UserCreateNestedOneWithoutCommissionsFromInput
-  order: Prisma.OrderCreateNestedOneWithoutCommissionsInput
 }
 
 export type CommissionUncheckedCreateInput = {
-  id?: number
+  id?: string
+  orderId: string
   referrerId: string
   buyerId: string
-  orderId: number
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CommissionUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  order?: Prisma.OrderUpdateOneRequiredWithoutCommissionsNestedInput
   referrer?: Prisma.UserUpdateOneRequiredWithoutCommissionsEarnedNestedInput
   buyer?: Prisma.UserUpdateOneRequiredWithoutCommissionsFromNestedInput
-  order?: Prisma.OrderUpdateOneRequiredWithoutCommissionsNestedInput
 }
 
 export type CommissionUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   referrerId?: Prisma.StringFieldUpdateOperationsInput | string
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommissionCreateManyInput = {
-  id?: number
+  id?: string
+  orderId: string
   referrerId: string
   buyerId: string
-  orderId: number
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CommissionUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommissionUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   referrerId?: Prisma.StringFieldUpdateOperationsInput | string
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommissionListRelationFilter = {
@@ -359,40 +392,42 @@ export type CommissionOrderByRelationAggregateInput = {
 
 export type CommissionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type CommissionAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
 }
 
 export type CommissionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type CommissionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type CommissionSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
 }
 
@@ -522,19 +557,28 @@ export type CommissionUncheckedUpdateManyWithoutOrderNestedInput = {
   deleteMany?: Prisma.CommissionScalarWhereInput | Prisma.CommissionScalarWhereInput[]
 }
 
+export type EnumCommissionStatusFieldUpdateOperationsInput = {
+  set?: $Enums.CommissionStatus
+}
+
 export type CommissionCreateWithoutReferrerInput = {
+  id?: string
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
-  buyer: Prisma.UserCreateNestedOneWithoutCommissionsFromInput
+  updatedAt?: Date | string
   order: Prisma.OrderCreateNestedOneWithoutCommissionsInput
+  buyer: Prisma.UserCreateNestedOneWithoutCommissionsFromInput
 }
 
 export type CommissionUncheckedCreateWithoutReferrerInput = {
-  id?: number
+  id?: string
+  orderId: string
   buyerId: string
-  orderId: number
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CommissionCreateOrConnectWithoutReferrerInput = {
@@ -548,18 +592,23 @@ export type CommissionCreateManyReferrerInputEnvelope = {
 }
 
 export type CommissionCreateWithoutBuyerInput = {
+  id?: string
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
-  referrer: Prisma.UserCreateNestedOneWithoutCommissionsEarnedInput
+  updatedAt?: Date | string
   order: Prisma.OrderCreateNestedOneWithoutCommissionsInput
+  referrer: Prisma.UserCreateNestedOneWithoutCommissionsEarnedInput
 }
 
 export type CommissionUncheckedCreateWithoutBuyerInput = {
-  id?: number
+  id?: string
+  orderId: string
   referrerId: string
-  orderId: number
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CommissionCreateOrConnectWithoutBuyerInput = {
@@ -592,12 +641,14 @@ export type CommissionScalarWhereInput = {
   AND?: Prisma.CommissionScalarWhereInput | Prisma.CommissionScalarWhereInput[]
   OR?: Prisma.CommissionScalarWhereInput[]
   NOT?: Prisma.CommissionScalarWhereInput | Prisma.CommissionScalarWhereInput[]
-  id?: Prisma.IntFilter<"Commission"> | number
+  id?: Prisma.StringFilter<"Commission"> | string
+  orderId?: Prisma.StringFilter<"Commission"> | string
   referrerId?: Prisma.StringFilter<"Commission"> | string
   buyerId?: Prisma.StringFilter<"Commission"> | string
-  orderId?: Prisma.IntFilter<"Commission"> | number
   amount?: Prisma.FloatFilter<"Commission"> | number
+  status?: Prisma.EnumCommissionStatusFilter<"Commission"> | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFilter<"Commission"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Commission"> | Date | string
 }
 
 export type CommissionUpsertWithWhereUniqueWithoutBuyerInput = {
@@ -617,18 +668,23 @@ export type CommissionUpdateManyWithWhereWithoutBuyerInput = {
 }
 
 export type CommissionCreateWithoutOrderInput = {
+  id?: string
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
   referrer: Prisma.UserCreateNestedOneWithoutCommissionsEarnedInput
   buyer: Prisma.UserCreateNestedOneWithoutCommissionsFromInput
 }
 
 export type CommissionUncheckedCreateWithoutOrderInput = {
-  id?: number
+  id?: string
   referrerId: string
   buyerId: string
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CommissionCreateOrConnectWithoutOrderInput = {
@@ -658,176 +714,213 @@ export type CommissionUpdateManyWithWhereWithoutOrderInput = {
 }
 
 export type CommissionCreateManyReferrerInput = {
-  id?: number
+  id?: string
+  orderId: string
   buyerId: string
-  orderId: number
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CommissionCreateManyBuyerInput = {
-  id?: number
+  id?: string
+  orderId: string
   referrerId: string
-  orderId: number
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CommissionUpdateWithoutReferrerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  buyer?: Prisma.UserUpdateOneRequiredWithoutCommissionsFromNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneRequiredWithoutCommissionsNestedInput
+  buyer?: Prisma.UserUpdateOneRequiredWithoutCommissionsFromNestedInput
 }
 
 export type CommissionUncheckedUpdateWithoutReferrerInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommissionUncheckedUpdateManyWithoutReferrerInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommissionUpdateWithoutBuyerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  referrer?: Prisma.UserUpdateOneRequiredWithoutCommissionsEarnedNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneRequiredWithoutCommissionsNestedInput
+  referrer?: Prisma.UserUpdateOneRequiredWithoutCommissionsEarnedNestedInput
 }
 
 export type CommissionUncheckedUpdateWithoutBuyerInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   referrerId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommissionUncheckedUpdateManyWithoutBuyerInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   referrerId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommissionCreateManyOrderInput = {
-  id?: number
+  id?: string
   referrerId: string
   buyerId: string
   amount: number
+  status?: $Enums.CommissionStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CommissionUpdateWithoutOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrer?: Prisma.UserUpdateOneRequiredWithoutCommissionsEarnedNestedInput
   buyer?: Prisma.UserUpdateOneRequiredWithoutCommissionsFromNestedInput
 }
 
 export type CommissionUncheckedUpdateWithoutOrderInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   referrerId?: Prisma.StringFieldUpdateOperationsInput | string
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommissionUncheckedUpdateManyWithoutOrderInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   referrerId?: Prisma.StringFieldUpdateOperationsInput | string
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumCommissionStatusFieldUpdateOperationsInput | $Enums.CommissionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
 
 export type CommissionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  orderId?: boolean
   referrerId?: boolean
   buyerId?: boolean
-  orderId?: boolean
   amount?: boolean
+  status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   referrer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["commission"]>
 
 export type CommissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  orderId?: boolean
   referrerId?: boolean
   buyerId?: boolean
-  orderId?: boolean
   amount?: boolean
+  status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   referrer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["commission"]>
 
 export type CommissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  orderId?: boolean
   referrerId?: boolean
   buyerId?: boolean
-  orderId?: boolean
   amount?: boolean
+  status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   referrer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["commission"]>
 
 export type CommissionSelectScalar = {
   id?: boolean
+  orderId?: boolean
   referrerId?: boolean
   buyerId?: boolean
-  orderId?: boolean
   amount?: boolean
+  status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type CommissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "referrerId" | "buyerId" | "orderId" | "amount" | "createdAt", ExtArgs["result"]["commission"]>
+export type CommissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "referrerId" | "buyerId" | "amount" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["commission"]>
 export type CommissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   referrer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }
 export type CommissionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   referrer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }
 export type CommissionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   referrer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }
 
 export type $CommissionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Commission"
   objects: {
+    order: Prisma.$OrderPayload<ExtArgs>
     referrer: Prisma.$UserPayload<ExtArgs>
     buyer: Prisma.$UserPayload<ExtArgs>
-    order: Prisma.$OrderPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
+    orderId: string
     referrerId: string
     buyerId: string
-    orderId: number
     amount: number
+    status: $Enums.CommissionStatus
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["commission"]>
   composites: {}
 }
@@ -1222,9 +1315,9 @@ readonly fields: CommissionFieldRefs;
  */
 export interface Prisma__CommissionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  order<T extends Prisma.OrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderDefaultArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   referrer<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   buyer<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  order<T extends Prisma.OrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderDefaultArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1254,12 +1347,14 @@ export interface Prisma__CommissionClient<T, Null = never, ExtArgs extends runti
  * Fields of the Commission model
  */
 export interface CommissionFieldRefs {
-  readonly id: Prisma.FieldRef<"Commission", 'Int'>
+  readonly id: Prisma.FieldRef<"Commission", 'String'>
+  readonly orderId: Prisma.FieldRef<"Commission", 'String'>
   readonly referrerId: Prisma.FieldRef<"Commission", 'String'>
   readonly buyerId: Prisma.FieldRef<"Commission", 'String'>
-  readonly orderId: Prisma.FieldRef<"Commission", 'Int'>
   readonly amount: Prisma.FieldRef<"Commission", 'Float'>
+  readonly status: Prisma.FieldRef<"Commission", 'CommissionStatus'>
   readonly createdAt: Prisma.FieldRef<"Commission", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Commission", 'DateTime'>
 }
     
 

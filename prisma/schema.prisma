@@ -8,6 +8,156 @@ datasource db {
   // url      = env("DATABASE_URL")
 }
 
+// enum UserRole {
+//   USER
+//   ADMIN
+// }
+
+// enum UserTier {
+//   Member
+//   Founder
+//   VIP
+// }
+// model User {
+//   id               String   @id @default(uuid())
+//   email            String   @unique
+//   name             String
+//   password         String
+//   referralCode     String   @unique
+//   tier             UserTier  @default(Member)
+//   role             UserRole @default(USER)
+
+//   // Soft delete for user accounts
+//   isActive         Boolean  @default(true)
+//   deletedAt        DateTime?
+
+//   storeCredit      Float    @default(0)
+//   referralCount    Int      @default(0)
+  
+//   isReferralValid  Boolean   @default(false)
+//   referrerId       String?
+//   referrer         User?    @relation("UserReferrals", fields: [referrerId], references: [id])
+//   referrals        User[]   @relation("UserReferrals")
+
+//   // Relations
+//   orders            Order[]
+//   commissionsEarned Commission[] @relation("ReferrerCommissions")
+//   commissionsFrom   Commission[] @relation("BuyerCommissions")
+//   checkoutSessions  CheckoutSession[]
+
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+
+//   @@index([id])
+//   @@index([email])
+//   @@index([referrerId])
+// }
+
+// model Product {
+//   id         Int      @id @default(autoincrement())
+//   name       String
+//   sizes      Json 
+//   desc       String
+//   details    String   @db.Text
+//   references Json
+
+//   coa        Json?
+
+//   isDeleted   Boolean  @default(false)
+//   deletedAt  DateTime?
+
+//   createdAt  DateTime @default(now())
+//   updatedAt  DateTime @updatedAt
+
+//   @@index([isDeleted])   
+//   @@index([createdAt])     
+//   @@index([name])           
+//   @@index([isDeleted, createdAt])  
+// }
+
+// model CheckoutSession {
+//   id                  Int      @id @default(autoincrement())
+//   sessionId           String   @unique
+
+//   userId              String
+//   user                User     @relation(fields: [userId], references: [id])
+
+//   items               Json
+//   originalSubtotal    Float
+//   discountedSubtotal  Float
+//   discount            Float
+//   shipping            Float
+//   storeCreditsApplied Float
+//   total               Float
+
+//   shippingName        String
+//   shippingAddress     String
+
+//   status              String   @default("pending")
+//   orderId             Int?
+
+//   createdAt           DateTime @default(now())
+//   updatedAt           DateTime @updatedAt
+
+//   @@index([userId])
+//   @@index([sessionId])
+// }
+
+// model Order {
+//   id                     Int      @id @default(autoincrement())
+
+//   userId                 String
+//   user                   User     @relation(fields: [userId], references: [id])
+
+//   items                  Json
+//   originalSubtotal       Float
+//   subtotal               Float
+//   discount               Float
+//   shipping               Float
+//   storeCreditsApplied    Float
+//   total                  Float
+
+//   shippingName           String
+//   shippingAddress        String
+
+//   stripeSessionId        String?  @unique
+//   stripePaymentIntentId String?
+
+//   status                 String   @default("pending") 
+//   // pending | processing | shipped | completed | cancelled
+
+//   commissions            Commission[]
+
+//   createdAt              DateTime @default(now())
+//   updatedAt              DateTime @updatedAt
+
+//   @@index([userId])
+//   @@index([status])
+//   @@index([createdAt])
+// }
+
+// model Commission {
+//   id          Int      @id @default(autoincrement())
+
+//   referrerId  String
+//   referrer    User     @relation("ReferrerCommissions", fields: [referrerId], references: [id])
+
+//   buyerId     String
+//   buyer       User     @relation("BuyerCommissions", fields: [buyerId], references: [id])
+
+//   orderId     Int
+//   order       Order    @relation(fields: [orderId], references: [id])
+
+//   amount      Float
+
+//   createdAt   DateTime @default(now())
+
+//   @@index([referrerId])
+//   @@index([buyerId])
+//   @@index([orderId])
+// }
+
+
 enum UserRole {
   USER
   ADMIN
@@ -18,23 +168,43 @@ enum UserTier {
   Founder
   VIP
 }
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  CANCELLED
+}
+
+enum StripePaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum CommissionStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
 model User {
   id               String   @id @default(uuid())
   email            String   @unique
   name             String
   password         String
   referralCode     String   @unique
-  tier             UserTier  @default(Member)
+  tier             UserTier @default(Member)
   role             UserRole @default(USER)
 
-  // Soft delete for user accounts
+  // Soft delete
   isActive         Boolean  @default(true)
   deletedAt        DateTime?
 
   storeCredit      Float    @default(0)
   referralCount    Int      @default(0)
-  
-  isReferralValid  Boolean   @default(false)
+
+  isReferralValid  Boolean  @default(false)
   referrerId       String?
   referrer         User?    @relation("UserReferrals", fields: [referrerId], references: [id])
   referrals        User[]   @relation("UserReferrals")
@@ -48,19 +218,18 @@ model User {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  @@index([id])
   @@index([email])
   @@index([referrerId])
+  @@index([tier])
 }
 
 model Product {
   id         Int      @id @default(autoincrement())
   name       String
-  sizes      Json 
+  sizes      Json
   desc       String
   details    String   @db.Text
   references Json
-
   coa        Json?
 
   isDeleted   Boolean  @default(false)
@@ -69,75 +238,98 @@ model Product {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@index([isDeleted])   
-  @@index([createdAt])     
-  @@index([name])           
-  @@index([isDeleted, createdAt])  
-}
+    orderItems OrderItem[]
 
-model CheckoutSession {
-  id                  Int      @id @default(autoincrement())
-  sessionId           String   @unique
-
-  userId              String
-  user                User     @relation(fields: [userId], references: [id])
-
-  items               Json
-  originalSubtotal    Float
-  discountedSubtotal  Float
-  discount            Float
-  shipping            Float
-  storeCreditsApplied Float
-  total               Float
-
-  shippingName        String
-  shippingAddress     String
-
-  status              String   @default("pending")
-  orderId             Int?
-
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-
-  @@index([userId])
-  @@index([sessionId])
+  @@index([isDeleted])
+  @@index([createdAt])
+  @@index([name])
 }
 
 model Order {
-  id                     Int      @id @default(autoincrement())
+  id                String      @id @default(uuid())
+  userId            String
+  user              User        @relation(fields: [userId], references: [id])
 
-  userId                 String
-  user                   User     @relation(fields: [userId], references: [id])
+  // Shipping Info
+  name              String
+  email             String
+  phone             String
+  address           String
+  city              String
+  state             String
+  zip               String
+  country           String
 
-  items                  Json
-  originalSubtotal       Float
-  subtotal               Float
-  discount               Float
-  shipping               Float
-  storeCreditsApplied    Float
-  total                  Float
+  // Pricing
+  originalPrice     Float
+  discountPercentage Float
+  discountAmount    Float
+  subtotal          Float
+  shipping          Float
+  creditApplied     Float
+  total             Float
 
-  shippingName           String
-  shippingAddress        String
+  status            OrderStatus @default(PENDING)
 
-  stripeSessionId        String?  @unique
-  stripePaymentIntentId String?
+  // ShipStation Data
+  trackingNumber    String?
+  labelUrl          String?
 
-  status                 String   @default("pending") 
-  // pending | processing | shipped | completed | cancelled
+  // Commission
+  commissionAmount  Float?     @default(0)
+  commissionPaid    Boolean    @default(false)
 
-  commissions            Commission[]
+  items             OrderItem[]
+  commissions       Commission[]
 
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  checkoutSessions  CheckoutSession[]
+
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+
+model OrderItem {
+  id              String  @id @default(uuid())
+  orderId         String
+  order           Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId       Int?
+  product         Product? @relation(fields: [productId], references: [id])
+
+  quantity        Int
+  unitPrice       Float
+  discountedPrice Float
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model CheckoutSession {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+
+  orderId         String?
+  order           Order?   @relation(fields: [orderId], references: [id])
+
+  stripeSessionId String
+  paymentStatus   StripePaymentStatus @default(PENDING)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([userId])
-  @@index([status])
-  @@index([createdAt])
+  @@index([orderId])
+  @@index([stripeSessionId])
+  @@index([paymentStatus])
 }
 
 model Commission {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
+
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   referrerId  String
   referrer    User     @relation("ReferrerCommissions", fields: [referrerId], references: [id])
@@ -145,14 +337,15 @@ model Commission {
   buyerId     String
   buyer       User     @relation("BuyerCommissions", fields: [buyerId], references: [id])
 
-  orderId     Int
-  order       Order    @relation(fields: [orderId], references: [id])
-
   amount      Float
+  status      CommissionStatus @default(PENDING)
 
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
+  @@index([orderId])
   @@index([referrerId])
   @@index([buyerId])
-  @@index([orderId])
+  @@index([status])
+  @@index([createdAt])
 }

@@ -20,164 +20,68 @@ export type CheckoutSessionModel = runtime.Types.Result.DefaultSelection<Prisma.
 
 export type AggregateCheckoutSession = {
   _count: CheckoutSessionCountAggregateOutputType | null
-  _avg: CheckoutSessionAvgAggregateOutputType | null
-  _sum: CheckoutSessionSumAggregateOutputType | null
   _min: CheckoutSessionMinAggregateOutputType | null
   _max: CheckoutSessionMaxAggregateOutputType | null
 }
 
-export type CheckoutSessionAvgAggregateOutputType = {
-  id: number | null
-  originalSubtotal: number | null
-  discountedSubtotal: number | null
-  discount: number | null
-  shipping: number | null
-  storeCreditsApplied: number | null
-  total: number | null
-  orderId: number | null
-}
-
-export type CheckoutSessionSumAggregateOutputType = {
-  id: number | null
-  originalSubtotal: number | null
-  discountedSubtotal: number | null
-  discount: number | null
-  shipping: number | null
-  storeCreditsApplied: number | null
-  total: number | null
-  orderId: number | null
-}
-
 export type CheckoutSessionMinAggregateOutputType = {
-  id: number | null
-  sessionId: string | null
+  id: string | null
   userId: string | null
-  originalSubtotal: number | null
-  discountedSubtotal: number | null
-  discount: number | null
-  shipping: number | null
-  storeCreditsApplied: number | null
-  total: number | null
-  shippingName: string | null
-  shippingAddress: string | null
-  status: string | null
-  orderId: number | null
+  orderId: string | null
+  stripeSessionId: string | null
+  paymentStatus: $Enums.StripePaymentStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type CheckoutSessionMaxAggregateOutputType = {
-  id: number | null
-  sessionId: string | null
+  id: string | null
   userId: string | null
-  originalSubtotal: number | null
-  discountedSubtotal: number | null
-  discount: number | null
-  shipping: number | null
-  storeCreditsApplied: number | null
-  total: number | null
-  shippingName: string | null
-  shippingAddress: string | null
-  status: string | null
-  orderId: number | null
+  orderId: string | null
+  stripeSessionId: string | null
+  paymentStatus: $Enums.StripePaymentStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type CheckoutSessionCountAggregateOutputType = {
   id: number
-  sessionId: number
   userId: number
-  items: number
-  originalSubtotal: number
-  discountedSubtotal: number
-  discount: number
-  shipping: number
-  storeCreditsApplied: number
-  total: number
-  shippingName: number
-  shippingAddress: number
-  status: number
   orderId: number
+  stripeSessionId: number
+  paymentStatus: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
 
-export type CheckoutSessionAvgAggregateInputType = {
-  id?: true
-  originalSubtotal?: true
-  discountedSubtotal?: true
-  discount?: true
-  shipping?: true
-  storeCreditsApplied?: true
-  total?: true
-  orderId?: true
-}
-
-export type CheckoutSessionSumAggregateInputType = {
-  id?: true
-  originalSubtotal?: true
-  discountedSubtotal?: true
-  discount?: true
-  shipping?: true
-  storeCreditsApplied?: true
-  total?: true
-  orderId?: true
-}
-
 export type CheckoutSessionMinAggregateInputType = {
   id?: true
-  sessionId?: true
   userId?: true
-  originalSubtotal?: true
-  discountedSubtotal?: true
-  discount?: true
-  shipping?: true
-  storeCreditsApplied?: true
-  total?: true
-  shippingName?: true
-  shippingAddress?: true
-  status?: true
   orderId?: true
+  stripeSessionId?: true
+  paymentStatus?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type CheckoutSessionMaxAggregateInputType = {
   id?: true
-  sessionId?: true
   userId?: true
-  originalSubtotal?: true
-  discountedSubtotal?: true
-  discount?: true
-  shipping?: true
-  storeCreditsApplied?: true
-  total?: true
-  shippingName?: true
-  shippingAddress?: true
-  status?: true
   orderId?: true
+  stripeSessionId?: true
+  paymentStatus?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type CheckoutSessionCountAggregateInputType = {
   id?: true
-  sessionId?: true
   userId?: true
-  items?: true
-  originalSubtotal?: true
-  discountedSubtotal?: true
-  discount?: true
-  shipping?: true
-  storeCreditsApplied?: true
-  total?: true
-  shippingName?: true
-  shippingAddress?: true
-  status?: true
   orderId?: true
+  stripeSessionId?: true
+  paymentStatus?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -221,18 +125,6 @@ export type CheckoutSessionAggregateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: CheckoutSessionAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: CheckoutSessionSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: CheckoutSessionMinAggregateInputType
@@ -263,32 +155,19 @@ export type CheckoutSessionGroupByArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   _count?: CheckoutSessionCountAggregateInputType | true
-  _avg?: CheckoutSessionAvgAggregateInputType
-  _sum?: CheckoutSessionSumAggregateInputType
   _min?: CheckoutSessionMinAggregateInputType
   _max?: CheckoutSessionMaxAggregateInputType
 }
 
 export type CheckoutSessionGroupByOutputType = {
-  id: number
-  sessionId: string
+  id: string
   userId: string
-  items: runtime.JsonValue
-  originalSubtotal: number
-  discountedSubtotal: number
-  discount: number
-  shipping: number
-  storeCreditsApplied: number
-  total: number
-  shippingName: string
-  shippingAddress: string
-  status: string
-  orderId: number | null
+  orderId: string | null
+  stripeSessionId: string
+  paymentStatus: $Enums.StripePaymentStatus
   createdAt: Date
   updatedAt: Date
   _count: CheckoutSessionCountAggregateOutputType | null
-  _avg: CheckoutSessionAvgAggregateOutputType | null
-  _sum: CheckoutSessionSumAggregateOutputType | null
   _min: CheckoutSessionMinAggregateOutputType | null
   _max: CheckoutSessionMaxAggregateOutputType | null
 }
@@ -312,239 +191,134 @@ export type CheckoutSessionWhereInput = {
   AND?: Prisma.CheckoutSessionWhereInput | Prisma.CheckoutSessionWhereInput[]
   OR?: Prisma.CheckoutSessionWhereInput[]
   NOT?: Prisma.CheckoutSessionWhereInput | Prisma.CheckoutSessionWhereInput[]
-  id?: Prisma.IntFilter<"CheckoutSession"> | number
-  sessionId?: Prisma.StringFilter<"CheckoutSession"> | string
+  id?: Prisma.StringFilter<"CheckoutSession"> | string
   userId?: Prisma.StringFilter<"CheckoutSession"> | string
-  items?: Prisma.JsonFilter<"CheckoutSession">
-  originalSubtotal?: Prisma.FloatFilter<"CheckoutSession"> | number
-  discountedSubtotal?: Prisma.FloatFilter<"CheckoutSession"> | number
-  discount?: Prisma.FloatFilter<"CheckoutSession"> | number
-  shipping?: Prisma.FloatFilter<"CheckoutSession"> | number
-  storeCreditsApplied?: Prisma.FloatFilter<"CheckoutSession"> | number
-  total?: Prisma.FloatFilter<"CheckoutSession"> | number
-  shippingName?: Prisma.StringFilter<"CheckoutSession"> | string
-  shippingAddress?: Prisma.StringFilter<"CheckoutSession"> | string
-  status?: Prisma.StringFilter<"CheckoutSession"> | string
-  orderId?: Prisma.IntNullableFilter<"CheckoutSession"> | number | null
+  orderId?: Prisma.StringNullableFilter<"CheckoutSession"> | string | null
+  stripeSessionId?: Prisma.StringFilter<"CheckoutSession"> | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFilter<"CheckoutSession"> | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
 }
 
 export type CheckoutSessionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  sessionId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  items?: Prisma.SortOrder
-  originalSubtotal?: Prisma.SortOrder
-  discountedSubtotal?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  storeCreditsApplied?: Prisma.SortOrder
-  total?: Prisma.SortOrder
-  shippingName?: Prisma.SortOrder
-  shippingAddress?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   orderId?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeSessionId?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  order?: Prisma.OrderOrderByWithRelationInput
 }
 
 export type CheckoutSessionWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
-  sessionId?: string
+  id?: string
   AND?: Prisma.CheckoutSessionWhereInput | Prisma.CheckoutSessionWhereInput[]
   OR?: Prisma.CheckoutSessionWhereInput[]
   NOT?: Prisma.CheckoutSessionWhereInput | Prisma.CheckoutSessionWhereInput[]
   userId?: Prisma.StringFilter<"CheckoutSession"> | string
-  items?: Prisma.JsonFilter<"CheckoutSession">
-  originalSubtotal?: Prisma.FloatFilter<"CheckoutSession"> | number
-  discountedSubtotal?: Prisma.FloatFilter<"CheckoutSession"> | number
-  discount?: Prisma.FloatFilter<"CheckoutSession"> | number
-  shipping?: Prisma.FloatFilter<"CheckoutSession"> | number
-  storeCreditsApplied?: Prisma.FloatFilter<"CheckoutSession"> | number
-  total?: Prisma.FloatFilter<"CheckoutSession"> | number
-  shippingName?: Prisma.StringFilter<"CheckoutSession"> | string
-  shippingAddress?: Prisma.StringFilter<"CheckoutSession"> | string
-  status?: Prisma.StringFilter<"CheckoutSession"> | string
-  orderId?: Prisma.IntNullableFilter<"CheckoutSession"> | number | null
+  orderId?: Prisma.StringNullableFilter<"CheckoutSession"> | string | null
+  stripeSessionId?: Prisma.StringFilter<"CheckoutSession"> | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFilter<"CheckoutSession"> | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "sessionId">
+  order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
+}, "id">
 
 export type CheckoutSessionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  sessionId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  items?: Prisma.SortOrder
-  originalSubtotal?: Prisma.SortOrder
-  discountedSubtotal?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  storeCreditsApplied?: Prisma.SortOrder
-  total?: Prisma.SortOrder
-  shippingName?: Prisma.SortOrder
-  shippingAddress?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   orderId?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeSessionId?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CheckoutSessionCountOrderByAggregateInput
-  _avg?: Prisma.CheckoutSessionAvgOrderByAggregateInput
   _max?: Prisma.CheckoutSessionMaxOrderByAggregateInput
   _min?: Prisma.CheckoutSessionMinOrderByAggregateInput
-  _sum?: Prisma.CheckoutSessionSumOrderByAggregateInput
 }
 
 export type CheckoutSessionScalarWhereWithAggregatesInput = {
   AND?: Prisma.CheckoutSessionScalarWhereWithAggregatesInput | Prisma.CheckoutSessionScalarWhereWithAggregatesInput[]
   OR?: Prisma.CheckoutSessionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CheckoutSessionScalarWhereWithAggregatesInput | Prisma.CheckoutSessionScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"CheckoutSession"> | number
-  sessionId?: Prisma.StringWithAggregatesFilter<"CheckoutSession"> | string
+  id?: Prisma.StringWithAggregatesFilter<"CheckoutSession"> | string
   userId?: Prisma.StringWithAggregatesFilter<"CheckoutSession"> | string
-  items?: Prisma.JsonWithAggregatesFilter<"CheckoutSession">
-  originalSubtotal?: Prisma.FloatWithAggregatesFilter<"CheckoutSession"> | number
-  discountedSubtotal?: Prisma.FloatWithAggregatesFilter<"CheckoutSession"> | number
-  discount?: Prisma.FloatWithAggregatesFilter<"CheckoutSession"> | number
-  shipping?: Prisma.FloatWithAggregatesFilter<"CheckoutSession"> | number
-  storeCreditsApplied?: Prisma.FloatWithAggregatesFilter<"CheckoutSession"> | number
-  total?: Prisma.FloatWithAggregatesFilter<"CheckoutSession"> | number
-  shippingName?: Prisma.StringWithAggregatesFilter<"CheckoutSession"> | string
-  shippingAddress?: Prisma.StringWithAggregatesFilter<"CheckoutSession"> | string
-  status?: Prisma.StringWithAggregatesFilter<"CheckoutSession"> | string
-  orderId?: Prisma.IntNullableWithAggregatesFilter<"CheckoutSession"> | number | null
+  orderId?: Prisma.StringNullableWithAggregatesFilter<"CheckoutSession"> | string | null
+  stripeSessionId?: Prisma.StringWithAggregatesFilter<"CheckoutSession"> | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusWithAggregatesFilter<"CheckoutSession"> | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CheckoutSession"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CheckoutSession"> | Date | string
 }
 
 export type CheckoutSessionCreateInput = {
-  sessionId: string
-  items: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal: number
-  discountedSubtotal: number
-  discount: number
-  shipping: number
-  storeCreditsApplied: number
-  total: number
-  shippingName: string
-  shippingAddress: string
-  status?: string
-  orderId?: number | null
+  id?: string
+  stripeSessionId: string
+  paymentStatus?: $Enums.StripePaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCheckoutSessionsInput
+  order?: Prisma.OrderCreateNestedOneWithoutCheckoutSessionsInput
 }
 
 export type CheckoutSessionUncheckedCreateInput = {
-  id?: number
-  sessionId: string
+  id?: string
   userId: string
-  items: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal: number
-  discountedSubtotal: number
-  discount: number
-  shipping: number
-  storeCreditsApplied: number
-  total: number
-  shippingName: string
-  shippingAddress: string
-  status?: string
-  orderId?: number | null
+  orderId?: string | null
+  stripeSessionId: string
+  paymentStatus?: $Enums.StripePaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CheckoutSessionUpdateInput = {
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  items?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discountedSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  storeCreditsApplied?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  shippingName?: Prisma.StringFieldUpdateOperationsInput | string
-  shippingAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCheckoutSessionsNestedInput
+  order?: Prisma.OrderUpdateOneWithoutCheckoutSessionsNestedInput
 }
 
 export type CheckoutSessionUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  items?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discountedSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  storeCreditsApplied?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  shippingName?: Prisma.StringFieldUpdateOperationsInput | string
-  shippingAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CheckoutSessionCreateManyInput = {
-  id?: number
-  sessionId: string
+  id?: string
   userId: string
-  items: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal: number
-  discountedSubtotal: number
-  discount: number
-  shipping: number
-  storeCreditsApplied: number
-  total: number
-  shippingName: string
-  shippingAddress: string
-  status?: string
-  orderId?: number | null
+  orderId?: string | null
+  stripeSessionId: string
+  paymentStatus?: $Enums.StripePaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CheckoutSessionUpdateManyMutationInput = {
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  items?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discountedSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  storeCreditsApplied?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  shippingName?: Prisma.StringFieldUpdateOperationsInput | string
-  shippingAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CheckoutSessionUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  items?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discountedSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  storeCreditsApplied?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  shippingName?: Prisma.StringFieldUpdateOperationsInput | string
-  shippingAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -561,79 +335,32 @@ export type CheckoutSessionOrderByRelationAggregateInput = {
 
 export type CheckoutSessionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  sessionId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  items?: Prisma.SortOrder
-  originalSubtotal?: Prisma.SortOrder
-  discountedSubtotal?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  storeCreditsApplied?: Prisma.SortOrder
-  total?: Prisma.SortOrder
-  shippingName?: Prisma.SortOrder
-  shippingAddress?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  stripeSessionId?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type CheckoutSessionAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  originalSubtotal?: Prisma.SortOrder
-  discountedSubtotal?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  storeCreditsApplied?: Prisma.SortOrder
-  total?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
-}
-
 export type CheckoutSessionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  sessionId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  originalSubtotal?: Prisma.SortOrder
-  discountedSubtotal?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  storeCreditsApplied?: Prisma.SortOrder
-  total?: Prisma.SortOrder
-  shippingName?: Prisma.SortOrder
-  shippingAddress?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  stripeSessionId?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type CheckoutSessionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  sessionId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  originalSubtotal?: Prisma.SortOrder
-  discountedSubtotal?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  storeCreditsApplied?: Prisma.SortOrder
-  total?: Prisma.SortOrder
-  shippingName?: Prisma.SortOrder
-  shippingAddress?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  stripeSessionId?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type CheckoutSessionSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  originalSubtotal?: Prisma.SortOrder
-  discountedSubtotal?: Prisma.SortOrder
-  discount?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  storeCreditsApplied?: Prisma.SortOrder
-  total?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
 }
 
 export type CheckoutSessionCreateNestedManyWithoutUserInput = {
@@ -678,45 +405,66 @@ export type CheckoutSessionUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.CheckoutSessionScalarWhereInput | Prisma.CheckoutSessionScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type CheckoutSessionCreateNestedManyWithoutOrderInput = {
+  create?: Prisma.XOR<Prisma.CheckoutSessionCreateWithoutOrderInput, Prisma.CheckoutSessionUncheckedCreateWithoutOrderInput> | Prisma.CheckoutSessionCreateWithoutOrderInput[] | Prisma.CheckoutSessionUncheckedCreateWithoutOrderInput[]
+  connectOrCreate?: Prisma.CheckoutSessionCreateOrConnectWithoutOrderInput | Prisma.CheckoutSessionCreateOrConnectWithoutOrderInput[]
+  createMany?: Prisma.CheckoutSessionCreateManyOrderInputEnvelope
+  connect?: Prisma.CheckoutSessionWhereUniqueInput | Prisma.CheckoutSessionWhereUniqueInput[]
+}
+
+export type CheckoutSessionUncheckedCreateNestedManyWithoutOrderInput = {
+  create?: Prisma.XOR<Prisma.CheckoutSessionCreateWithoutOrderInput, Prisma.CheckoutSessionUncheckedCreateWithoutOrderInput> | Prisma.CheckoutSessionCreateWithoutOrderInput[] | Prisma.CheckoutSessionUncheckedCreateWithoutOrderInput[]
+  connectOrCreate?: Prisma.CheckoutSessionCreateOrConnectWithoutOrderInput | Prisma.CheckoutSessionCreateOrConnectWithoutOrderInput[]
+  createMany?: Prisma.CheckoutSessionCreateManyOrderInputEnvelope
+  connect?: Prisma.CheckoutSessionWhereUniqueInput | Prisma.CheckoutSessionWhereUniqueInput[]
+}
+
+export type CheckoutSessionUpdateManyWithoutOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.CheckoutSessionCreateWithoutOrderInput, Prisma.CheckoutSessionUncheckedCreateWithoutOrderInput> | Prisma.CheckoutSessionCreateWithoutOrderInput[] | Prisma.CheckoutSessionUncheckedCreateWithoutOrderInput[]
+  connectOrCreate?: Prisma.CheckoutSessionCreateOrConnectWithoutOrderInput | Prisma.CheckoutSessionCreateOrConnectWithoutOrderInput[]
+  upsert?: Prisma.CheckoutSessionUpsertWithWhereUniqueWithoutOrderInput | Prisma.CheckoutSessionUpsertWithWhereUniqueWithoutOrderInput[]
+  createMany?: Prisma.CheckoutSessionCreateManyOrderInputEnvelope
+  set?: Prisma.CheckoutSessionWhereUniqueInput | Prisma.CheckoutSessionWhereUniqueInput[]
+  disconnect?: Prisma.CheckoutSessionWhereUniqueInput | Prisma.CheckoutSessionWhereUniqueInput[]
+  delete?: Prisma.CheckoutSessionWhereUniqueInput | Prisma.CheckoutSessionWhereUniqueInput[]
+  connect?: Prisma.CheckoutSessionWhereUniqueInput | Prisma.CheckoutSessionWhereUniqueInput[]
+  update?: Prisma.CheckoutSessionUpdateWithWhereUniqueWithoutOrderInput | Prisma.CheckoutSessionUpdateWithWhereUniqueWithoutOrderInput[]
+  updateMany?: Prisma.CheckoutSessionUpdateManyWithWhereWithoutOrderInput | Prisma.CheckoutSessionUpdateManyWithWhereWithoutOrderInput[]
+  deleteMany?: Prisma.CheckoutSessionScalarWhereInput | Prisma.CheckoutSessionScalarWhereInput[]
+}
+
+export type CheckoutSessionUncheckedUpdateManyWithoutOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.CheckoutSessionCreateWithoutOrderInput, Prisma.CheckoutSessionUncheckedCreateWithoutOrderInput> | Prisma.CheckoutSessionCreateWithoutOrderInput[] | Prisma.CheckoutSessionUncheckedCreateWithoutOrderInput[]
+  connectOrCreate?: Prisma.CheckoutSessionCreateOrConnectWithoutOrderInput | Prisma.CheckoutSessionCreateOrConnectWithoutOrderInput[]
+  upsert?: Prisma.CheckoutSessionUpsertWithWhereUniqueWithoutOrderInput | Prisma.CheckoutSessionUpsertWithWhereUniqueWithoutOrderInput[]
+  createMany?: Prisma.CheckoutSessionCreateManyOrderInputEnvelope
+  set?: Prisma.CheckoutSessionWhereUniqueInput | Prisma.CheckoutSessionWhereUniqueInput[]
+  disconnect?: Prisma.CheckoutSessionWhereUniqueInput | Prisma.CheckoutSessionWhereUniqueInput[]
+  delete?: Prisma.CheckoutSessionWhereUniqueInput | Prisma.CheckoutSessionWhereUniqueInput[]
+  connect?: Prisma.CheckoutSessionWhereUniqueInput | Prisma.CheckoutSessionWhereUniqueInput[]
+  update?: Prisma.CheckoutSessionUpdateWithWhereUniqueWithoutOrderInput | Prisma.CheckoutSessionUpdateWithWhereUniqueWithoutOrderInput[]
+  updateMany?: Prisma.CheckoutSessionUpdateManyWithWhereWithoutOrderInput | Prisma.CheckoutSessionUpdateManyWithWhereWithoutOrderInput[]
+  deleteMany?: Prisma.CheckoutSessionScalarWhereInput | Prisma.CheckoutSessionScalarWhereInput[]
+}
+
+export type EnumStripePaymentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.StripePaymentStatus
 }
 
 export type CheckoutSessionCreateWithoutUserInput = {
-  sessionId: string
-  items: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal: number
-  discountedSubtotal: number
-  discount: number
-  shipping: number
-  storeCreditsApplied: number
-  total: number
-  shippingName: string
-  shippingAddress: string
-  status?: string
-  orderId?: number | null
+  id?: string
+  stripeSessionId: string
+  paymentStatus?: $Enums.StripePaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  order?: Prisma.OrderCreateNestedOneWithoutCheckoutSessionsInput
 }
 
 export type CheckoutSessionUncheckedCreateWithoutUserInput = {
-  id?: number
-  sessionId: string
-  items: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal: number
-  discountedSubtotal: number
-  discount: number
-  shipping: number
-  storeCreditsApplied: number
-  total: number
-  shippingName: string
-  shippingAddress: string
-  status?: string
-  orderId?: number | null
+  id?: string
+  orderId?: string | null
+  stripeSessionId: string
+  paymentStatus?: $Enums.StripePaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -751,91 +499,127 @@ export type CheckoutSessionScalarWhereInput = {
   AND?: Prisma.CheckoutSessionScalarWhereInput | Prisma.CheckoutSessionScalarWhereInput[]
   OR?: Prisma.CheckoutSessionScalarWhereInput[]
   NOT?: Prisma.CheckoutSessionScalarWhereInput | Prisma.CheckoutSessionScalarWhereInput[]
-  id?: Prisma.IntFilter<"CheckoutSession"> | number
-  sessionId?: Prisma.StringFilter<"CheckoutSession"> | string
+  id?: Prisma.StringFilter<"CheckoutSession"> | string
   userId?: Prisma.StringFilter<"CheckoutSession"> | string
-  items?: Prisma.JsonFilter<"CheckoutSession">
-  originalSubtotal?: Prisma.FloatFilter<"CheckoutSession"> | number
-  discountedSubtotal?: Prisma.FloatFilter<"CheckoutSession"> | number
-  discount?: Prisma.FloatFilter<"CheckoutSession"> | number
-  shipping?: Prisma.FloatFilter<"CheckoutSession"> | number
-  storeCreditsApplied?: Prisma.FloatFilter<"CheckoutSession"> | number
-  total?: Prisma.FloatFilter<"CheckoutSession"> | number
-  shippingName?: Prisma.StringFilter<"CheckoutSession"> | string
-  shippingAddress?: Prisma.StringFilter<"CheckoutSession"> | string
-  status?: Prisma.StringFilter<"CheckoutSession"> | string
-  orderId?: Prisma.IntNullableFilter<"CheckoutSession"> | number | null
+  orderId?: Prisma.StringNullableFilter<"CheckoutSession"> | string | null
+  stripeSessionId?: Prisma.StringFilter<"CheckoutSession"> | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFilter<"CheckoutSession"> | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string
 }
 
+export type CheckoutSessionCreateWithoutOrderInput = {
+  id?: string
+  stripeSessionId: string
+  paymentStatus?: $Enums.StripePaymentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutCheckoutSessionsInput
+}
+
+export type CheckoutSessionUncheckedCreateWithoutOrderInput = {
+  id?: string
+  userId: string
+  stripeSessionId: string
+  paymentStatus?: $Enums.StripePaymentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CheckoutSessionCreateOrConnectWithoutOrderInput = {
+  where: Prisma.CheckoutSessionWhereUniqueInput
+  create: Prisma.XOR<Prisma.CheckoutSessionCreateWithoutOrderInput, Prisma.CheckoutSessionUncheckedCreateWithoutOrderInput>
+}
+
+export type CheckoutSessionCreateManyOrderInputEnvelope = {
+  data: Prisma.CheckoutSessionCreateManyOrderInput | Prisma.CheckoutSessionCreateManyOrderInput[]
+  skipDuplicates?: boolean
+}
+
+export type CheckoutSessionUpsertWithWhereUniqueWithoutOrderInput = {
+  where: Prisma.CheckoutSessionWhereUniqueInput
+  update: Prisma.XOR<Prisma.CheckoutSessionUpdateWithoutOrderInput, Prisma.CheckoutSessionUncheckedUpdateWithoutOrderInput>
+  create: Prisma.XOR<Prisma.CheckoutSessionCreateWithoutOrderInput, Prisma.CheckoutSessionUncheckedCreateWithoutOrderInput>
+}
+
+export type CheckoutSessionUpdateWithWhereUniqueWithoutOrderInput = {
+  where: Prisma.CheckoutSessionWhereUniqueInput
+  data: Prisma.XOR<Prisma.CheckoutSessionUpdateWithoutOrderInput, Prisma.CheckoutSessionUncheckedUpdateWithoutOrderInput>
+}
+
+export type CheckoutSessionUpdateManyWithWhereWithoutOrderInput = {
+  where: Prisma.CheckoutSessionScalarWhereInput
+  data: Prisma.XOR<Prisma.CheckoutSessionUpdateManyMutationInput, Prisma.CheckoutSessionUncheckedUpdateManyWithoutOrderInput>
+}
+
 export type CheckoutSessionCreateManyUserInput = {
-  id?: number
-  sessionId: string
-  items: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal: number
-  discountedSubtotal: number
-  discount: number
-  shipping: number
-  storeCreditsApplied: number
-  total: number
-  shippingName: string
-  shippingAddress: string
-  status?: string
-  orderId?: number | null
+  id?: string
+  orderId?: string | null
+  stripeSessionId: string
+  paymentStatus?: $Enums.StripePaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CheckoutSessionUpdateWithoutUserInput = {
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  items?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discountedSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  storeCreditsApplied?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  shippingName?: Prisma.StringFieldUpdateOperationsInput | string
-  shippingAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  order?: Prisma.OrderUpdateOneWithoutCheckoutSessionsNestedInput
 }
 
 export type CheckoutSessionUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  items?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discountedSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  storeCreditsApplied?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  shippingName?: Prisma.StringFieldUpdateOperationsInput | string
-  shippingAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CheckoutSessionUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  items?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  originalSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discountedSubtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  storeCreditsApplied?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  shippingName?: Prisma.StringFieldUpdateOperationsInput | string
-  shippingAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CheckoutSessionCreateManyOrderInput = {
+  id?: string
+  userId: string
+  stripeSessionId: string
+  paymentStatus?: $Enums.StripePaymentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CheckoutSessionUpdateWithoutOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCheckoutSessionsNestedInput
+}
+
+export type CheckoutSessionUncheckedUpdateWithoutOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CheckoutSessionUncheckedUpdateManyWithoutOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -844,114 +628,76 @@ export type CheckoutSessionUncheckedUpdateManyWithoutUserInput = {
 
 export type CheckoutSessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  sessionId?: boolean
   userId?: boolean
-  items?: boolean
-  originalSubtotal?: boolean
-  discountedSubtotal?: boolean
-  discount?: boolean
-  shipping?: boolean
-  storeCreditsApplied?: boolean
-  total?: boolean
-  shippingName?: boolean
-  shippingAddress?: boolean
-  status?: boolean
   orderId?: boolean
+  stripeSessionId?: boolean
+  paymentStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.CheckoutSession$orderArgs<ExtArgs>
 }, ExtArgs["result"]["checkoutSession"]>
 
 export type CheckoutSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  sessionId?: boolean
   userId?: boolean
-  items?: boolean
-  originalSubtotal?: boolean
-  discountedSubtotal?: boolean
-  discount?: boolean
-  shipping?: boolean
-  storeCreditsApplied?: boolean
-  total?: boolean
-  shippingName?: boolean
-  shippingAddress?: boolean
-  status?: boolean
   orderId?: boolean
+  stripeSessionId?: boolean
+  paymentStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.CheckoutSession$orderArgs<ExtArgs>
 }, ExtArgs["result"]["checkoutSession"]>
 
 export type CheckoutSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  sessionId?: boolean
   userId?: boolean
-  items?: boolean
-  originalSubtotal?: boolean
-  discountedSubtotal?: boolean
-  discount?: boolean
-  shipping?: boolean
-  storeCreditsApplied?: boolean
-  total?: boolean
-  shippingName?: boolean
-  shippingAddress?: boolean
-  status?: boolean
   orderId?: boolean
+  stripeSessionId?: boolean
+  paymentStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.CheckoutSession$orderArgs<ExtArgs>
 }, ExtArgs["result"]["checkoutSession"]>
 
 export type CheckoutSessionSelectScalar = {
   id?: boolean
-  sessionId?: boolean
   userId?: boolean
-  items?: boolean
-  originalSubtotal?: boolean
-  discountedSubtotal?: boolean
-  discount?: boolean
-  shipping?: boolean
-  storeCreditsApplied?: boolean
-  total?: boolean
-  shippingName?: boolean
-  shippingAddress?: boolean
-  status?: boolean
   orderId?: boolean
+  stripeSessionId?: boolean
+  paymentStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CheckoutSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sessionId" | "userId" | "items" | "originalSubtotal" | "discountedSubtotal" | "discount" | "shipping" | "storeCreditsApplied" | "total" | "shippingName" | "shippingAddress" | "status" | "orderId" | "createdAt" | "updatedAt", ExtArgs["result"]["checkoutSession"]>
+export type CheckoutSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "orderId" | "stripeSessionId" | "paymentStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["checkoutSession"]>
 export type CheckoutSessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.CheckoutSession$orderArgs<ExtArgs>
 }
 export type CheckoutSessionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.CheckoutSession$orderArgs<ExtArgs>
 }
 export type CheckoutSessionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  order?: boolean | Prisma.CheckoutSession$orderArgs<ExtArgs>
 }
 
 export type $CheckoutSessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CheckoutSession"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    order: Prisma.$OrderPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    sessionId: string
+    id: string
     userId: string
-    items: runtime.JsonValue
-    originalSubtotal: number
-    discountedSubtotal: number
-    discount: number
-    shipping: number
-    storeCreditsApplied: number
-    total: number
-    shippingName: string
-    shippingAddress: string
-    status: string
-    orderId: number | null
+    orderId: string | null
+    stripeSessionId: string
+    paymentStatus: $Enums.StripePaymentStatus
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["checkoutSession"]>
@@ -1349,6 +1095,7 @@ readonly fields: CheckoutSessionFieldRefs;
 export interface Prisma__CheckoutSessionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  order<T extends Prisma.CheckoutSession$orderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CheckoutSession$orderArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1378,20 +1125,11 @@ export interface Prisma__CheckoutSessionClient<T, Null = never, ExtArgs extends 
  * Fields of the CheckoutSession model
  */
 export interface CheckoutSessionFieldRefs {
-  readonly id: Prisma.FieldRef<"CheckoutSession", 'Int'>
-  readonly sessionId: Prisma.FieldRef<"CheckoutSession", 'String'>
+  readonly id: Prisma.FieldRef<"CheckoutSession", 'String'>
   readonly userId: Prisma.FieldRef<"CheckoutSession", 'String'>
-  readonly items: Prisma.FieldRef<"CheckoutSession", 'Json'>
-  readonly originalSubtotal: Prisma.FieldRef<"CheckoutSession", 'Float'>
-  readonly discountedSubtotal: Prisma.FieldRef<"CheckoutSession", 'Float'>
-  readonly discount: Prisma.FieldRef<"CheckoutSession", 'Float'>
-  readonly shipping: Prisma.FieldRef<"CheckoutSession", 'Float'>
-  readonly storeCreditsApplied: Prisma.FieldRef<"CheckoutSession", 'Float'>
-  readonly total: Prisma.FieldRef<"CheckoutSession", 'Float'>
-  readonly shippingName: Prisma.FieldRef<"CheckoutSession", 'String'>
-  readonly shippingAddress: Prisma.FieldRef<"CheckoutSession", 'String'>
-  readonly status: Prisma.FieldRef<"CheckoutSession", 'String'>
-  readonly orderId: Prisma.FieldRef<"CheckoutSession", 'Int'>
+  readonly orderId: Prisma.FieldRef<"CheckoutSession", 'String'>
+  readonly stripeSessionId: Prisma.FieldRef<"CheckoutSession", 'String'>
+  readonly paymentStatus: Prisma.FieldRef<"CheckoutSession", 'StripePaymentStatus'>
   readonly createdAt: Prisma.FieldRef<"CheckoutSession", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CheckoutSession", 'DateTime'>
 }
@@ -1787,6 +1525,25 @@ export type CheckoutSessionDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many CheckoutSessions to delete.
    */
   limit?: number
+}
+
+/**
+ * CheckoutSession.order
+ */
+export type CheckoutSession$orderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Order
+   */
+  select?: Prisma.OrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Order
+   */
+  omit?: Prisma.OrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput
 }
 
 /**

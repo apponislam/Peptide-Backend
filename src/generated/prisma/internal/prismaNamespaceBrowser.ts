@@ -53,8 +53,9 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Product: 'Product',
-  CheckoutSession: 'CheckoutSession',
   Order: 'Order',
+  OrderItem: 'OrderItem',
+  CheckoutSession: 'CheckoutSession',
   Commission: 'Commission'
 } as const
 
@@ -112,43 +113,29 @@ export const ProductScalarFieldEnum = {
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
 
 
-export const CheckoutSessionScalarFieldEnum = {
-  id: 'id',
-  sessionId: 'sessionId',
-  userId: 'userId',
-  items: 'items',
-  originalSubtotal: 'originalSubtotal',
-  discountedSubtotal: 'discountedSubtotal',
-  discount: 'discount',
-  shipping: 'shipping',
-  storeCreditsApplied: 'storeCreditsApplied',
-  total: 'total',
-  shippingName: 'shippingName',
-  shippingAddress: 'shippingAddress',
-  status: 'status',
-  orderId: 'orderId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CheckoutSessionScalarFieldEnum = (typeof CheckoutSessionScalarFieldEnum)[keyof typeof CheckoutSessionScalarFieldEnum]
-
-
 export const OrderScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  items: 'items',
-  originalSubtotal: 'originalSubtotal',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+  city: 'city',
+  state: 'state',
+  zip: 'zip',
+  country: 'country',
+  originalPrice: 'originalPrice',
+  discountPercentage: 'discountPercentage',
+  discountAmount: 'discountAmount',
   subtotal: 'subtotal',
-  discount: 'discount',
   shipping: 'shipping',
-  storeCreditsApplied: 'storeCreditsApplied',
+  creditApplied: 'creditApplied',
   total: 'total',
-  shippingName: 'shippingName',
-  shippingAddress: 'shippingAddress',
-  stripeSessionId: 'stripeSessionId',
-  stripePaymentIntentId: 'stripePaymentIntentId',
   status: 'status',
+  trackingNumber: 'trackingNumber',
+  labelUrl: 'labelUrl',
+  commissionAmount: 'commissionAmount',
+  commissionPaid: 'commissionPaid',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -156,13 +143,40 @@ export const OrderScalarFieldEnum = {
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
 
 
+export const OrderItemScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  productId: 'productId',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  discountedPrice: 'discountedPrice'
+} as const
+
+export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
+
+
+export const CheckoutSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  orderId: 'orderId',
+  stripeSessionId: 'stripeSessionId',
+  paymentStatus: 'paymentStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CheckoutSessionScalarFieldEnum = (typeof CheckoutSessionScalarFieldEnum)[keyof typeof CheckoutSessionScalarFieldEnum]
+
+
 export const CommissionScalarFieldEnum = {
   id: 'id',
+  orderId: 'orderId',
   referrerId: 'referrerId',
   buyerId: 'buyerId',
-  orderId: 'orderId',
   amount: 'amount',
-  createdAt: 'createdAt'
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type CommissionScalarFieldEnum = (typeof CommissionScalarFieldEnum)[keyof typeof CommissionScalarFieldEnum]

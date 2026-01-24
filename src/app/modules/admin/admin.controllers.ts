@@ -29,27 +29,27 @@ const getAllOrders = catchAsync(async (req: Request, res: Response) => {
 });
 
 // Update order status
-const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id as string);
+// const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
+//     const id = parseInt(req.params.id as string);
 
-    if (isNaN(id)) {
-        return sendResponse(res, {
-            statusCode: 400,
-            success: false,
-            message: "Invalid order ID",
-            data: null,
-        });
-    }
+//     if (isNaN(id)) {
+//         return sendResponse(res, {
+//             statusCode: 400,
+//             success: false,
+//             message: "Invalid order ID",
+//             data: null,
+//         });
+//     }
 
-    const order = await adminServices.updateOrderStatus(id, req.body);
+//     const order = await adminServices.updateOrderStatus(id, req.body);
 
-    sendResponse(res, {
-        statusCode: 200,
-        success: true,
-        message: "Order status updated successfully",
-        data: order,
-    });
-});
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Order status updated successfully",
+//         data: order,
+//     });
+// });
 
 // Get all users
 // const getAllUsers = catchAsync(async (req: Request, res: Response) => {
@@ -102,7 +102,6 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
 export const adminControllers = {
     getDashboardStats,
     getAllOrders,
-    updateOrderStatus,
     getAllUsers,
     updateUser,
 };

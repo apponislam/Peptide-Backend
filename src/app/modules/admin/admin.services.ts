@@ -42,22 +42,22 @@ const getAllOrders = async () => {
 };
 
 // Update order status
-const updateOrderStatus = async (id: number, data: { status: string }) => {
-    const existingOrder = await prisma.order.findUnique({
-        where: { id },
-    });
+// const updateOrderStatus = async (id: number, data: { status: string }) => {
+//     const existingOrder = await prisma.order.findUnique({
+//         where: { id },
+//     });
 
-    if (!existingOrder) {
-        throw new ApiError(404, "Order not found");
-    }
+//     if (!existingOrder) {
+//         throw new ApiError(404, "Order not found");
+//     }
 
-    const order = await prisma.order.update({
-        where: { id },
-        data: { status: data.status },
-    });
+//     const order = await prisma.order.update({
+//         where: { id },
+//         data: { status: data.status },
+//     });
 
-    return order;
-};
+//     return order;
+// };
 
 // Get all users
 const getAllUsers = async (params: { page?: number; limit?: number; search?: string; role?: UserRole; tier?: UserTier; sortBy?: string; sortOrder?: "asc" | "desc" }) => {
@@ -168,7 +168,6 @@ const updateUser = async (
 export const adminServices = {
     getDashboardStats,
     getAllOrders,
-    updateOrderStatus,
     getAllUsers,
     updateUser,
 };

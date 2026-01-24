@@ -734,20 +734,6 @@ export type UserUncheckedUpdateManyWithoutReferrerNestedInput = {
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
-export type UserCreateNestedOneWithoutCheckoutSessionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCheckoutSessionsInput, Prisma.UserUncheckedCreateWithoutCheckoutSessionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCheckoutSessionsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutCheckoutSessionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCheckoutSessionsInput, Prisma.UserUncheckedCreateWithoutCheckoutSessionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCheckoutSessionsInput
-  upsert?: Prisma.UserUpsertWithoutCheckoutSessionsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCheckoutSessionsInput, Prisma.UserUpdateWithoutCheckoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutCheckoutSessionsInput>
-}
-
 export type UserCreateNestedOneWithoutOrdersInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrdersInput
@@ -760,6 +746,20 @@ export type UserUpdateOneRequiredWithoutOrdersNestedInput = {
   upsert?: Prisma.UserUpsertWithoutOrdersInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrdersInput, Prisma.UserUpdateWithoutOrdersInput>, Prisma.UserUncheckedUpdateWithoutOrdersInput>
+}
+
+export type UserCreateNestedOneWithoutCheckoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCheckoutSessionsInput, Prisma.UserUncheckedCreateWithoutCheckoutSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCheckoutSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCheckoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCheckoutSessionsInput, Prisma.UserUncheckedCreateWithoutCheckoutSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCheckoutSessionsInput
+  upsert?: Prisma.UserUpsertWithoutCheckoutSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCheckoutSessionsInput, Prisma.UserUpdateWithoutCheckoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutCheckoutSessionsInput>
 }
 
 export type UserCreateNestedOneWithoutCommissionsEarnedInput = {
@@ -985,110 +985,6 @@ export type UserScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
 
-export type UserCreateWithoutCheckoutSessionsInput = {
-  id?: string
-  email: string
-  name: string
-  password: string
-  referralCode: string
-  tier?: $Enums.UserTier
-  role?: $Enums.UserRole
-  isActive?: boolean
-  deletedAt?: Date | string | null
-  storeCredit?: number
-  referralCount?: number
-  isReferralValid?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  referrer?: Prisma.UserCreateNestedOneWithoutReferralsInput
-  referrals?: Prisma.UserCreateNestedManyWithoutReferrerInput
-  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
-  commissionsEarned?: Prisma.CommissionCreateNestedManyWithoutReferrerInput
-  commissionsFrom?: Prisma.CommissionCreateNestedManyWithoutBuyerInput
-}
-
-export type UserUncheckedCreateWithoutCheckoutSessionsInput = {
-  id?: string
-  email: string
-  name: string
-  password: string
-  referralCode: string
-  tier?: $Enums.UserTier
-  role?: $Enums.UserRole
-  isActive?: boolean
-  deletedAt?: Date | string | null
-  storeCredit?: number
-  referralCount?: number
-  isReferralValid?: boolean
-  referrerId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferrerInput
-  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
-  commissionsEarned?: Prisma.CommissionUncheckedCreateNestedManyWithoutReferrerInput
-  commissionsFrom?: Prisma.CommissionUncheckedCreateNestedManyWithoutBuyerInput
-}
-
-export type UserCreateOrConnectWithoutCheckoutSessionsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCheckoutSessionsInput, Prisma.UserUncheckedCreateWithoutCheckoutSessionsInput>
-}
-
-export type UserUpsertWithoutCheckoutSessionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCheckoutSessionsInput, Prisma.UserUncheckedUpdateWithoutCheckoutSessionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCheckoutSessionsInput, Prisma.UserUncheckedCreateWithoutCheckoutSessionsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutCheckoutSessionsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCheckoutSessionsInput, Prisma.UserUncheckedUpdateWithoutCheckoutSessionsInput>
-}
-
-export type UserUpdateWithoutCheckoutSessionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
-  tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
-  referralCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  referrer?: Prisma.UserUpdateOneWithoutReferralsNestedInput
-  referrals?: Prisma.UserUpdateManyWithoutReferrerNestedInput
-  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
-  commissionsEarned?: Prisma.CommissionUpdateManyWithoutReferrerNestedInput
-  commissionsFrom?: Prisma.CommissionUpdateManyWithoutBuyerNestedInput
-}
-
-export type UserUncheckedUpdateWithoutCheckoutSessionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
-  tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
-  referralCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
-  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
-  commissionsEarned?: Prisma.CommissionUncheckedUpdateManyWithoutReferrerNestedInput
-  commissionsFrom?: Prisma.CommissionUncheckedUpdateManyWithoutBuyerNestedInput
-}
-
 export type UserCreateWithoutOrdersInput = {
   id?: string
   email: string
@@ -1191,6 +1087,110 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   commissionsEarned?: Prisma.CommissionUncheckedUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUncheckedUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCheckoutSessionsInput = {
+  id?: string
+  email: string
+  name: string
+  password: string
+  referralCode: string
+  tier?: $Enums.UserTier
+  role?: $Enums.UserRole
+  isActive?: boolean
+  deletedAt?: Date | string | null
+  storeCredit?: number
+  referralCount?: number
+  isReferralValid?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referrer?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferrerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  commissionsEarned?: Prisma.CommissionCreateNestedManyWithoutReferrerInput
+  commissionsFrom?: Prisma.CommissionCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutCheckoutSessionsInput = {
+  id?: string
+  email: string
+  name: string
+  password: string
+  referralCode: string
+  tier?: $Enums.UserTier
+  role?: $Enums.UserRole
+  isActive?: boolean
+  deletedAt?: Date | string | null
+  storeCredit?: number
+  referralCount?: number
+  isReferralValid?: boolean
+  referrerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferrerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  commissionsEarned?: Prisma.CommissionUncheckedCreateNestedManyWithoutReferrerInput
+  commissionsFrom?: Prisma.CommissionUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutCheckoutSessionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCheckoutSessionsInput, Prisma.UserUncheckedCreateWithoutCheckoutSessionsInput>
+}
+
+export type UserUpsertWithoutCheckoutSessionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCheckoutSessionsInput, Prisma.UserUncheckedUpdateWithoutCheckoutSessionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCheckoutSessionsInput, Prisma.UserUncheckedCreateWithoutCheckoutSessionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCheckoutSessionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCheckoutSessionsInput, Prisma.UserUncheckedUpdateWithoutCheckoutSessionsInput>
+}
+
+export type UserUpdateWithoutCheckoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
+  referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrer?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferrerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  commissionsEarned?: Prisma.CommissionUpdateManyWithoutReferrerNestedInput
+  commissionsFrom?: Prisma.CommissionUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCheckoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
+  referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  commissionsEarned?: Prisma.CommissionUncheckedUpdateManyWithoutReferrerNestedInput
+  commissionsFrom?: Prisma.CommissionUncheckedUpdateManyWithoutBuyerNestedInput
 }
 
 export type UserCreateWithoutCommissionsEarnedInput = {

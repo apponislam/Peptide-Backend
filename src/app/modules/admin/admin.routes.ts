@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/stats", auth, adminControllers.getDashboardStats);
 router.get("/orders", auth, adminControllers.getAllOrders);
 router.get("/users", auth, adminControllers.getAllUsers);
-router.patch("/orders/:id", auth, adminControllers.updateOrderStatus);
+// router.patch("/orders/:id", auth, adminControllers.updateOrderStatus);
 router.patch("/users/:id", auth, adminControllers.updateUser);
 
 export const adminRoutes = router;
