@@ -1,4 +1,3 @@
-// src/routes/payment.routes.ts
 import express from "express";
 import { PaymentController } from "./payment.controller";
 import { WebhookController } from "./webhook.controller";
