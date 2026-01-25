@@ -57,8 +57,82 @@ export class ShipStationService {
     }
 
     // Create order in ShipStation
+    // async createOrder(orderId: string) {
+    //     try {
+    //         const order = await prisma.order.findUnique({
+    //             where: { id: orderId },
+    //             include: {
+    //                 items: {
+    //                     include: {
+    //                         product: true,
+    //                     },
+    //                 },
+    //                 user: true,
+    //             },
+    //         });
+
+    //         if (!order) {
+    //             throw new Error(`Order ${orderId} not found`);
+    //         }
+
+    //         const shipStationOrder: ShipStationOrder = {
+    //             orderNumber: order.id,
+    //             orderDate: order.createdAt.toISOString(),
+    //             orderStatus: "awaiting_shipment",
+    //             billTo: {
+    //                 name: order.name,
+    //                 street1: order.address,
+    //                 city: order.city,
+    //                 state: order.state,
+    //                 postalCode: order.zip,
+    //                 country: order.country,
+    //                 phone: order.phone,
+    //             },
+    //             shipTo: {
+    //                 name: order.name,
+    //                 street1: order.address,
+    //                 city: order.city,
+    //                 state: order.state,
+    //                 postalCode: order.zip,
+    //                 country: order.country,
+    //                 phone: order.phone,
+    //             },
+    //             items: order.items.map((item) => ({
+    //                 lineItemKey: item.id,
+    //                 sku: `PROD-${item.productId}`,
+    //                 name: item.product?.name || "Unknown Product",
+    //                 quantity: item.quantity,
+    //                 unitPrice: item.unitPrice,
+    //                 weight: {
+    //                     value: 1,
+    //                     units: "pounds",
+    //                 },
+    //             })),
+    //             amountPaid: order.total,
+    //             shippingAmount: order.shipping,
+    //         };
+
+    //         const response = await axios.post(`${this.baseUrl}/orders/createorder`, shipStationOrder, { headers: this.getAuthHeader() });
+
+    //         await prisma.order.update({
+    //             where: { id: orderId },
+    //             data: {
+    //                 trackingNumber: response.data.trackingNumber || null,
+    //                 labelUrl: response.data.labelUrl || null,
+    //             },
+    //         });
+
+    //         return response.data;
+    //     } catch (error: any) {
+    //         console.error("ShipStation create order error:", error.response?.data || error.message);
+    //         throw new Error(`Failed to create ShipStation order: ${error.message}`);
+    //     }
+    // }
+
     async createOrder(orderId: string) {
         try {
+            console.log(`Creating ShipStation order for order ID: ${orderId}`);
+
             const order = await prisma.order.findUnique({
                 where: { id: orderId },
                 include: {
@@ -75,10 +149,31 @@ export class ShipStationService {
                 throw new Error(`Order ${orderId} not found`);
             }
 
-            const shipStationOrder: ShipStationOrder = {
+            // Check if order has required fields
+            if (!order.address || !order.city || !order.state || !order.zip || !order.country) {
+                throw new Error(`Order ${orderId} is missing shipping address fields`);
+            }
+
+            // Prepare items for ShipStation
+            const shipStationItems = order.items.map((item, index) => ({
+                lineItemKey: item.id,
+                sku: item.product?.id ? `PROD-${item.product.id}` : `ITEM-${index}`,
+                name: item.product?.name || `Product ${index + 1}`,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice,
+                weight: {
+                    value: 1, // Default weight
+                    units: "pounds" as const,
+                },
+            }));
+
+            // Prepare ShipStation order payload
+            const shipStationOrder = {
                 orderNumber: order.id,
                 orderDate: order.createdAt.toISOString(),
-                orderStatus: "awaiting_shipment",
+                orderStatus: "awaiting_shipment" as const,
+
+                // BILL TO (required by ShipStation)
                 billTo: {
                     name: order.name,
                     street1: order.address,
@@ -86,8 +181,10 @@ export class ShipStationService {
                     state: order.state,
                     postalCode: order.zip,
                     country: order.country,
-                    phone: order.phone,
+                    phone: order.phone || "",
                 },
+
+                // SHIP TO (required by ShipStation)
                 shipTo: {
                     name: order.name,
                     street1: order.address,
@@ -95,37 +192,58 @@ export class ShipStationService {
                     state: order.state,
                     postalCode: order.zip,
                     country: order.country,
-                    phone: order.phone,
+                    phone: order.phone || "",
                 },
-                items: order.items.map((item) => ({
-                    lineItemKey: item.id,
-                    sku: `PROD-${item.productId}`,
-                    name: item.product?.name || "Unknown Product",
-                    quantity: item.quantity,
-                    unitPrice: item.unitPrice,
-                    weight: {
-                        value: 1,
-                        units: "pounds",
-                    },
-                })),
+
+                items: shipStationItems,
                 amountPaid: order.total,
-                shippingAmount: order.shipping,
+                taxAmount: 0,
+                shippingAmount: order.shipping || 0,
+                customerEmail: order.email,
+                customerNotes: "Order from website",
+
+                // Required weight field
+                weight: {
+                    value: order.items.length || 1,
+                    units: "pounds" as const,
+                },
             };
 
-            const response = await axios.post(`${this.baseUrl}/orders/createorder`, shipStationOrder, { headers: this.getAuthHeader() });
+            console.log("ShipStation payload:", JSON.stringify(shipStationOrder, null, 2));
 
+            // Add /v1/ to the endpoint
+            const response = await axios.post(`${this.baseUrl}/v1/orders/createorder`, shipStationOrder, {
+                headers: this.getAuthHeader(),
+                timeout: 30000,
+            });
+
+            console.log("ShipStation response:", response.data);
+
+            // Save ShipStation order ID
             await prisma.order.update({
                 where: { id: orderId },
                 data: {
-                    trackingNumber: response.data.trackingNumber || null,
-                    labelUrl: response.data.labelUrl || null,
+                    shipstationOrderId: response.data.orderId,
+                    updatedAt: new Date(),
                 },
             });
 
             return response.data;
         } catch (error: any) {
-            console.error("ShipStation create order error:", error.response?.data || error.message);
-            throw new Error(`Failed to create ShipStation order: ${error.message}`);
+            console.error("ShipStation 400 Error Details:");
+            console.error("URL:", `${this.baseUrl}/v1/orders/createorder`);
+
+            if (error.response) {
+                console.error("Status:", error.response.status);
+                console.error("Response data:", error.response.data);
+                console.error("Headers:", error.response.headers);
+            } else if (error.request) {
+                console.error("No response received:", error.request);
+            } else {
+                console.error("Error message:", error.message);
+            }
+
+            throw new Error(`ShipStation Error: ${error.response?.data?.message || error.message}`);
         }
     }
 

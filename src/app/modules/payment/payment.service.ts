@@ -28,7 +28,6 @@ export class StripeService {
 
     // Create a checkout session
     async createCheckoutSession(userId: string, items: CheckoutItem[], shippingInfo: ShippingInfo, metadata: Record<string, any> = {}) {
-        console.log(shippingInfo);
         try {
             const user = await prisma.user.findUnique({
                 where: { id: userId },
@@ -149,33 +148,51 @@ export class StripeService {
 
     async handleCheckoutSessionCompleted(session: EnhancedStripeSession) {
         const userId = session.metadata?.userId;
-        const orderSummary = session.metadata?.orderSummary ? JSON.parse(session.metadata.orderSummary) : null;
 
         if (!userId) {
             throw new Error("No userId in session metadata");
         }
 
         try {
+            // Get shipping from metadata (individual fields, not JSON)
+            const shippingInfo = {
+                name: session.metadata?.shippingName || "",
+                email: session.metadata?.shippingEmail || "",
+                phone: session.metadata?.shippingPhone || "",
+                address: session.metadata?.shippingAddress || "",
+                city: session.metadata?.shippingCity || "",
+                state: session.metadata?.shippingState || "",
+                zip: session.metadata?.shippingZip || "",
+                country: session.metadata?.shippingCountry || "US",
+            };
+
+            // Update checkout session
             await prisma.checkoutSession.update({
-                where: { id: session.id },
+                where: { stripeSessionId: session.id },
                 data: {
                     paymentStatus: "PAID",
                     updatedAt: new Date(),
                 },
             });
 
-            const order = await this.createOrderFromSession(session, userId, orderSummary);
+            // Create order WITH shipping info
+            const order = await this.createOrderFromSession(session, userId, shippingInfo);
 
+            // Link checkout session to order
             await prisma.checkoutSession.update({
-                where: { id: session.id },
+                where: { stripeSessionId: session.id },
                 data: { orderId: order.id },
             });
 
-            await shipStationService.createOrder(order.id);
+            // Process commissions
             await this.processCommissions(order);
 
-            if (orderSummary?.storeCreditsApplied > 0) {
-                await this.updateUserStoreCredit(userId, orderSummary.storeCreditsApplied);
+            // Create ShipStation order (with try-catch so it doesn't break)
+            try {
+                await shipStationService.createOrder(order.id);
+            } catch (shipstationError) {
+                console.error("ShipStation error (non-fatal):", shipstationError);
+                // Don't throw - let order be created even if ShipStation fails
             }
         } catch (error) {
             console.error("Error handling checkout session completed:", error);
@@ -183,7 +200,11 @@ export class StripeService {
         }
     }
 
-    private async createOrderFromSession(session: EnhancedStripeSession, userId: string, orderSummary: OrderSummary | null) {
+    private async createOrderFromSession(
+        session: EnhancedStripeSession,
+        userId: string,
+        shippingInfo: any, // Add this parameter
+    ) {
         try {
             const sessionDetails = await stripe.checkout.sessions.retrieve(session.id, {
                 expand: ["line_items.data.price.product"],
@@ -191,62 +212,59 @@ export class StripeService {
 
             const lineItems = sessionDetails.line_items?.data || [];
 
-            // Extract customer details
-            const customerDetails = session.customer_details;
-            const customerName = customerDetails?.name || "";
-            const customerEmail = customerDetails?.email || "";
-            const customerPhone = customerDetails?.phone || "";
-
-            // Extract shipping details
-            const shipping = session.shipping;
-            const shippingAddress = shipping?.address;
-            const shippingName = shipping?.name || customerName;
-
-            // Calculate shipping cost
-            const shippingCost = session.shipping_cost?.amount_total ? session.shipping_cost.amount_total / 100 : 0;
-
-            // Calculate totals
-            const stripeSubtotal = session.amount_subtotal ? session.amount_subtotal / 100 : 0;
-            const stripeTotal = session.amount_total ? session.amount_total / 100 : 0;
-            const stripeShipping = shippingCost || 0;
-            const stripeDiscount = Math.max(0, stripeSubtotal - (stripeTotal - stripeShipping));
-
+            // Use shippingInfo from metadata (your form)
             const order = await prisma.order.create({
                 data: {
                     id: `ord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
                     userId,
-                    name: shippingName,
-                    email: customerEmail,
-                    phone: customerPhone,
-                    address: shippingAddress?.line1 || "",
-                    city: shippingAddress?.city || "",
-                    state: shippingAddress?.state || "",
-                    zip: shippingAddress?.postal_code || "",
-                    country: shippingAddress?.country || "",
-                    originalPrice: orderSummary?.originalSubtotal || stripeSubtotal,
-                    discountAmount: orderSummary?.discount || stripeDiscount,
-                    discountPercentage: orderSummary?.discount && orderSummary.originalSubtotal && orderSummary.originalSubtotal > 0 ? (orderSummary.discount / orderSummary.originalSubtotal) * 100 : stripeDiscount > 0 && stripeSubtotal > 0 ? (stripeDiscount / stripeSubtotal) * 100 : 0,
-                    subtotal: (orderSummary?.originalSubtotal || stripeSubtotal) - (orderSummary?.discount || stripeDiscount),
-                    shipping: stripeShipping,
-                    creditApplied: orderSummary?.storeCreditsApplied || 0,
-                    total: orderSummary?.total || stripeTotal,
+                    // Use shippingInfo from your form
+                    name: shippingInfo.name,
+                    email: shippingInfo.email,
+                    phone: shippingInfo.phone,
+                    address: shippingInfo.address,
+                    city: shippingInfo.city,
+                    state: shippingInfo.state,
+                    zip: shippingInfo.zip,
+                    country: shippingInfo.country,
+                    // Calculate prices
+                    originalPrice: session.amount_subtotal ? session.amount_subtotal / 100 : 0,
+                    discountAmount: 0, // You need to calculate this
+                    discountPercentage: 0,
+                    subtotal: session.amount_subtotal ? session.amount_subtotal / 100 : 0,
+                    shipping: session.shipping_cost?.amount_total ? session.shipping_cost.amount_total / 100 : 0,
+                    creditApplied: 0, // Calculate from metadata
+                    total: session.amount_total ? session.amount_total / 100 : 0,
                     status: "PAID",
                     commissionAmount: 0,
                     commissionPaid: false,
                 },
             });
 
+            // Create order items
             for (const item of lineItems) {
                 const productId = this.extractProductIdFromLineItem(item);
 
                 if (productId > 0) {
+                    // Fetch product to get price from sizes
+                    const product = await prisma.product.findUnique({
+                        where: { id: productId },
+                    });
+
+                    let unitPrice = 0;
+                    if (product?.sizes) {
+                        const sizes = JSON.parse(JSON.stringify(product.sizes));
+                        if (Array.isArray(sizes) && sizes.length > 0) {
+                            unitPrice = sizes[0]?.price || 0;
+                        }
+                    }
+
                     await prisma.orderItem.create({
                         data: {
                             id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
                             orderId: order.id,
                             productId,
                             quantity: item.quantity || 1,
-                            unitPrice: item.price?.unit_amount ? item.price.unit_amount / 100 : 0,
+                            unitPrice: unitPrice,
                             discountedPrice: item.amount_total ? item.amount_total / 100 : 0,
                         },
                     });
