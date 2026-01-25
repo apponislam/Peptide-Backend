@@ -56,79 +56,6 @@ export class ShipStationService {
         };
     }
 
-    // Create order in ShipStation
-    // async createOrder(orderId: string) {
-    //     try {
-    //         const order = await prisma.order.findUnique({
-    //             where: { id: orderId },
-    //             include: {
-    //                 items: {
-    //                     include: {
-    //                         product: true,
-    //                     },
-    //                 },
-    //                 user: true,
-    //             },
-    //         });
-
-    //         if (!order) {
-    //             throw new Error(`Order ${orderId} not found`);
-    //         }
-
-    //         const shipStationOrder: ShipStationOrder = {
-    //             orderNumber: order.id,
-    //             orderDate: order.createdAt.toISOString(),
-    //             orderStatus: "awaiting_shipment",
-    //             billTo: {
-    //                 name: order.name,
-    //                 street1: order.address,
-    //                 city: order.city,
-    //                 state: order.state,
-    //                 postalCode: order.zip,
-    //                 country: order.country,
-    //                 phone: order.phone,
-    //             },
-    //             shipTo: {
-    //                 name: order.name,
-    //                 street1: order.address,
-    //                 city: order.city,
-    //                 state: order.state,
-    //                 postalCode: order.zip,
-    //                 country: order.country,
-    //                 phone: order.phone,
-    //             },
-    //             items: order.items.map((item) => ({
-    //                 lineItemKey: item.id,
-    //                 sku: `PROD-${item.productId}`,
-    //                 name: item.product?.name || "Unknown Product",
-    //                 quantity: item.quantity,
-    //                 unitPrice: item.unitPrice,
-    //                 weight: {
-    //                     value: 1,
-    //                     units: "pounds",
-    //                 },
-    //             })),
-    //             amountPaid: order.total,
-    //             shippingAmount: order.shipping,
-    //         };
-
-    //         const response = await axios.post(`${this.baseUrl}/orders/createorder`, shipStationOrder, { headers: this.getAuthHeader() });
-
-    //         await prisma.order.update({
-    //             where: { id: orderId },
-    //             data: {
-    //                 trackingNumber: response.data.trackingNumber || null,
-    //                 labelUrl: response.data.labelUrl || null,
-    //             },
-    //         });
-
-    //         return response.data;
-    //     } catch (error: any) {
-    //         console.error("ShipStation create order error:", error.response?.data || error.message);
-    //         throw new Error(`Failed to create ShipStation order: ${error.message}`);
-    //     }
-    // }
-
     async createOrder(orderId: string) {
         try {
             console.log(`Creating ShipStation order for order ID: ${orderId}`);
@@ -212,7 +139,7 @@ export class ShipStationService {
             console.log("ShipStation payload:", JSON.stringify(shipStationOrder, null, 2));
 
             // Add /v1/ to the endpoint
-            const response = await axios.post(`${this.baseUrl}/v1/orders/createorder`, shipStationOrder, {
+            const response = await axios.post(`${this.baseUrl}/orders/createorder`, shipStationOrder, {
                 headers: this.getAuthHeader(),
                 timeout: 30000,
             });
@@ -231,7 +158,7 @@ export class ShipStationService {
             return response.data;
         } catch (error: any) {
             console.error("ShipStation 400 Error Details:");
-            console.error("URL:", `${this.baseUrl}/v1/orders/createorder`);
+            console.error("URL:", `${this.baseUrl}/orders/createorder`);
 
             if (error.response) {
                 console.error("Status:", error.response.status);
@@ -297,37 +224,111 @@ export class ShipStationService {
     }
 
     // Create shipment label
+    // async createLabel(orderId: string) {
+    //     try {
+    //         const order = await prisma.order.findUnique({
+    //             where: { id: orderId },
+    //         });
+
+    //         if (!order) {
+    //             throw new Error(`Order ${orderId} not found`);
+    //         }
+
+    //         const labelRequest = {
+    //             orderId: orderId,
+    //             carrierCode: "fedex",
+    //             serviceCode: "fedex_ground",
+    //             confirmation: "delivery",
+    //             shipDate: new Date().toISOString().split("T")[0],
+    //         };
+
+    //         const response = await axios.post(`${this.baseUrl}/orders/createlabelfororder`, labelRequest, { headers: this.getAuthHeader() });
+
+    //         await prisma.order.update({
+    //             where: { id: orderId },
+    //             data: {
+    //                 labelUrl: response.data.labelUrl,
+    //                 trackingNumber: response.data.trackingNumber,
+    //             },
+    //         });
+
+    //         return response.data;
+    //     } catch (error: any) {
+    //         console.error("ShipStation create label error:", error.response?.data || error.message);
+    //         throw new Error(`Failed to create shipping label: ${error.message}`);
+    //     }
+    // }
+
     async createLabel(orderId: string) {
         try {
             const order = await prisma.order.findUnique({
                 where: { id: orderId },
+                include: {
+                    items: true,
+                },
             });
 
             if (!order) {
                 throw new Error(`Order ${orderId} not found`);
             }
 
+            if (!order.shipstationOrderId) {
+                throw new Error(`Order ${orderId} does not have a ShipStation order ID. Create the order in ShipStation first.`);
+            }
+
+            // Use ups_walleted (UPS by ShipStation)
             const labelRequest = {
-                orderId: orderId,
-                carrierCode: "fedex",
-                serviceCode: "fedex_ground",
+                orderId: Number(order.shipstationOrderId),
+                carrierCode: "ups_walleted", // Use UPS by ShipStation
+                serviceCode: "ups_ground", // Common UPS service
+                packageCode: "package",
                 confirmation: "delivery",
                 shipDate: new Date().toISOString().split("T")[0],
+                weight: {
+                    value: 5, // Minimum weight for UPS (1 lb = 16 oz)
+                    units: "pounds", // UPS uses pounds
+                },
+                dimensions: {
+                    length: 12,
+                    width: 12,
+                    height: 12,
+                    units: "inches",
+                },
+                testLabel: true, // Use test label for development
+                validateAddress: "no_validation", // Skip address validation for testing
+                insuranceOptions: {
+                    provider: "carrier",
+                    insureShipment: false,
+                    insuredValue: 0,
+                },
             };
 
-            const response = await axios.post(`${this.baseUrl}/orders/createlabelfororder`, labelRequest, { headers: this.getAuthHeader() });
+            console.log("Creating UPS label:", labelRequest);
+
+            const response = await axios.post(`${this.baseUrl}/orders/createlabelfororder`, labelRequest, {
+                headers: this.getAuthHeader(),
+                timeout: 30000,
+            });
+
+            console.log("UPS label created successfully:", response.data);
 
             await prisma.order.update({
                 where: { id: orderId },
                 data: {
                     labelUrl: response.data.labelUrl,
                     trackingNumber: response.data.trackingNumber,
+                    carrier: "UPS",
+                    updatedAt: new Date(),
                 },
             });
 
             return response.data;
         } catch (error: any) {
-            console.error("ShipStation create label error:", error.response?.data || error.message);
+            console.error("ShipStation create label error details:");
+            if (error.response) {
+                console.error("Status:", error.response.status);
+                console.error("Data:", JSON.stringify(error.response.data, null, 2));
+            }
             throw new Error(`Failed to create shipping label: ${error.message}`);
         }
     }
@@ -420,6 +421,18 @@ export class ShipStationService {
         } catch (error: any) {
             console.error("ShipStation mark as shipped error:", error.response?.data || error.message);
             throw new Error(`Failed to mark order as shipped: ${error.message}`);
+        }
+    }
+
+    async getCarriers() {
+        try {
+            const response = await axios.get(`${this.baseUrl}/carriers`, {
+                headers: this.getAuthHeader(),
+            });
+            return response.data;
+        } catch (error: any) {
+            console.error("ShipStation get carriers error:", error.response?.data || error.message);
+            throw new Error(`Failed to get carriers: ${error.message}`);
         }
     }
 }

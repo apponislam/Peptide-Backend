@@ -11,5 +11,6 @@ router.post("/label/:orderId", ShipStationController.createLabel);
 router.get("/orders", ShipStationController.listOrders);
 router.put("/tracking/:orderId", ShipStationController.updateTracking);
 router.post("/ship/:orderId", ShipStationController.markAsShipped);
+router.get("/carriers", ShipStationController.getCarriers);
 
 export const shipmentRoutes = router;
