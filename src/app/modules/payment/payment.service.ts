@@ -62,11 +62,30 @@ export class StripeService {
                 success_url: `${process.env.FRONTEND_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
                 cancel_url: `${process.env.FRONTEND_URL}/checkout/cancel`,
                 customer_email: shippingInfo.email,
+                // shipping_address_collection: {
+                //     allowed_countries: ["US", "CA"],
+                // },
+                billing_address_collection: "required",
+
                 shipping_address_collection: {
                     allowed_countries: ["US", "CA"],
                 },
+
+                shipping_options: [
+                    {
+                        shipping_rate_data: {
+                            type: "fixed_amount",
+                            fixed_amount: {
+                                amount: 0,
+                                currency: "usd",
+                            },
+                            display_name: "Standard Shipping",
+                        },
+                    },
+                ],
                 metadata: {
                     userId,
+                    shippingAddress: JSON.stringify(shippingInfo),
                     ...metadata,
                     orderSummary: JSON.stringify(orderSummary),
                 },

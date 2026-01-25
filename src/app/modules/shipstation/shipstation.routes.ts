@@ -12,4 +12,4 @@ router.get("/orders", ShipStationController.listOrders);
 router.put("/tracking/:orderId", ShipStationController.updateTracking);
 router.post("/ship/:orderId", ShipStationController.markAsShipped);
 
-export default router;
+export const shipmentRoutes = router;

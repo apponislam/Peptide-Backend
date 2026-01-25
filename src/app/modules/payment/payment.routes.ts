@@ -9,4 +9,4 @@ router.post("/create-payment-intent", PaymentController.createPaymentIntent);
 router.post("/refund", PaymentController.createRefund);
 router.get("/session/:sessionId", PaymentController.getSessionStatus);
 
-export default router;
+export const paymentRoutes = router;
