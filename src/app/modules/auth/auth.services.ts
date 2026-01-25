@@ -117,20 +117,35 @@ const getCurrentUser = async (userId: string) => {
                 take: 10,
                 select: {
                     id: true,
-                    items: true,
-                    originalSubtotal: true,
+
+                    // ✅ correct pricing fields
+                    originalPrice: true,
+                    discountPercentage: true,
+                    discountAmount: true,
                     subtotal: true,
-                    discount: true,
                     shipping: true,
-                    storeCreditsApplied: true,
+                    creditApplied: true,
                     total: true,
-                    shippingName: true,
-                    shippingAddress: true,
-                    stripeSessionId: true,
-                    stripePaymentIntentId: true,
+
                     status: true,
                     createdAt: true,
                     updatedAt: true,
+
+                    // ✅ relation selection
+                    items: {
+                        select: {
+                            id: true,
+                            quantity: true,
+                            unitPrice: true,
+                            discountedPrice: true,
+                            product: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
