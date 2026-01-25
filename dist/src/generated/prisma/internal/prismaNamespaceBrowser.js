@@ -41,8 +41,9 @@ export const AnyNull = runtime.AnyNull;
 export const ModelName = {
     User: 'User',
     Product: 'Product',
-    CheckoutSession: 'CheckoutSession',
     Order: 'Order',
+    OrderItem: 'OrderItem',
+    CheckoutSession: 'CheckoutSession',
     Commission: 'Commission'
 };
 /*
@@ -62,8 +63,11 @@ export const UserScalarFieldEnum = {
     referralCode: 'referralCode',
     tier: 'tier',
     role: 'role',
+    isActive: 'isActive',
+    deletedAt: 'deletedAt',
     storeCredit: 'storeCredit',
     referralCount: 'referralCount',
+    isReferralValid: 'isReferralValid',
     referrerId: 'referrerId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -75,58 +79,75 @@ export const ProductScalarFieldEnum = {
     desc: 'desc',
     details: 'details',
     references: 'references',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-};
-export const CheckoutSessionScalarFieldEnum = {
-    id: 'id',
-    sessionId: 'sessionId',
-    userId: 'userId',
-    items: 'items',
-    originalSubtotal: 'originalSubtotal',
-    discountedSubtotal: 'discountedSubtotal',
-    discount: 'discount',
-    shipping: 'shipping',
-    storeCreditsApplied: 'storeCreditsApplied',
-    total: 'total',
-    shippingName: 'shippingName',
-    shippingAddress: 'shippingAddress',
-    status: 'status',
-    orderId: 'orderId',
+    coa: 'coa',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
 export const OrderScalarFieldEnum = {
     id: 'id',
     userId: 'userId',
-    items: 'items',
-    originalSubtotal: 'originalSubtotal',
+    name: 'name',
+    email: 'email',
+    phone: 'phone',
+    address: 'address',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+    country: 'country',
+    originalPrice: 'originalPrice',
+    discountPercentage: 'discountPercentage',
+    discountAmount: 'discountAmount',
     subtotal: 'subtotal',
-    discount: 'discount',
     shipping: 'shipping',
-    storeCreditsApplied: 'storeCreditsApplied',
+    creditApplied: 'creditApplied',
     total: 'total',
-    shippingName: 'shippingName',
-    shippingAddress: 'shippingAddress',
-    stripeSessionId: 'stripeSessionId',
-    stripePaymentIntentId: 'stripePaymentIntentId',
     status: 'status',
+    shipstationOrderId: 'shipstationOrderId',
+    trackingNumber: 'trackingNumber',
+    labelUrl: 'labelUrl',
+    commissionAmount: 'commissionAmount',
+    commissionPaid: 'commissionPaid',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const OrderItemScalarFieldEnum = {
+    id: 'id',
+    orderId: 'orderId',
+    productId: 'productId',
+    quantity: 'quantity',
+    unitPrice: 'unitPrice',
+    discountedPrice: 'discountedPrice'
+};
+export const CheckoutSessionScalarFieldEnum = {
+    id: 'id',
+    userId: 'userId',
+    orderId: 'orderId',
+    stripeSessionId: 'stripeSessionId',
+    paymentStatus: 'paymentStatus',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
 export const CommissionScalarFieldEnum = {
     id: 'id',
+    orderId: 'orderId',
     referrerId: 'referrerId',
     buyerId: 'buyerId',
-    orderId: 'orderId',
     amount: 'amount',
-    createdAt: 'createdAt'
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 export const SortOrder = {
     asc: 'asc',
     desc: 'desc'
 };
 export const JsonNullValueInput = {
+    JsonNull: 'JsonNull'
+};
+export const NullableJsonNullValueInput = {
+    DbNull: 'DbNull',
     JsonNull: 'JsonNull'
 };
 export const QueryMode = {

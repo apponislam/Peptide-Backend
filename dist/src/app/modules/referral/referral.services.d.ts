@@ -1,23 +1,25 @@
 export declare const referralServices: {
     getReferralStats: (userId: string) => Promise<{
         referralCode: string;
-        tier: string;
+        tier: import("../../../generated/prisma/enums").UserTier;
         referralCount: number;
         storeCredit: number;
         referrals: {
             id: string;
             email: string;
-            tier: string;
+            tier: import("../../../generated/prisma/enums").UserTier;
             createdAt: Date;
         }[];
         totalCommission: number;
         commissions: {
-            id: number;
+            id: string;
             referrerId: string;
             createdAt: Date;
-            buyerId: string;
-            orderId: number;
+            updatedAt: Date;
+            status: import("../../../generated/prisma/enums").CommissionStatus;
+            orderId: string;
             amount: number;
+            buyerId: string;
         }[];
     }>;
     getTierData: (referralCount: number) => {

@@ -11,4 +11,25 @@ export const UserRole = {
     USER: 'USER',
     ADMIN: 'ADMIN'
 };
+export const UserTier = {
+    Member: 'Member',
+    Founder: 'Founder',
+    VIP: 'VIP'
+};
+export const OrderStatus = {
+    PENDING: 'PENDING',
+    PAID: 'PAID',
+    SHIPPED: 'SHIPPED',
+    CANCELLED: 'CANCELLED'
+};
+export const StripePaymentStatus = {
+    PENDING: 'PENDING',
+    PAID: 'PAID',
+    FAILED: 'FAILED'
+};
+export const CommissionStatus = {
+    PENDING: 'PENDING',
+    PAID: 'PAID',
+    FAILED: 'FAILED'
+};
 //# sourceMappingURL=enums.js.map

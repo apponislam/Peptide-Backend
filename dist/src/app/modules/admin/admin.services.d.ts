@@ -1,11 +1,41 @@
-export declare const adminServices: {
-    adminLogin: (data: {
-        email: string;
-        password: string;
+import { UserRole, UserTier } from "../../../generated/prisma/client";
+declare const _default: {
+    getAllUsers: (params: {
+        page?: number;
+        limit?: number;
+        search?: string;
+        role?: UserRole;
+        tier?: UserTier;
+        sortBy?: string;
+        sortOrder?: "asc" | "desc";
     }) => Promise<{
-        token: string;
-        admin: boolean;
+        users: {
+            id: string;
+            email: string;
+            referralCode: string;
+            name: string;
+            tier: UserTier;
+            role: UserRole;
+            storeCredit: number;
+            referralCount: number;
+            createdAt: Date;
+            orders: {
+                id: string;
+                createdAt: Date;
+                total: number;
+                status: import("../../../generated/prisma/enums").OrderStatus;
+            }[];
+        }[];
+        meta: {
+            page: number;
+            limit: number;
+            total: number;
+            totalPages: number;
+        };
     }>;
+};
+export default _default;
+export declare const adminServices: {
     getDashboardStats: () => Promise<{
         totalOrders: number;
         totalRevenue: number;
@@ -18,54 +48,65 @@ export declare const adminServices: {
             referralCode: string;
         };
     } & {
-        id: number;
-        createdAt: Date;
-        updatedAt: Date;
-        userId: string;
-        items: import("@prisma/client/runtime/client").JsonValue;
-        originalSubtotal: number;
-        subtotal: number;
-        discount: number;
-        shipping: number;
-        storeCreditsApplied: number;
-        total: number;
-        shippingName: string;
-        shippingAddress: string;
-        stripeSessionId: string | null;
-        stripePaymentIntentId: string | null;
-        status: string;
-    })[]>;
-    updateOrderStatus: (id: number, data: {
-        status: string;
-    }) => Promise<{
-        id: number;
-        createdAt: Date;
-        updatedAt: Date;
-        userId: string;
-        items: import("@prisma/client/runtime/client").JsonValue;
-        originalSubtotal: number;
-        subtotal: number;
-        discount: number;
-        shipping: number;
-        storeCreditsApplied: number;
-        total: number;
-        shippingName: string;
-        shippingAddress: string;
-        stripeSessionId: string | null;
-        stripePaymentIntentId: string | null;
-        status: string;
-    }>;
-    getAllUsers: () => Promise<{
         id: string;
         email: string;
-        referralCode: string;
         name: string;
-        tier: string;
-        role: import("../../../generated/prisma/enums").UserRole;
-        storeCredit: number;
-        referralCount: number;
         createdAt: Date;
-    }[]>;
+        updatedAt: Date;
+        userId: string;
+        phone: string;
+        address: string;
+        city: string;
+        state: string;
+        zip: string;
+        country: string;
+        originalPrice: number;
+        discountPercentage: number;
+        discountAmount: number;
+        subtotal: number;
+        shipping: number;
+        creditApplied: number;
+        total: number;
+        status: import("../../../generated/prisma/enums").OrderStatus;
+        shipstationOrderId: number | null;
+        trackingNumber: string | null;
+        labelUrl: string | null;
+        commissionAmount: number | null;
+        commissionPaid: boolean;
+    })[]>;
+    getAllUsers: (params: {
+        page?: number;
+        limit?: number;
+        search?: string;
+        role?: UserRole;
+        tier?: UserTier;
+        sortBy?: string;
+        sortOrder?: "asc" | "desc";
+    }) => Promise<{
+        users: {
+            id: string;
+            email: string;
+            referralCode: string;
+            name: string;
+            tier: UserTier;
+            role: UserRole;
+            storeCredit: number;
+            referralCount: number;
+            createdAt: Date;
+            orders: {
+                id: string;
+                createdAt: Date;
+                total: number;
+                status: import("../../../generated/prisma/enums").OrderStatus;
+            }[];
+        }[];
+        meta: {
+            page: number;
+            limit: number;
+            total: number;
+            totalPages: number;
+        };
+    }>;
     updateUser: (id: string, data: {
         storeCredit?: number;
         tier?: string;
@@ -76,10 +117,13 @@ export declare const adminServices: {
         referralCode: string;
         name: string;
         password: string;
-        tier: string;
-        role: import("../../../generated/prisma/enums").UserRole;
+        tier: UserTier;
+        role: UserRole;
+        isActive: boolean;
+        deletedAt: Date | null;
         storeCredit: number;
         referralCount: number;
+        isReferralValid: boolean;
         referrerId: string | null;
         createdAt: Date;
         updatedAt: Date;

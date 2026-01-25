@@ -14,7 +14,13 @@ const globalErrorHandler = (err, req, res, next) => {
             message: "Something went wrong",
         },
     ];
-    if (err instanceof ZodError) {
+    if (err?.message?.includes("Invalid `prisma.") && err?.message?.includes("Expected")) {
+        const simplifiedError = handlePrismaError(err);
+        statusCode = simplifiedError?.statusCode;
+        message = simplifiedError?.message;
+        errorSources = simplifiedError?.errorSources;
+    }
+    else if (err instanceof ZodError) {
         const simplifiedError = handleZodError(err);
         statusCode = simplifiedError?.statusCode;
         message = simplifiedError?.message;

@@ -134,17 +134,6 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
-     * `prisma.checkoutSession`: Exposes CRUD operations for the **CheckoutSession** model.
-      * Example usage:
-      * ```ts
-      * // Fetch zero or more CheckoutSessions
-      * const checkoutSessions = await prisma.checkoutSession.findMany()
-      * ```
-      */
-    get checkoutSession(): Prisma.CheckoutSessionDelegate<ExtArgs, {
-        omit: OmitOpts;
-    }>;
-    /**
      * `prisma.order`: Exposes CRUD operations for the **Order** model.
       * Example usage:
       * ```ts
@@ -153,6 +142,28 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
       * ```
       */
     get order(): Prisma.OrderDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.orderItem`: Exposes CRUD operations for the **OrderItem** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more OrderItems
+      * const orderItems = await prisma.orderItem.findMany()
+      * ```
+      */
+    get orderItem(): Prisma.OrderItemDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.checkoutSession`: Exposes CRUD operations for the **CheckoutSession** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more CheckoutSessions
+      * const checkoutSessions = await prisma.checkoutSession.findMany()
+      * ```
+      */
+    get checkoutSession(): Prisma.CheckoutSessionDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**

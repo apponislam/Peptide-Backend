@@ -1,16 +1,6 @@
 import catchAsync from "../../../utils/catchAsync";
 import { adminServices } from "./admin.services";
 import sendResponse from "../../../utils/sendResponse.";
-// Admin login
-const adminLogin = catchAsync(async (req, res) => {
-    const result = await adminServices.adminLogin(req.body);
-    sendResponse(res, {
-        statusCode: 200,
-        success: true,
-        message: "Admin login successful",
-        data: result,
-    });
-});
 // Get dashboard stats
 const getDashboardStats = catchAsync(async (req, res) => {
     const stats = await adminServices.getDashboardStats();
@@ -32,32 +22,51 @@ const getAllOrders = catchAsync(async (req, res) => {
     });
 });
 // Update order status
-const updateOrderStatus = catchAsync(async (req, res) => {
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) {
-        return sendResponse(res, {
-            statusCode: 400,
-            success: false,
-            message: "Invalid order ID",
-            data: null,
-        });
-    }
-    const order = await adminServices.updateOrderStatus(id, req.body);
-    sendResponse(res, {
-        statusCode: 200,
-        success: true,
-        message: "Order status updated successfully",
-        data: order,
-    });
-});
+// const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
+//     const id = parseInt(req.params.id as string);
+//     if (isNaN(id)) {
+//         return sendResponse(res, {
+//             statusCode: 400,
+//             success: false,
+//             message: "Invalid order ID",
+//             data: null,
+//         });
+//     }
+//     const order = await adminServices.updateOrderStatus(id, req.body);
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Order status updated successfully",
+//         data: order,
+//     });
+// });
 // Get all users
+// const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+//     const users = await adminServices.getAllUsers();
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Users retrieved successfully",
+//         data: users,
+//     });
+// });
 const getAllUsers = catchAsync(async (req, res) => {
-    const users = await adminServices.getAllUsers();
+    const { page = 1, limit = 10, search = "", role, tier, sortBy = "createdAt", sortOrder = "desc" } = req.query;
+    const result = await adminServices.getAllUsers({
+        page: Number(page),
+        limit: Number(limit),
+        search: search,
+        role: role,
+        tier: tier,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+    });
     sendResponse(res, {
         statusCode: 200,
         success: true,
         message: "Users retrieved successfully",
-        data: users,
+        data: result.users,
+        meta: result.meta,
     });
 });
 // Update user
@@ -72,10 +81,8 @@ const updateUser = catchAsync(async (req, res) => {
     });
 });
 export const adminControllers = {
-    adminLogin,
     getDashboardStats,
     getAllOrders,
-    updateOrderStatus,
     getAllUsers,
     updateUser,
 };

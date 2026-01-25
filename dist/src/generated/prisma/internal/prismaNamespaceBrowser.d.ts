@@ -28,8 +28,9 @@ export declare const AnyNull: import("@prisma/client-runtime-utils").AnyNullClas
 export declare const ModelName: {
     readonly User: "User";
     readonly Product: "Product";
-    readonly CheckoutSession: "CheckoutSession";
     readonly Order: "Order";
+    readonly OrderItem: "OrderItem";
+    readonly CheckoutSession: "CheckoutSession";
     readonly Commission: "Commission";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -48,8 +49,11 @@ export declare const UserScalarFieldEnum: {
     readonly referralCode: "referralCode";
     readonly tier: "tier";
     readonly role: "role";
+    readonly isActive: "isActive";
+    readonly deletedAt: "deletedAt";
     readonly storeCredit: "storeCredit";
     readonly referralCount: "referralCount";
+    readonly isReferralValid: "isReferralValid";
     readonly referrerId: "referrerId";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
@@ -62,55 +66,69 @@ export declare const ProductScalarFieldEnum: {
     readonly desc: "desc";
     readonly details: "details";
     readonly references: "references";
+    readonly coa: "coa";
+    readonly isDeleted: "isDeleted";
+    readonly deletedAt: "deletedAt";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum];
-export declare const CheckoutSessionScalarFieldEnum: {
-    readonly id: "id";
-    readonly sessionId: "sessionId";
-    readonly userId: "userId";
-    readonly items: "items";
-    readonly originalSubtotal: "originalSubtotal";
-    readonly discountedSubtotal: "discountedSubtotal";
-    readonly discount: "discount";
-    readonly shipping: "shipping";
-    readonly storeCreditsApplied: "storeCreditsApplied";
-    readonly total: "total";
-    readonly shippingName: "shippingName";
-    readonly shippingAddress: "shippingAddress";
-    readonly status: "status";
-    readonly orderId: "orderId";
-    readonly createdAt: "createdAt";
-    readonly updatedAt: "updatedAt";
-};
-export type CheckoutSessionScalarFieldEnum = (typeof CheckoutSessionScalarFieldEnum)[keyof typeof CheckoutSessionScalarFieldEnum];
 export declare const OrderScalarFieldEnum: {
     readonly id: "id";
     readonly userId: "userId";
-    readonly items: "items";
-    readonly originalSubtotal: "originalSubtotal";
+    readonly name: "name";
+    readonly email: "email";
+    readonly phone: "phone";
+    readonly address: "address";
+    readonly city: "city";
+    readonly state: "state";
+    readonly zip: "zip";
+    readonly country: "country";
+    readonly originalPrice: "originalPrice";
+    readonly discountPercentage: "discountPercentage";
+    readonly discountAmount: "discountAmount";
     readonly subtotal: "subtotal";
-    readonly discount: "discount";
     readonly shipping: "shipping";
-    readonly storeCreditsApplied: "storeCreditsApplied";
+    readonly creditApplied: "creditApplied";
     readonly total: "total";
-    readonly shippingName: "shippingName";
-    readonly shippingAddress: "shippingAddress";
-    readonly stripeSessionId: "stripeSessionId";
-    readonly stripePaymentIntentId: "stripePaymentIntentId";
     readonly status: "status";
+    readonly shipstationOrderId: "shipstationOrderId";
+    readonly trackingNumber: "trackingNumber";
+    readonly labelUrl: "labelUrl";
+    readonly commissionAmount: "commissionAmount";
+    readonly commissionPaid: "commissionPaid";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum];
+export declare const OrderItemScalarFieldEnum: {
+    readonly id: "id";
+    readonly orderId: "orderId";
+    readonly productId: "productId";
+    readonly quantity: "quantity";
+    readonly unitPrice: "unitPrice";
+    readonly discountedPrice: "discountedPrice";
+};
+export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum];
+export declare const CheckoutSessionScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly orderId: "orderId";
+    readonly stripeSessionId: "stripeSessionId";
+    readonly paymentStatus: "paymentStatus";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type CheckoutSessionScalarFieldEnum = (typeof CheckoutSessionScalarFieldEnum)[keyof typeof CheckoutSessionScalarFieldEnum];
 export declare const CommissionScalarFieldEnum: {
     readonly id: "id";
+    readonly orderId: "orderId";
     readonly referrerId: "referrerId";
     readonly buyerId: "buyerId";
-    readonly orderId: "orderId";
     readonly amount: "amount";
+    readonly status: "status";
     readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type CommissionScalarFieldEnum = (typeof CommissionScalarFieldEnum)[keyof typeof CommissionScalarFieldEnum];
 export declare const SortOrder: {
@@ -122,6 +140,11 @@ export declare const JsonNullValueInput: {
     readonly JsonNull: "JsonNull";
 };
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput];
+export declare const NullableJsonNullValueInput: {
+    readonly DbNull: "DbNull";
+    readonly JsonNull: "JsonNull";
+};
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput];
 export declare const QueryMode: {
     readonly default: "default";
     readonly insensitive: "insensitive";

@@ -20,7 +20,6 @@ const register = async (name, email, password, referralCode) => {
         }
         referrerId = referrer.id;
     }
-    // Create user
     const user = await prisma.user.create({
         data: {
             name,
@@ -34,7 +33,6 @@ const register = async (name, email, password, referralCode) => {
             referralCount: 0,
         },
     });
-    // Prepare user data without password
     const userData = {
         id: user.id,
         name: user.name,
@@ -46,7 +44,6 @@ const register = async (name, email, password, referralCode) => {
         referralCount: user.referralCount,
         createdAt: user.createdAt,
     };
-    // Generate JWT tokens with full user data
     const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret, config.jwt_access_expire || "1h");
     const refreshToken = jwtHelper.generateToken({ userId: user.id }, config.jwt_refresh_secret, config.jwt_refresh_expire || "7d");
     return {
@@ -59,12 +56,12 @@ const login = async (email, password) => {
     // console.log(email, password);
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-        throw new ApiError(401, "Invalid credentials");
+        throw new ApiError(401, "Invalid email or password");
     }
     // console.log(user);
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-        throw new ApiError(401, "Invalid credentials");
+        throw new ApiError(401, "Invalid email or password");
     }
     // Prepare user data without password
     const userData = {
@@ -78,11 +75,6 @@ const login = async (email, password) => {
         referralCount: user.referralCount,
         createdAt: user.createdAt,
     };
-    // console.log(config.jwt_access_secret);
-    // console.log(config.jwt_access_expire);
-    // console.log(config.jwt_refresh_secret);
-    // console.log(config.jwt_refresh_expire);
-    // Generate JWT tokens with full user data
     const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret, config.jwt_access_expire || "30d");
     const refreshToken = jwtHelper.generateToken({ userId: user.id }, config.jwt_refresh_secret, config.jwt_refresh_expire || "365d");
     return {
@@ -109,20 +101,32 @@ const getCurrentUser = async (userId) => {
                 take: 10,
                 select: {
                     id: true,
-                    items: true,
-                    originalSubtotal: true,
+                    // ✅ correct pricing fields
+                    originalPrice: true,
+                    discountPercentage: true,
+                    discountAmount: true,
                     subtotal: true,
-                    discount: true,
                     shipping: true,
-                    storeCreditsApplied: true,
+                    creditApplied: true,
                     total: true,
-                    shippingName: true,
-                    shippingAddress: true,
-                    stripeSessionId: true,
-                    stripePaymentIntentId: true,
                     status: true,
                     createdAt: true,
                     updatedAt: true,
+                    // ✅ relation selection
+                    items: {
+                        select: {
+                            id: true,
+                            quantity: true,
+                            unitPrice: true,
+                            discountedPrice: true,
+                            product: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -218,6 +222,40 @@ const checkReferralCodeAvailability = async (code) => {
     });
     return !existingUser;
 };
+// Admin
+const adminLogin = async (email, password) => {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+        throw new ApiError(401, "Invalid email or password");
+    }
+    // Check if user is admin
+    if (user.role !== "ADMIN") {
+        throw new ApiError(403, "Access denied. Admin only.");
+    }
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+        throw new ApiError(401, "Invalid email or password");
+    }
+    // Prepare admin user data
+    const userData = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        referralCode: user.referralCode,
+        tier: user.tier,
+        storeCredit: user.storeCredit,
+        referralCount: user.referralCount,
+        createdAt: user.createdAt,
+    };
+    const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret, config.jwt_access_expire || "30d");
+    const refreshToken = jwtHelper.generateToken({ userId: user.id }, config.jwt_refresh_secret, config.jwt_refresh_expire || "365d");
+    return {
+        accessToken,
+        refreshToken,
+        user: userData,
+    };
+};
 export const authServices = {
     register,
     login,
@@ -226,5 +264,6 @@ export const authServices = {
     logout,
     updateReferralCode,
     checkReferralCodeAvailability,
+    adminLogin,
 };
 //# sourceMappingURL=auth.services.js.map

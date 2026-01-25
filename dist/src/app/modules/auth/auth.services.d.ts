@@ -8,7 +8,7 @@ export declare const authServices: {
             email: string;
             role: import("../../../generated/prisma/enums").UserRole;
             referralCode: string;
-            tier: string;
+            tier: import("../../../generated/prisma/enums").UserTier;
             storeCredit: number;
             referralCount: number;
             createdAt: Date;
@@ -23,7 +23,7 @@ export declare const authServices: {
             email: string;
             role: import("../../../generated/prisma/enums").UserRole;
             referralCode: string;
-            tier: string;
+            tier: import("../../../generated/prisma/enums").UserTier;
             storeCredit: number;
             referralCount: number;
             createdAt: Date;
@@ -34,27 +34,33 @@ export declare const authServices: {
         email: string;
         referralCode: string;
         name: string;
-        tier: string;
+        tier: import("../../../generated/prisma/enums").UserTier;
         role: import("../../../generated/prisma/enums").UserRole;
         storeCredit: number;
         referralCount: number;
         createdAt: Date;
         orders: {
-            id: number;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
-            items: import("@prisma/client/runtime/client").JsonValue;
-            originalSubtotal: number;
+            originalPrice: number;
+            discountPercentage: number;
+            discountAmount: number;
             subtotal: number;
-            discount: number;
             shipping: number;
-            storeCreditsApplied: number;
+            creditApplied: number;
             total: number;
-            shippingName: string;
-            shippingAddress: string;
-            stripeSessionId: string | null;
-            stripePaymentIntentId: string | null;
-            status: string;
+            status: import("../../../generated/prisma/enums").OrderStatus;
+            items: {
+                id: string;
+                quantity: number;
+                unitPrice: number;
+                discountedPrice: number;
+                product: {
+                    id: number;
+                    name: string;
+                } | null;
+            }[];
         }[];
     }>;
     refreshToken: (refreshToken: string) => Promise<{
@@ -64,7 +70,7 @@ export declare const authServices: {
             email: string;
             referralCode: string;
             name: string;
-            tier: string;
+            tier: import("../../../generated/prisma/enums").UserTier;
             role: import("../../../generated/prisma/enums").UserRole;
             storeCredit: number;
             referralCount: number;
@@ -79,12 +85,27 @@ export declare const authServices: {
         email: string;
         referralCode: string;
         name: string;
-        tier: string;
+        tier: import("../../../generated/prisma/enums").UserTier;
         role: import("../../../generated/prisma/enums").UserRole;
         storeCredit: number;
         referralCount: number;
         createdAt: Date;
     }>;
     checkReferralCodeAvailability: (code: string) => Promise<boolean>;
+    adminLogin: (email: string, password: string) => Promise<{
+        accessToken: string;
+        refreshToken: string;
+        user: {
+            id: string;
+            name: string;
+            email: string;
+            role: "ADMIN";
+            referralCode: string;
+            tier: import("../../../generated/prisma/enums").UserTier;
+            storeCredit: number;
+            referralCount: number;
+            createdAt: Date;
+        };
+    }>;
 };
 //# sourceMappingURL=auth.services.d.ts.map

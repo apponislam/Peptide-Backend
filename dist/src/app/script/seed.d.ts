@@ -4,10 +4,13 @@ export declare function createAdmin(): Promise<{
     referralCode: string;
     name: string;
     password: string;
-    tier: string;
+    tier: import("../../generated/prisma/enums").UserTier;
     role: import("../../generated/prisma/enums").UserRole;
+    isActive: boolean;
+    deletedAt: Date | null;
     storeCredit: number;
     referralCount: number;
+    isReferralValid: boolean;
     referrerId: string | null;
     createdAt: Date;
     updatedAt: Date;

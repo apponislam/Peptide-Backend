@@ -317,7 +317,6 @@ export class ShipStationService {
                 data: {
                     labelUrl: response.data.labelUrl,
                     trackingNumber: response.data.trackingNumber,
-                    carrier: "UPS",
                     updatedAt: new Date(),
                 },
             });
