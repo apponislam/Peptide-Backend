@@ -132,6 +132,7 @@ export const OrderScalarFieldEnum = {
   creditApplied: 'creditApplied',
   total: 'total',
   status: 'status',
+  shipstationOrderId: 'shipstationOrderId',
   trackingNumber: 'trackingNumber',
   labelUrl: 'labelUrl',
   commissionAmount: 'commissionAmount',

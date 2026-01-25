@@ -71,6 +71,7 @@ CREATE TABLE "Order" (
     "creditApplied" DOUBLE PRECISION NOT NULL,
     "total" DOUBLE PRECISION NOT NULL,
     "status" "OrderStatus" NOT NULL DEFAULT 'PENDING',
+    "shipstationOrderId" INTEGER,
     "trackingNumber" TEXT,
     "labelUrl" TEXT,
     "commissionAmount" DOUBLE PRECISION DEFAULT 0,
@@ -145,10 +146,31 @@ CREATE INDEX "Product_createdAt_idx" ON "Product"("createdAt");
 CREATE INDEX "Product_name_idx" ON "Product"("name");
 
 -- CreateIndex
+CREATE INDEX "Order_userId_idx" ON "Order"("userId");
+
+-- CreateIndex
+CREATE INDEX "Order_status_idx" ON "Order"("status");
+
+-- CreateIndex
+CREATE INDEX "Order_createdAt_idx" ON "Order"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "Order_trackingNumber_idx" ON "Order"("trackingNumber");
+
+-- CreateIndex
+CREATE INDEX "Order_email_idx" ON "Order"("email");
+
+-- CreateIndex
+CREATE INDEX "Order_shipstationOrderId_idx" ON "Order"("shipstationOrderId");
+
+-- CreateIndex
 CREATE INDEX "OrderItem_orderId_idx" ON "OrderItem"("orderId");
 
 -- CreateIndex
 CREATE INDEX "OrderItem_productId_idx" ON "OrderItem"("productId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CheckoutSession_stripeSessionId_key" ON "CheckoutSession"("stripeSessionId");
 
 -- CreateIndex
 CREATE INDEX "CheckoutSession_userId_idx" ON "CheckoutSession"("userId");

@@ -34,6 +34,7 @@ export type OrderAvgAggregateOutputType = {
   shipping: number | null
   creditApplied: number | null
   total: number | null
+  shipstationOrderId: number | null
   commissionAmount: number | null
 }
 
@@ -45,6 +46,7 @@ export type OrderSumAggregateOutputType = {
   shipping: number | null
   creditApplied: number | null
   total: number | null
+  shipstationOrderId: number | null
   commissionAmount: number | null
 }
 
@@ -67,6 +69,7 @@ export type OrderMinAggregateOutputType = {
   creditApplied: number | null
   total: number | null
   status: $Enums.OrderStatus | null
+  shipstationOrderId: number | null
   trackingNumber: string | null
   labelUrl: string | null
   commissionAmount: number | null
@@ -94,6 +97,7 @@ export type OrderMaxAggregateOutputType = {
   creditApplied: number | null
   total: number | null
   status: $Enums.OrderStatus | null
+  shipstationOrderId: number | null
   trackingNumber: string | null
   labelUrl: string | null
   commissionAmount: number | null
@@ -121,6 +125,7 @@ export type OrderCountAggregateOutputType = {
   creditApplied: number
   total: number
   status: number
+  shipstationOrderId: number
   trackingNumber: number
   labelUrl: number
   commissionAmount: number
@@ -139,6 +144,7 @@ export type OrderAvgAggregateInputType = {
   shipping?: true
   creditApplied?: true
   total?: true
+  shipstationOrderId?: true
   commissionAmount?: true
 }
 
@@ -150,6 +156,7 @@ export type OrderSumAggregateInputType = {
   shipping?: true
   creditApplied?: true
   total?: true
+  shipstationOrderId?: true
   commissionAmount?: true
 }
 
@@ -172,6 +179,7 @@ export type OrderMinAggregateInputType = {
   creditApplied?: true
   total?: true
   status?: true
+  shipstationOrderId?: true
   trackingNumber?: true
   labelUrl?: true
   commissionAmount?: true
@@ -199,6 +207,7 @@ export type OrderMaxAggregateInputType = {
   creditApplied?: true
   total?: true
   status?: true
+  shipstationOrderId?: true
   trackingNumber?: true
   labelUrl?: true
   commissionAmount?: true
@@ -226,6 +235,7 @@ export type OrderCountAggregateInputType = {
   creditApplied?: true
   total?: true
   status?: true
+  shipstationOrderId?: true
   trackingNumber?: true
   labelUrl?: true
   commissionAmount?: true
@@ -340,6 +350,7 @@ export type OrderGroupByOutputType = {
   creditApplied: number
   total: number
   status: $Enums.OrderStatus
+  shipstationOrderId: number | null
   trackingNumber: string | null
   labelUrl: string | null
   commissionAmount: number | null
@@ -390,6 +401,7 @@ export type OrderWhereInput = {
   creditApplied?: Prisma.FloatFilter<"Order"> | number
   total?: Prisma.FloatFilter<"Order"> | number
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.IntNullableFilter<"Order"> | number | null
   trackingNumber?: Prisma.StringNullableFilter<"Order"> | string | null
   labelUrl?: Prisma.StringNullableFilter<"Order"> | string | null
   commissionAmount?: Prisma.FloatNullableFilter<"Order"> | number | null
@@ -421,6 +433,7 @@ export type OrderOrderByWithRelationInput = {
   creditApplied?: Prisma.SortOrder
   total?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  shipstationOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
   trackingNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   labelUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   commissionAmount?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -455,6 +468,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   creditApplied?: Prisma.FloatFilter<"Order"> | number
   total?: Prisma.FloatFilter<"Order"> | number
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.IntNullableFilter<"Order"> | number | null
   trackingNumber?: Prisma.StringNullableFilter<"Order"> | string | null
   labelUrl?: Prisma.StringNullableFilter<"Order"> | string | null
   commissionAmount?: Prisma.FloatNullableFilter<"Order"> | number | null
@@ -486,6 +500,7 @@ export type OrderOrderByWithAggregationInput = {
   creditApplied?: Prisma.SortOrder
   total?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  shipstationOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
   trackingNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   labelUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   commissionAmount?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -521,6 +536,7 @@ export type OrderScalarWhereWithAggregatesInput = {
   creditApplied?: Prisma.FloatWithAggregatesFilter<"Order"> | number
   total?: Prisma.FloatWithAggregatesFilter<"Order"> | number
   status?: Prisma.EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.IntNullableWithAggregatesFilter<"Order"> | number | null
   trackingNumber?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   labelUrl?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   commissionAmount?: Prisma.FloatNullableWithAggregatesFilter<"Order"> | number | null
@@ -547,6 +563,7 @@ export type OrderCreateInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -578,6 +595,7 @@ export type OrderUncheckedCreateInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -607,6 +625,7 @@ export type OrderUpdateInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -638,6 +657,7 @@ export type OrderUncheckedUpdateInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -668,6 +688,7 @@ export type OrderCreateManyInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -694,6 +715,7 @@ export type OrderUpdateManyMutationInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -721,6 +743,7 @@ export type OrderUncheckedUpdateManyInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -758,6 +781,7 @@ export type OrderCountOrderByAggregateInput = {
   creditApplied?: Prisma.SortOrder
   total?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  shipstationOrderId?: Prisma.SortOrder
   trackingNumber?: Prisma.SortOrder
   labelUrl?: Prisma.SortOrder
   commissionAmount?: Prisma.SortOrder
@@ -774,6 +798,7 @@ export type OrderAvgOrderByAggregateInput = {
   shipping?: Prisma.SortOrder
   creditApplied?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  shipstationOrderId?: Prisma.SortOrder
   commissionAmount?: Prisma.SortOrder
 }
 
@@ -796,6 +821,7 @@ export type OrderMaxOrderByAggregateInput = {
   creditApplied?: Prisma.SortOrder
   total?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  shipstationOrderId?: Prisma.SortOrder
   trackingNumber?: Prisma.SortOrder
   labelUrl?: Prisma.SortOrder
   commissionAmount?: Prisma.SortOrder
@@ -823,6 +849,7 @@ export type OrderMinOrderByAggregateInput = {
   creditApplied?: Prisma.SortOrder
   total?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  shipstationOrderId?: Prisma.SortOrder
   trackingNumber?: Prisma.SortOrder
   labelUrl?: Prisma.SortOrder
   commissionAmount?: Prisma.SortOrder
@@ -839,6 +866,7 @@ export type OrderSumOrderByAggregateInput = {
   shipping?: Prisma.SortOrder
   creditApplied?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  shipstationOrderId?: Prisma.SortOrder
   commissionAmount?: Prisma.SortOrder
 }
 
@@ -896,6 +924,14 @@ export type OrderUncheckedUpdateManyWithoutUserNestedInput = {
 
 export type EnumOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.OrderStatus
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type NullableFloatFieldUpdateOperationsInput = {
@@ -968,6 +1004,7 @@ export type OrderCreateWithoutUserInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -997,6 +1034,7 @@ export type OrderUncheckedCreateWithoutUserInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -1056,6 +1094,7 @@ export type OrderScalarWhereInput = {
   creditApplied?: Prisma.FloatFilter<"Order"> | number
   total?: Prisma.FloatFilter<"Order"> | number
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.IntNullableFilter<"Order"> | number | null
   trackingNumber?: Prisma.StringNullableFilter<"Order"> | string | null
   labelUrl?: Prisma.StringNullableFilter<"Order"> | string | null
   commissionAmount?: Prisma.FloatNullableFilter<"Order"> | number | null
@@ -1082,6 +1121,7 @@ export type OrderCreateWithoutItemsInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -1112,6 +1152,7 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -1156,6 +1197,7 @@ export type OrderUpdateWithoutItemsInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1186,6 +1228,7 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1214,6 +1257,7 @@ export type OrderCreateWithoutCheckoutSessionsInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -1244,6 +1288,7 @@ export type OrderUncheckedCreateWithoutCheckoutSessionsInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -1288,6 +1333,7 @@ export type OrderUpdateWithoutCheckoutSessionsInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1318,6 +1364,7 @@ export type OrderUncheckedUpdateWithoutCheckoutSessionsInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1346,6 +1393,7 @@ export type OrderCreateWithoutCommissionsInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -1376,6 +1424,7 @@ export type OrderUncheckedCreateWithoutCommissionsInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -1420,6 +1469,7 @@ export type OrderUpdateWithoutCommissionsInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1450,6 +1500,7 @@ export type OrderUncheckedUpdateWithoutCommissionsInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1478,6 +1529,7 @@ export type OrderCreateManyUserInput = {
   creditApplied: number
   total: number
   status?: $Enums.OrderStatus
+  shipstationOrderId?: number | null
   trackingNumber?: string | null
   labelUrl?: string | null
   commissionAmount?: number | null
@@ -1504,6 +1556,7 @@ export type OrderUpdateWithoutUserInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1533,6 +1586,7 @@ export type OrderUncheckedUpdateWithoutUserInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1562,6 +1616,7 @@ export type OrderUncheckedUpdateManyWithoutUserInput = {
   creditApplied?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  shipstationOrderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   labelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commissionAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1638,6 +1693,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   creditApplied?: boolean
   total?: boolean
   status?: boolean
+  shipstationOrderId?: boolean
   trackingNumber?: boolean
   labelUrl?: boolean
   commissionAmount?: boolean
@@ -1670,6 +1726,7 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   creditApplied?: boolean
   total?: boolean
   status?: boolean
+  shipstationOrderId?: boolean
   trackingNumber?: boolean
   labelUrl?: boolean
   commissionAmount?: boolean
@@ -1698,6 +1755,7 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   creditApplied?: boolean
   total?: boolean
   status?: boolean
+  shipstationOrderId?: boolean
   trackingNumber?: boolean
   labelUrl?: boolean
   commissionAmount?: boolean
@@ -1726,6 +1784,7 @@ export type OrderSelectScalar = {
   creditApplied?: boolean
   total?: boolean
   status?: boolean
+  shipstationOrderId?: boolean
   trackingNumber?: boolean
   labelUrl?: boolean
   commissionAmount?: boolean
@@ -1734,7 +1793,7 @@ export type OrderSelectScalar = {
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "email" | "phone" | "address" | "city" | "state" | "zip" | "country" | "originalPrice" | "discountPercentage" | "discountAmount" | "subtotal" | "shipping" | "creditApplied" | "total" | "status" | "trackingNumber" | "labelUrl" | "commissionAmount" | "commissionPaid" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "email" | "phone" | "address" | "city" | "state" | "zip" | "country" | "originalPrice" | "discountPercentage" | "discountAmount" | "subtotal" | "shipping" | "creditApplied" | "total" | "status" | "shipstationOrderId" | "trackingNumber" | "labelUrl" | "commissionAmount" | "commissionPaid" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
@@ -1776,6 +1835,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     creditApplied: number
     total: number
     status: $Enums.OrderStatus
+    shipstationOrderId: number | null
     trackingNumber: string | null
     labelUrl: string | null
     commissionAmount: number | null
@@ -2227,6 +2287,7 @@ export interface OrderFieldRefs {
   readonly creditApplied: Prisma.FieldRef<"Order", 'Float'>
   readonly total: Prisma.FieldRef<"Order", 'Float'>
   readonly status: Prisma.FieldRef<"Order", 'OrderStatus'>
+  readonly shipstationOrderId: Prisma.FieldRef<"Order", 'Int'>
   readonly trackingNumber: Prisma.FieldRef<"Order", 'String'>
   readonly labelUrl: Prisma.FieldRef<"Order", 'String'>
   readonly commissionAmount: Prisma.FieldRef<"Order", 'Float'>
