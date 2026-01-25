@@ -10,7 +10,6 @@ router.post("/create-payment-intent", PaymentController.createPaymentIntent);
 router.post("/refund", PaymentController.createRefund);
 router.get("/session/:sessionId", PaymentController.getSessionStatus);
 
-// Webhook route (must use raw body)
 router.post("/webhook", express.raw({ type: "application/json" }), WebhookController.handleStripeWebhook);
 
 export default router;
