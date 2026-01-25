@@ -1,6 +1,5 @@
 import express from "express";
 import { PaymentController } from "./payment.controller";
-import { WebhookController } from "./webhook.controller";
 
 const router = express.Router();
 
@@ -9,7 +8,5 @@ router.post("/checkout", PaymentController.createCheckoutSession);
 router.post("/create-payment-intent", PaymentController.createPaymentIntent);
 router.post("/refund", PaymentController.createRefund);
 router.get("/session/:sessionId", PaymentController.getSessionStatus);
-
-router.post("/webhook", express.raw({ type: "application/json" }), WebhookController.handleStripeWebhook);
 
 export default router;

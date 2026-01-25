@@ -272,6 +272,7 @@ model Order {
   status            OrderStatus @default(PENDING)
 
   // ShipStation Data
+  shipstationOrderId Int?
   trackingNumber    String?
   labelUrl          String?
 
@@ -286,6 +287,13 @@ model Order {
 
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([trackingNumber])
+  @@index([email])
+  @@index([shipstationOrderId])
 }
 
 
@@ -313,7 +321,7 @@ model CheckoutSession {
   orderId         String?
   order           Order?   @relation(fields: [orderId], references: [id])
 
-  stripeSessionId String
+  stripeSessionId String @unique
   paymentStatus   StripePaymentStatus @default(PENDING)
 
   createdAt       DateTime @default(now())
