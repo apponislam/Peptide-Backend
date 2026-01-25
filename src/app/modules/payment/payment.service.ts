@@ -28,6 +28,7 @@ export class StripeService {
 
     // Create a checkout session
     async createCheckoutSession(userId: string, items: CheckoutItem[], shippingInfo: ShippingInfo, metadata: Record<string, any> = {}) {
+        console.log(shippingInfo);
         try {
             const user = await prisma.user.findUnique({
                 where: { id: userId },
@@ -85,7 +86,14 @@ export class StripeService {
                 ],
                 metadata: {
                     userId,
-                    shippingAddress: JSON.stringify(shippingInfo),
+                    shippingName: shippingInfo.name,
+                    shippingEmail: shippingInfo.email,
+                    shippingPhone: shippingInfo.phone,
+                    shippingAddress: shippingInfo.address,
+                    shippingCity: shippingInfo.city,
+                    shippingState: shippingInfo.state,
+                    shippingZip: shippingInfo.zip,
+                    shippingCountry: shippingInfo.country,
                     ...metadata,
                     orderSummary: JSON.stringify(orderSummary),
                 },
