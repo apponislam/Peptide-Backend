@@ -4,7 +4,7 @@ import { shipStationService } from "../shipstation/shipstation.service";
 import { CheckoutItem, EnhancedStripeSession, OrderSummary, ShippingInfo } from "./payment.types";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2025-12-15.clover",
+    apiVersion: "2025-07-30.basil" as any,
 });
 
 export class StripeService {
