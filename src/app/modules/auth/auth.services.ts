@@ -9,15 +9,14 @@ const register = async (name: string, email: string, password: string, referralC
     if (existing) {
         throw new ApiError(400, "Email already registered");
     }
-
     const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
-
-    // Find referrer if code provided
     let referrerId = null;
-    if (referralCode && referralCode !== "JAKE") {
+    console.log(referralCode);
+    if (referralCode) {
         const referrer = await prisma.user.findUnique({
             where: { referralCode },
         });
+        console.log(referrer);
         if (!referrer) {
             throw new ApiError(400, "Invalid referral code");
         }

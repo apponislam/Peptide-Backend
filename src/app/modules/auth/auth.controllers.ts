@@ -5,8 +5,6 @@ import sendResponse from "../../../utils/sendResponse.";
 
 const register = catchAsync(async (req: Request, res: Response) => {
     const { name, email, password, referralCode } = req.body;
-    console.log(req.body);
-    console.log(referralCode);
 
     const result = await authServices.register(name, email, password, referralCode);
 
@@ -14,7 +12,7 @@ const register = catchAsync(async (req: Request, res: Response) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     sendResponse(res, {
