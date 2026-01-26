@@ -308,41 +308,115 @@ export class StripeService {
 
     private async processCommissions(order: any) {
         try {
+            console.log("=== PROCESSING COMMISSIONS START ===");
+            console.log("Order ID:", order.id);
+            console.log("Order Subtotal:", order.subtotal);
+
             const user = await prisma.user.findUnique({
                 where: { id: order.userId },
                 include: { referrer: true },
             });
 
-            if (user?.isReferralValid && user.referrer) {
-                const commissionAmount = (order.subtotal - order.creditApplied) * 0.1;
+            console.log("User found:", user?.id);
+            console.log("User isReferralValid BEFORE:", user?.isReferralValid);
+            console.log("User referrer:", user?.referrer?.id);
 
-                await prisma.commission.create({
-                    data: {
-                        id: `com_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-                        orderId: order.id,
-                        referrerId: user.referrer.id,
-                        buyerId: user.id,
-                        amount: commissionAmount,
-                        status: "PENDING",
-                    },
-                });
+            if (user?.referrer) {
+                // Check if this is the FIRST purchase for this user
+                const isFirstPurchase = !user.isReferralValid;
 
-                await prisma.user.update({
-                    where: { id: user.referrer.id },
-                    data: {
-                        referralCount: { increment: 1 },
-                    },
-                });
+                if (isFirstPurchase) {
+                    console.log("🎯 FIRST PURCHASE - Validating referral");
 
-                await prisma.order.update({
-                    where: { id: order.id },
-                    data: {
-                        commissionAmount,
-                    },
-                });
+                    // Get current count and tier
+                    const currentCount = user.referrer.referralCount;
+                    const currentTier = user.referrer.tier;
+                    const newCount = currentCount + 1;
+
+                    // Check if tier should change
+                    let newTier = currentTier;
+                    if (newCount >= 10 && currentTier !== "Founder") {
+                        newTier = "Founder";
+                    } else if (newCount >= 3 && currentTier === "Member") {
+                        newTier = "VIP";
+                    }
+
+                    // Mark referral valid
+                    await prisma.user.update({
+                        where: { id: user.id },
+                        data: { isReferralValid: true },
+                    });
+
+                    // Update referrer
+                    const updateData: any = { referralCount: { increment: 1 } };
+                    if (newTier !== currentTier) {
+                        updateData.tier = newTier;
+                    }
+
+                    await prisma.user.update({
+                        where: { id: user.referrer.id },
+                        data: updateData,
+                    });
+
+                    console.log("✅ Referral validated and count incremented");
+                } else {
+                    console.log("📦 Repeat purchase - referral already counted");
+                }
+
+                const commissionRates = {
+                    Founder: 0.15,
+                    VIP: 0.1,
+                    Member: 0,
+                };
+
+                const commissionRate = commissionRates[user.referrer.tier] || 0;
+
+                if (commissionRate > 0) {
+                    const commissionAmount = order.subtotal * commissionRate;
+                    console.log("💰 Commission Amount:", commissionAmount);
+
+                    // Give commission to referrer
+                    await prisma.user.update({
+                        where: { id: user.referrer.id },
+                        data: {
+                            storeCredit: { increment: commissionAmount },
+                        },
+                    });
+                    console.log("✅ Commission added to referrer's store credit");
+
+                    // Create commission record
+                    const commissionId = `com_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                    await prisma.commission.create({
+                        data: {
+                            id: commissionId,
+                            orderId: order.id,
+                            referrerId: user.referrer.id,
+                            buyerId: user.id,
+                            amount: commissionAmount,
+                            status: "PAID",
+                        },
+                    });
+                    console.log("✅ Created commission record:", commissionId);
+
+                    // Update order with commission
+                    await prisma.order.update({
+                        where: { id: order.id },
+                        data: { commissionAmount },
+                    });
+                    console.log("✅ Updated order with commission amount");
+                } else {
+                    console.log("📊 No commission for this tier");
+                }
+            } else {
+                console.log("❌ No referrer found");
             }
+
+            console.log("=== PROCESSING COMMISSIONS END ===");
         } catch (error) {
-            console.error("Error processing commissions:", error);
+            console.error("❌ Error processing commissions:", error);
+            if (error instanceof Error) {
+                console.error("Error message:", error.message);
+            }
         }
     }
 

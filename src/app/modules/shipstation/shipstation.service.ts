@@ -136,7 +136,7 @@ export class ShipStationService {
                 },
             };
 
-            console.log("ShipStation payload:", JSON.stringify(shipStationOrder, null, 2));
+            // console.log("ShipStation payload:", JSON.stringify(shipStationOrder, null, 2));
 
             // Add /v1/ to the endpoint
             const response = await axios.post(`${this.baseUrl}/orders/createorder`, shipStationOrder, {
@@ -144,7 +144,7 @@ export class ShipStationService {
                 timeout: 30000,
             });
 
-            console.log("ShipStation response:", response.data);
+            // console.log("ShipStation response:", response.data);
 
             // Save ShipStation order ID
             await prisma.order.update({

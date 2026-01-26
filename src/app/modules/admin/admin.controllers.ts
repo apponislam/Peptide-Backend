@@ -99,9 +99,37 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// Get top selling products
+const getTopSellingProducts = catchAsync(async (req: Request, res: Response) => {
+    const limit = parseInt(req.query.limit as string) || 5;
+
+    const products = await adminServices.getTopSellingProducts(limit);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Top selling products retrieved successfully",
+        data: products,
+    });
+});
+
+// Get referral performance
+const getReferralPerformance = catchAsync(async (req: Request, res: Response) => {
+    const performance = await adminServices.getReferralPerformance();
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Referral performance retrieved successfully",
+        data: performance,
+    });
+});
+
 export const adminControllers = {
     getDashboardStats,
     getAllOrders,
     getAllUsers,
     updateUser,
+    getTopSellingProducts,
+    getReferralPerformance,
 };
