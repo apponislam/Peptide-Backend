@@ -273,50 +273,79 @@ export class ShipStationService {
             }
 
             if (!order.shipstationOrderId) {
-                throw new Error(`Order ${orderId} does not have a ShipStation order ID. Create the order in ShipStation first.`);
+                throw new Error(`Order ${orderId} does not have a ShipStation order ID.`);
             }
 
-            // Use ups_walleted (UPS by ShipStation)
-            const labelRequest = {
-                orderId: Number(order.shipstationOrderId),
-                carrierCode: "ups_walleted", // Use UPS by ShipStation
-                serviceCode: "ups_ground", // Common UPS service
-                packageCode: "package",
-                confirmation: "delivery",
-                shipDate: new Date().toISOString().split("T")[0],
-                weight: {
-                    value: 5, // Minimum weight for UPS (1 lb = 16 oz)
-                    units: "pounds", // UPS uses pounds
-                },
-                dimensions: {
-                    length: 12,
-                    width: 12,
-                    height: 12,
-                    units: "inches",
-                },
-                testLabel: true, // Use test label for development
-                validateAddress: "no_validation", // Skip address validation for testing
-                insuranceOptions: {
-                    provider: "carrier",
-                    insureShipment: false,
-                    insuredValue: 0,
-                },
+            // ✅ Your Static US Warehouse (Correct)
+            const shipFromAddress = {
+                name: "Jacob Stansfield",
+                company: "PEPTIDE.CLUB",
+                street1: "5500 West Airport Freeway",
+                city: "Irving",
+                state: "TX",
+                postalCode: "75062",
+                country: "US",
+                phone: "555-0123",
+                residential: false,
             };
 
-            console.log("Creating UPS label:", labelRequest);
+            // ✅ Your Customer's Address (From Database)
+            const shipToAddress = {
+                name: order.name,
+                company: "",
+                street1: order.address,
+                city: order.city,
+                state: order.state,
+                postalCode: order.zip,
+                country: "US",
+                phone: order.phone || "",
+                residential: true,
+            };
 
-            const response = await axios.post(`${this.baseUrl}/orders/createlabelfororder`, labelRequest, {
-                headers: this.getAuthHeader(),
-                timeout: 30000,
-            });
+            // ✅ Build the label request
+            const labelRequest = {
+                orderId: Number(order.shipstationOrderId),
+                carrierCode: "stamps_com",
+                serviceCode: "usps_first_class_mail",
+                packageCode: "package",
+                confirmation: "none",
+                shipDate: new Date().toISOString().split("T")[0],
+                weight: {
+                    value: 4,
+                    units: "ounces",
+                },
+                dimensions: {
+                    length: 10,
+                    width: 10,
+                    height: 10,
+                    units: "inches",
+                },
+                shipFrom: shipFromAddress,
+                shipTo: shipToAddress,
+                testLabel: true,
+            };
 
-            console.log("UPS label created successfully:", response.data);
+            console.log("Creating label with correct V1 payload:", JSON.stringify(labelRequest, null, 2));
+
+            // 🔴 FIX: CALL THE CORRECT ENDPOINT
+            const response = await axios.post(
+                `${this.baseUrl}/orders/createlabelfororder`, // CHANGED ENDPOINT
+                labelRequest,
+                {
+                    headers: this.getAuthHeader(),
+                    timeout: 30000,
+                },
+            );
+
+            console.log("Label created successfully:", response.data);
 
             await prisma.order.update({
                 where: { id: orderId },
                 data: {
-                    labelUrl: response.data.labelUrl,
                     trackingNumber: response.data.trackingNumber,
+                    labelUrl: response.data.labelUrl,
+                    status: "SHIPPED",
+                    shipstationOrderId: Number(order.shipstationOrderId),
                     updatedAt: new Date(),
                 },
             });
