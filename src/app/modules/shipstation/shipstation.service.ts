@@ -434,6 +434,18 @@ export class ShipStationService {
             throw new Error(`Failed to get carriers: ${error.message}`);
         }
     }
+
+    async getWarehouses() {
+        try {
+            const response = await axios.get(`${this.baseUrl}/warehouses`, {
+                headers: this.getAuthHeader(),
+            });
+            return response.data;
+        } catch (error: any) {
+            console.error("ShipStation get warehouses error:", error.response?.data || error.message);
+            throw new Error(`Failed to get warehouses: ${error.message}`);
+        }
+    }
 }
 
 export const shipStationService = new ShipStationService();

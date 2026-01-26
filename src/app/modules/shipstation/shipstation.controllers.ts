@@ -182,4 +182,21 @@ export class ShipStationController {
             });
         }
     }
+
+    static async getWarehouses(req: Request, res: Response) {
+        try {
+            const result = await shipStationService.getWarehouses();
+
+            res.json({
+                success: true,
+                data: result,
+            });
+        } catch (error: any) {
+            console.error("Get carriers error:", error);
+            res.status(500).json({
+                success: false,
+                error: error.message || "Failed to get carriers",
+            });
+        }
+    }
 }
