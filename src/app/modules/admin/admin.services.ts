@@ -246,7 +246,7 @@ const getTopSellingProducts = async (limit: number = 5) => {
 // };
 
 const getReferralPerformance = async () => {
-    // Get top 3 referrers WITH storeCredit
+    // Get top 3 referrers
     const topReferrers = await prisma.user.findMany({
         where: {
             referralCount: { gt: 0 },
@@ -259,16 +259,31 @@ const getReferralPerformance = async () => {
             id: true,
             name: true,
             referralCount: true,
-            storeCredit: true, // ADD THIS - get storeCredit instead of commission table
         },
     });
 
-    // Return with storeCredit
-    return topReferrers.map((referrer) => ({
-        topReferrer: referrer.name,
-        referrals: referrer.referralCount,
-        totalCommissions: referrer.storeCredit || 0, // Use storeCredit
-    }));
+    // Get total commissions for EACH referrer from Commission table
+    const referralPerformanceArray = await Promise.all(
+        topReferrers.map(async (referrer) => {
+            const commissions = await prisma.commission.aggregate({
+                where: {
+                    referrerId: referrer.id,
+                    status: "PAID",
+                },
+                _sum: {
+                    amount: true,
+                },
+            });
+
+            return {
+                topReferrer: referrer.name,
+                referrals: referrer.referralCount,
+                totalCommissions: commissions._sum.amount || 0,
+            };
+        }),
+    );
+
+    return referralPerformanceArray;
 };
 
 export const adminServices = {
