@@ -22,7 +22,7 @@ export default sendEmail;
 
 // import { Resend } from "resend";
 
-// const resend = new Resend("re_nLYxkPfG_5Ehh2rQotRsp12K6vS2BH4bo");
+// const resend = new Resend("adsfasdf");
 
 // resend.emails.send({
 //     from: "onboarding@resend.dev",
