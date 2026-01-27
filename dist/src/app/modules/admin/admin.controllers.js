@@ -13,12 +13,26 @@ const getDashboardStats = catchAsync(async (req, res) => {
 });
 // Get all orders
 const getAllOrders = catchAsync(async (req, res) => {
-    const orders = await adminServices.getAllOrders();
+    const { page = 1, limit = 10, search = "", status, userId, sortBy = "createdAt", sortOrder = "desc", startDate, endDate, minAmount, maxAmount } = req.query;
+    const result = await adminServices.getAllOrders({
+        page: Number(page),
+        limit: Number(limit),
+        search: search,
+        status: status,
+        userId: userId,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+        startDate: startDate,
+        endDate: endDate,
+        ...(minAmount && { minAmount: Number(minAmount) }),
+        ...(maxAmount && { maxAmount: Number(maxAmount) }),
+    });
     sendResponse(res, {
         statusCode: 200,
         success: true,
         message: "Orders retrieved successfully",
-        data: orders,
+        data: result.orders,
+        meta: result.meta,
     });
 });
 // Update order status
@@ -80,10 +94,52 @@ const updateUser = catchAsync(async (req, res) => {
         data: user,
     });
 });
+// Get top selling products
+const getTopSellingProducts = catchAsync(async (req, res) => {
+    const limit = parseInt(req.query.limit) || 5;
+    const products = await adminServices.getTopSellingProducts(limit);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Top selling products retrieved successfully",
+        data: products,
+    });
+});
+// Get referral performance
+const getReferralPerformance = catchAsync(async (req, res) => {
+    const performance = await adminServices.getReferralPerformance();
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Referral performance retrieved successfully",
+        data: performance,
+    });
+});
+const getUserById = catchAsync(async (req, res) => {
+    const id = req.params.id;
+    if (!id) {
+        return sendResponse(res, {
+            statusCode: 400,
+            success: false,
+            message: "User ID is required",
+            data: null,
+        });
+    }
+    const result = await adminServices.getUserById(id);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "User retrieved successfully",
+        data: result,
+    });
+});
 export const adminControllers = {
     getDashboardStats,
     getAllOrders,
     getAllUsers,
     updateUser,
+    getTopSellingProducts,
+    getReferralPerformance,
+    getUserById,
 };
 //# sourceMappingURL=admin.controllers.js.map

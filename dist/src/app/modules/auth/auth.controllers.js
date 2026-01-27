@@ -3,14 +3,12 @@ import { authServices } from "./auth.services";
 import sendResponse from "../../../utils/sendResponse.";
 const register = catchAsync(async (req, res) => {
     const { name, email, password, referralCode } = req.body;
-    console.log(req.body);
-    console.log(referralCode);
     const result = await authServices.register(name, email, password, referralCode);
     res.cookie("refreshToken", result.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     sendResponse(res, {
         statusCode: 201,

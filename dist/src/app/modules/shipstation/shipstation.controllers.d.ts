@@ -7,5 +7,6 @@ export declare class ShipStationController {
     static updateTracking(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static markAsShipped(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static getCarriers(req: Request, res: Response): Promise<void>;
+    static getWarehouses(req: Request, res: Response): Promise<void>;
 }
 //# sourceMappingURL=shipstation.controllers.d.ts.map

@@ -6,7 +6,10 @@ const router = express.Router();
 router.get("/stats", auth, adminControllers.getDashboardStats);
 router.get("/orders", auth, adminControllers.getAllOrders);
 router.get("/users", auth, adminControllers.getAllUsers);
+router.get("/users/:id", auth, adminControllers.getUserById);
 // router.patch("/orders/:id", auth, adminControllers.updateOrderStatus);
+router.get("/top-products", auth, adminControllers.getTopSellingProducts);
+router.get("/referral-performance", auth, adminControllers.getReferralPerformance);
 router.patch("/users/:id", auth, adminControllers.updateUser);
 export const adminRoutes = router;
 //# sourceMappingURL=admin.routes.js.map

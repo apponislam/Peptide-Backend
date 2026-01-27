@@ -45,6 +45,7 @@ export declare class ShipStationService {
     updateTracking(orderId: string, trackingNumber: string, carrier: string): Promise<any>;
     markOrderAsShipped(orderId: string): Promise<any>;
     getCarriers(): Promise<any>;
+    getWarehouses(): Promise<any>;
 }
 export declare const shipStationService: ShipStationService;
 //# sourceMappingURL=shipstation.service.d.ts.map

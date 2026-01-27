@@ -10,5 +10,6 @@ router.get("/orders", ShipStationController.listOrders);
 router.put("/tracking/:orderId", ShipStationController.updateTracking);
 router.post("/ship/:orderId", ShipStationController.markAsShipped);
 router.get("/carriers", ShipStationController.getCarriers);
+router.get("/warehouses", ShipStationController.getWarehouses);
 export const shipmentRoutes = router;
 //# sourceMappingURL=shipstation.routes.js.map

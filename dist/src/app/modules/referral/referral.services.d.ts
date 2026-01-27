@@ -18,8 +18,8 @@ export declare const referralServices: {
             updatedAt: Date;
             status: import("../../../generated/prisma/enums").CommissionStatus;
             orderId: string;
-            amount: number;
             buyerId: string;
+            amount: number;
         }[];
     }>;
     getTierData: (referralCount: number) => {
