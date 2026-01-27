@@ -395,6 +395,178 @@ const getReferralPerformance = async () => {
     return referralPerformanceArray;
 };
 
+// Get single user by ID with full details
+const getUserById = async (id: string) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            id,
+            isActive: true,
+        },
+        select: {
+            id: true,
+            email: true,
+            name: true,
+            referralCode: true,
+            tier: true,
+            role: true,
+            isActive: true,
+            storeCredit: true,
+            referralCount: true,
+            isReferralValid: true,
+            referrerId: true,
+            createdAt: true,
+            updatedAt: true,
+            // Include related data
+            referrer: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    tier: true,
+                    referralCode: true,
+                },
+            },
+            referrals: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    tier: true,
+                    createdAt: true,
+                    isReferralValid: true,
+                    storeCredit: true,
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+                take: 10,
+            },
+            orders: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    total: true,
+                    status: true,
+                    createdAt: true,
+                    items: {
+                        select: {
+                            id: true,
+                            quantity: true,
+                            unitPrice: true,
+                            discountedPrice: true,
+                            product: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
+                    commissions: {
+                        select: {
+                            id: true,
+                            amount: true,
+                            status: true,
+                            createdAt: true,
+                        },
+                    },
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+                take: 5,
+            },
+            commissionsEarned: {
+                select: {
+                    id: true,
+                    amount: true,
+                    status: true,
+                    createdAt: true,
+                    order: {
+                        select: {
+                            id: true,
+                            total: true,
+                            createdAt: true,
+                        },
+                    },
+                    buyer: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                        },
+                    },
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+                take: 10,
+            },
+            checkoutSessions: {
+                select: {
+                    id: true,
+                    stripeSessionId: true,
+                    paymentStatus: true,
+                    createdAt: true,
+                    order: {
+                        select: {
+                            id: true,
+                            total: true,
+                        },
+                    },
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+                take: 5,
+            },
+        },
+    });
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    // Calculate user stats
+    const totalOrders = user.orders.length;
+    const totalSpent = user.orders.reduce((sum, order) => sum + order.total, 0);
+    const averageOrderValue = totalOrders > 0 ? totalSpent / totalOrders : 0;
+    const totalCommissionsEarned = user.commissionsEarned.reduce((sum, commission) => sum + commission.amount, 0);
+    const validReferrals = user.referrals.filter((ref) => ref.isReferralValid).length;
+
+    // Get recent activity (last 30 days)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const recentOrders = await prisma.order.count({
+        where: {
+            userId: id,
+            createdAt: {
+                gte: thirtyDaysAgo,
+            },
+        },
+    });
+
+    return {
+        user,
+        stats: {
+            totalOrders,
+            totalSpent: parseFloat(totalSpent.toFixed(2)),
+            averageOrderValue: parseFloat(averageOrderValue.toFixed(2)),
+            totalCommissionsEarned: parseFloat(totalCommissionsEarned.toFixed(2)),
+            totalReferrals: user.referrals.length,
+            validReferrals,
+            referralConversionRate: user.referrals.length > 0 ? parseFloat(((validReferrals / user.referrals.length) * 100).toFixed(2)) : 0,
+            recentOrdersLast30Days: recentOrders,
+            storeCredit: user.storeCredit,
+            tier: user.tier,
+            referralCount: user.referralCount,
+            isReferralValid: user.isReferralValid,
+        },
+    };
+};
+
 export const adminServices = {
     getDashboardStats,
     getAllOrders,
@@ -402,4 +574,5 @@ export const adminServices = {
     updateUser,
     getTopSellingProducts,
     getReferralPerformance,
+    getUserById,
 };
