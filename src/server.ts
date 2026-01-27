@@ -3,6 +3,7 @@ import app from "./app";
 import { prisma } from "./lib/prisma";
 import { createAdmin } from "./app/script/seed";
 import seedProducts from "./app/script/products";
+// import sendEmail from "./utils/sendEmail";
 // import seedProducts from "./app/script/products";
 
 const PORT = Number(process.env.PORT) || 5050;
@@ -14,6 +15,7 @@ async function main() {
 
         await createAdmin();
         // await seedProducts();
+        // await sendEmail();
 
         // Start server
         app.listen(PORT, () => {
