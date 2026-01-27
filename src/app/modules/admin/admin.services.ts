@@ -1,6 +1,6 @@
 import { prisma } from "../../../lib/prisma";
 import ApiError from "../../../errors/ApiError";
-import { Prisma, UserRole, UserTier } from "../../../generated/prisma/client";
+import { OrderStatus, Prisma, UserRole, UserTier } from "../../../generated/prisma/client";
 
 // Get dashboard stats
 const getDashboardStats = async () => {
@@ -28,17 +28,126 @@ const getDashboardStats = async () => {
     };
 };
 
-const getAllOrders = async () => {
-    const orders = await prisma.order.findMany({
-        include: {
-            user: {
-                select: { email: true, referralCode: true },
-            },
-        },
-        orderBy: { createdAt: "desc" },
-    });
+// const getAllOrders = async () => {
+//     const orders = await prisma.order.findMany({
+//         include: {
+//             user: {
+//                 select: { email: true, referralCode: true },
+//             },
+//         },
+//         orderBy: { createdAt: "desc" },
+//     });
 
-    return orders;
+//     return orders;
+// };
+
+const getAllOrders = async (params: { page?: number; limit?: number; search?: string; status?: OrderStatus; userId?: string; sortBy?: string; sortOrder?: "asc" | "desc"; startDate?: string; endDate?: string; minAmount?: number; maxAmount?: number }) => {
+    const page = params.page || 1;
+    const limit = params.limit || 10;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.OrderWhereInput = {};
+
+    // Search by name, email, order ID
+    if (params.search) {
+        where.OR = [{ name: { contains: params.search, mode: "insensitive" } }, { email: { contains: params.search, mode: "insensitive" } }, { id: { contains: params.search, mode: "insensitive" } }, { trackingNumber: { contains: params.search, mode: "insensitive" } }];
+    }
+
+    // Filter by status
+    if (params.status) {
+        where.status = params.status;
+    }
+
+    // Filter by user
+    if (params.userId) {
+        where.userId = params.userId;
+    }
+
+    // Date range filter
+    if (params.startDate || params.endDate) {
+        where.createdAt = {};
+        if (params.startDate) {
+            where.createdAt.gte = new Date(params.startDate);
+        }
+        if (params.endDate) {
+            where.createdAt.lte = new Date(params.endDate);
+        }
+    }
+
+    // Amount range filter
+    if (params.minAmount !== undefined || params.maxAmount !== undefined) {
+        where.total = {};
+        if (params.minAmount !== undefined) {
+            where.total.gte = params.minAmount;
+        }
+        if (params.maxAmount !== undefined) {
+            where.total.lte = params.maxAmount;
+        }
+    }
+
+    // Sorting
+    const orderBy: Prisma.OrderOrderByWithRelationInput = { createdAt: "desc" };
+    if (params.sortBy) {
+        const allowedSortFields = ["createdAt", "total", "status", "name", "email"];
+        if (allowedSortFields.includes(params.sortBy)) {
+            const sortField = params.sortBy as keyof Prisma.OrderOrderByWithRelationInput;
+            orderBy[sortField] = params.sortOrder || "desc";
+        }
+    }
+
+    // Get orders with pagination
+    const [orders, total] = await Promise.all([
+        prisma.order.findMany({
+            where,
+            include: {
+                user: {
+                    select: {
+                        email: true,
+                        name: true,
+                        referralCode: true,
+                        tier: true,
+                    },
+                },
+                items: {
+                    include: {
+                        product: {
+                            select: {
+                                name: true,
+                            },
+                        },
+                    },
+                },
+                commissions: {
+                    select: {
+                        amount: true,
+                        status: true,
+                        referrer: {
+                            select: {
+                                name: true,
+                                email: true,
+                            },
+                        },
+                    },
+                },
+            },
+            orderBy,
+            skip,
+            take: limit,
+        }),
+        prisma.order.count({ where }),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+        orders,
+        meta: {
+            page,
+            limit,
+            total,
+            totalPages,
+        },
+    };
 };
 
 // Update order status

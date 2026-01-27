@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../../../utils/catchAsync";
 import { adminServices } from "./admin.services";
 import sendResponse from "../../../utils/sendResponse.";
-import { UserRole, UserTier } from "../../../generated/prisma/enums";
+import { OrderStatus, UserRole, UserTier } from "../../../generated/prisma/enums";
 
 // Get dashboard stats
 const getDashboardStats = catchAsync(async (req: Request, res: Response) => {
@@ -18,13 +18,28 @@ const getDashboardStats = catchAsync(async (req: Request, res: Response) => {
 
 // Get all orders
 const getAllOrders = catchAsync(async (req: Request, res: Response) => {
-    const orders = await adminServices.getAllOrders();
+    const { page = 1, limit = 10, search = "", status, userId, sortBy = "createdAt", sortOrder = "desc", startDate, endDate, minAmount, maxAmount } = req.query;
+
+    const result = await adminServices.getAllOrders({
+        page: Number(page),
+        limit: Number(limit),
+        search: search as string,
+        status: status as OrderStatus,
+        userId: userId as string,
+        sortBy: sortBy as string,
+        sortOrder: sortOrder as "asc" | "desc",
+        startDate: startDate as string,
+        endDate: endDate as string,
+        ...(minAmount && { minAmount: Number(minAmount) }),
+        ...(maxAmount && { maxAmount: Number(maxAmount) }),
+    });
 
     sendResponse(res, {
         statusCode: 200,
         success: true,
         message: "Orders retrieved successfully",
-        data: orders,
+        data: result.orders,
+        meta: result.meta,
     });
 });
 
