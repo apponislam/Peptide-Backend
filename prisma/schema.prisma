@@ -8,156 +8,6 @@ datasource db {
   // url      = env("DATABASE_URL")
 }
 
-// enum UserRole {
-//   USER
-//   ADMIN
-// }
-
-// enum UserTier {
-//   Member
-//   Founder
-//   VIP
-// }
-// model User {
-//   id               String   @id @default(uuid())
-//   email            String   @unique
-//   name             String
-//   password         String
-//   referralCode     String   @unique
-//   tier             UserTier  @default(Member)
-//   role             UserRole @default(USER)
-
-//   // Soft delete for user accounts
-//   isActive         Boolean  @default(true)
-//   deletedAt        DateTime?
-
-//   storeCredit      Float    @default(0)
-//   referralCount    Int      @default(0)
-  
-//   isReferralValid  Boolean   @default(false)
-//   referrerId       String?
-//   referrer         User?    @relation("UserReferrals", fields: [referrerId], references: [id])
-//   referrals        User[]   @relation("UserReferrals")
-
-//   // Relations
-//   orders            Order[]
-//   commissionsEarned Commission[] @relation("ReferrerCommissions")
-//   commissionsFrom   Commission[] @relation("BuyerCommissions")
-//   checkoutSessions  CheckoutSession[]
-
-//   createdAt        DateTime @default(now())
-//   updatedAt        DateTime @updatedAt
-
-//   @@index([id])
-//   @@index([email])
-//   @@index([referrerId])
-// }
-
-// model Product {
-//   id         Int      @id @default(autoincrement())
-//   name       String
-//   sizes      Json 
-//   desc       String
-//   details    String   @db.Text
-//   references Json
-
-//   coa        Json?
-
-//   isDeleted   Boolean  @default(false)
-//   deletedAt  DateTime?
-
-//   createdAt  DateTime @default(now())
-//   updatedAt  DateTime @updatedAt
-
-//   @@index([isDeleted])   
-//   @@index([createdAt])     
-//   @@index([name])           
-//   @@index([isDeleted, createdAt])  
-// }
-
-// model CheckoutSession {
-//   id                  Int      @id @default(autoincrement())
-//   sessionId           String   @unique
-
-//   userId              String
-//   user                User     @relation(fields: [userId], references: [id])
-
-//   items               Json
-//   originalSubtotal    Float
-//   discountedSubtotal  Float
-//   discount            Float
-//   shipping            Float
-//   storeCreditsApplied Float
-//   total               Float
-
-//   shippingName        String
-//   shippingAddress     String
-
-//   status              String   @default("pending")
-//   orderId             Int?
-
-//   createdAt           DateTime @default(now())
-//   updatedAt           DateTime @updatedAt
-
-//   @@index([userId])
-//   @@index([sessionId])
-// }
-
-// model Order {
-//   id                     Int      @id @default(autoincrement())
-
-//   userId                 String
-//   user                   User     @relation(fields: [userId], references: [id])
-
-//   items                  Json
-//   originalSubtotal       Float
-//   subtotal               Float
-//   discount               Float
-//   shipping               Float
-//   storeCreditsApplied    Float
-//   total                  Float
-
-//   shippingName           String
-//   shippingAddress        String
-
-//   stripeSessionId        String?  @unique
-//   stripePaymentIntentId String?
-
-//   status                 String   @default("pending") 
-//   // pending | processing | shipped | completed | cancelled
-
-//   commissions            Commission[]
-
-//   createdAt              DateTime @default(now())
-//   updatedAt              DateTime @updatedAt
-
-//   @@index([userId])
-//   @@index([status])
-//   @@index([createdAt])
-// }
-
-// model Commission {
-//   id          Int      @id @default(autoincrement())
-
-//   referrerId  String
-//   referrer    User     @relation("ReferrerCommissions", fields: [referrerId], references: [id])
-
-//   buyerId     String
-//   buyer       User     @relation("BuyerCommissions", fields: [buyerId], references: [id])
-
-//   orderId     Int
-//   order       Order    @relation(fields: [orderId], references: [id])
-
-//   amount      Float
-
-//   createdAt   DateTime @default(now())
-
-//   @@index([referrerId])
-//   @@index([buyerId])
-//   @@index([orderId])
-// }
-
-
 enum UserRole {
   USER
   ADMIN
@@ -203,6 +53,9 @@ model User {
 
   storeCredit      Float    @default(0)
   referralCount    Int      @default(0)
+
+    // Shipping Credit System - ONLY used for Members
+  shippingCredit   Float    @default(150.00)
 
   isReferralValid  Boolean  @default(false)
   referrerId       String?

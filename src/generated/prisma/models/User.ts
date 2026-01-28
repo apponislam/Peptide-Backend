@@ -29,11 +29,13 @@ export type AggregateUser = {
 export type UserAvgAggregateOutputType = {
   storeCredit: number | null
   referralCount: number | null
+  shippingCredit: number | null
 }
 
 export type UserSumAggregateOutputType = {
   storeCredit: number | null
   referralCount: number | null
+  shippingCredit: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -48,6 +50,7 @@ export type UserMinAggregateOutputType = {
   deletedAt: Date | null
   storeCredit: number | null
   referralCount: number | null
+  shippingCredit: number | null
   isReferralValid: boolean | null
   referrerId: string | null
   createdAt: Date | null
@@ -66,6 +69,7 @@ export type UserMaxAggregateOutputType = {
   deletedAt: Date | null
   storeCredit: number | null
   referralCount: number | null
+  shippingCredit: number | null
   isReferralValid: boolean | null
   referrerId: string | null
   createdAt: Date | null
@@ -84,6 +88,7 @@ export type UserCountAggregateOutputType = {
   deletedAt: number
   storeCredit: number
   referralCount: number
+  shippingCredit: number
   isReferralValid: number
   referrerId: number
   createdAt: number
@@ -95,11 +100,13 @@ export type UserCountAggregateOutputType = {
 export type UserAvgAggregateInputType = {
   storeCredit?: true
   referralCount?: true
+  shippingCredit?: true
 }
 
 export type UserSumAggregateInputType = {
   storeCredit?: true
   referralCount?: true
+  shippingCredit?: true
 }
 
 export type UserMinAggregateInputType = {
@@ -114,6 +121,7 @@ export type UserMinAggregateInputType = {
   deletedAt?: true
   storeCredit?: true
   referralCount?: true
+  shippingCredit?: true
   isReferralValid?: true
   referrerId?: true
   createdAt?: true
@@ -132,6 +140,7 @@ export type UserMaxAggregateInputType = {
   deletedAt?: true
   storeCredit?: true
   referralCount?: true
+  shippingCredit?: true
   isReferralValid?: true
   referrerId?: true
   createdAt?: true
@@ -150,6 +159,7 @@ export type UserCountAggregateInputType = {
   deletedAt?: true
   storeCredit?: true
   referralCount?: true
+  shippingCredit?: true
   isReferralValid?: true
   referrerId?: true
   createdAt?: true
@@ -255,6 +265,7 @@ export type UserGroupByOutputType = {
   deletedAt: Date | null
   storeCredit: number
   referralCount: number
+  shippingCredit: number
   isReferralValid: boolean
   referrerId: string | null
   createdAt: Date
@@ -296,6 +307,7 @@ export type UserWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   storeCredit?: Prisma.FloatFilter<"User"> | number
   referralCount?: Prisma.IntFilter<"User"> | number
+  shippingCredit?: Prisma.FloatFilter<"User"> | number
   isReferralValid?: Prisma.BoolFilter<"User"> | boolean
   referrerId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -320,6 +332,7 @@ export type UserOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
+  shippingCredit?: Prisma.SortOrder
   isReferralValid?: Prisma.SortOrder
   referrerId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -347,6 +360,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   storeCredit?: Prisma.FloatFilter<"User"> | number
   referralCount?: Prisma.IntFilter<"User"> | number
+  shippingCredit?: Prisma.FloatFilter<"User"> | number
   isReferralValid?: Prisma.BoolFilter<"User"> | boolean
   referrerId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -371,6 +385,7 @@ export type UserOrderByWithAggregationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
+  shippingCredit?: Prisma.SortOrder
   isReferralValid?: Prisma.SortOrder
   referrerId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -397,6 +412,7 @@ export type UserScalarWhereWithAggregatesInput = {
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   storeCredit?: Prisma.FloatWithAggregatesFilter<"User"> | number
   referralCount?: Prisma.IntWithAggregatesFilter<"User"> | number
+  shippingCredit?: Prisma.FloatWithAggregatesFilter<"User"> | number
   isReferralValid?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   referrerId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -415,6 +431,7 @@ export type UserCreateInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -438,6 +455,7 @@ export type UserUncheckedCreateInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   referrerId?: string | null
   createdAt?: Date | string
@@ -461,6 +479,7 @@ export type UserUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -484,6 +503,7 @@ export type UserUncheckedUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -507,6 +527,7 @@ export type UserCreateManyInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   referrerId?: string | null
   createdAt?: Date | string
@@ -525,6 +546,7 @@ export type UserUpdateManyMutationInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -542,6 +564,7 @@ export type UserUncheckedUpdateManyInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -575,6 +598,7 @@ export type UserCountOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
+  shippingCredit?: Prisma.SortOrder
   isReferralValid?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -584,6 +608,7 @@ export type UserCountOrderByAggregateInput = {
 export type UserAvgOrderByAggregateInput = {
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
+  shippingCredit?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -598,6 +623,7 @@ export type UserMaxOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
+  shippingCredit?: Prisma.SortOrder
   isReferralValid?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -616,6 +642,7 @@ export type UserMinOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
+  shippingCredit?: Prisma.SortOrder
   isReferralValid?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -625,6 +652,7 @@ export type UserMinOrderByAggregateInput = {
 export type UserSumOrderByAggregateInput = {
   storeCredit?: Prisma.SortOrder
   referralCount?: Prisma.SortOrder
+  shippingCredit?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -802,6 +830,7 @@ export type UserCreateWithoutReferralsInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -824,6 +853,7 @@ export type UserUncheckedCreateWithoutReferralsInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   referrerId?: string | null
   createdAt?: Date | string
@@ -851,6 +881,7 @@ export type UserCreateWithoutReferrerInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -873,6 +904,7 @@ export type UserUncheckedCreateWithoutReferrerInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -916,6 +948,7 @@ export type UserUpdateWithoutReferralsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -938,6 +971,7 @@ export type UserUncheckedUpdateWithoutReferralsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -979,6 +1013,7 @@ export type UserScalarWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   storeCredit?: Prisma.FloatFilter<"User"> | number
   referralCount?: Prisma.IntFilter<"User"> | number
+  shippingCredit?: Prisma.FloatFilter<"User"> | number
   isReferralValid?: Prisma.BoolFilter<"User"> | boolean
   referrerId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -997,6 +1032,7 @@ export type UserCreateWithoutOrdersInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1019,6 +1055,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   referrerId?: string | null
   createdAt?: Date | string
@@ -1057,6 +1094,7 @@ export type UserUpdateWithoutOrdersInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1079,6 +1117,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1101,6 +1140,7 @@ export type UserCreateWithoutCheckoutSessionsInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1123,6 +1163,7 @@ export type UserUncheckedCreateWithoutCheckoutSessionsInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   referrerId?: string | null
   createdAt?: Date | string
@@ -1161,6 +1202,7 @@ export type UserUpdateWithoutCheckoutSessionsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1183,6 +1225,7 @@ export type UserUncheckedUpdateWithoutCheckoutSessionsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1205,6 +1248,7 @@ export type UserCreateWithoutCommissionsEarnedInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1227,6 +1271,7 @@ export type UserUncheckedCreateWithoutCommissionsEarnedInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   referrerId?: string | null
   createdAt?: Date | string
@@ -1254,6 +1299,7 @@ export type UserCreateWithoutCommissionsFromInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1276,6 +1322,7 @@ export type UserUncheckedCreateWithoutCommissionsFromInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   referrerId?: string | null
   createdAt?: Date | string
@@ -1314,6 +1361,7 @@ export type UserUpdateWithoutCommissionsEarnedInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1336,6 +1384,7 @@ export type UserUncheckedUpdateWithoutCommissionsEarnedInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1369,6 +1418,7 @@ export type UserUpdateWithoutCommissionsFromInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1391,6 +1441,7 @@ export type UserUncheckedUpdateWithoutCommissionsFromInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1413,6 +1464,7 @@ export type UserCreateManyReferrerInput = {
   deletedAt?: Date | string | null
   storeCredit?: number
   referralCount?: number
+  shippingCredit?: number
   isReferralValid?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1430,6 +1482,7 @@ export type UserUpdateWithoutReferrerInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1452,6 +1505,7 @@ export type UserUncheckedUpdateWithoutReferrerInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1474,6 +1528,7 @@ export type UserUncheckedUpdateManyWithoutReferrerInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  shippingCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1558,6 +1613,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   deletedAt?: boolean
   storeCredit?: boolean
   referralCount?: boolean
+  shippingCredit?: boolean
   isReferralValid?: boolean
   referrerId?: boolean
   createdAt?: boolean
@@ -1583,6 +1639,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   deletedAt?: boolean
   storeCredit?: boolean
   referralCount?: boolean
+  shippingCredit?: boolean
   isReferralValid?: boolean
   referrerId?: boolean
   createdAt?: boolean
@@ -1602,6 +1659,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   deletedAt?: boolean
   storeCredit?: boolean
   referralCount?: boolean
+  shippingCredit?: boolean
   isReferralValid?: boolean
   referrerId?: boolean
   createdAt?: boolean
@@ -1621,13 +1679,14 @@ export type UserSelectScalar = {
   deletedAt?: boolean
   storeCredit?: boolean
   referralCount?: boolean
+  shippingCredit?: boolean
   isReferralValid?: boolean
   referrerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "password" | "referralCode" | "tier" | "role" | "isActive" | "deletedAt" | "storeCredit" | "referralCount" | "isReferralValid" | "referrerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "password" | "referralCode" | "tier" | "role" | "isActive" | "deletedAt" | "storeCredit" | "referralCount" | "shippingCredit" | "isReferralValid" | "referrerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   referrer?: boolean | Prisma.User$referrerArgs<ExtArgs>
   referrals?: boolean | Prisma.User$referralsArgs<ExtArgs>
@@ -1666,6 +1725,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     deletedAt: Date | null
     storeCredit: number
     referralCount: number
+    shippingCredit: number
     isReferralValid: boolean
     referrerId: string | null
     createdAt: Date
@@ -2110,6 +2170,7 @@ export interface UserFieldRefs {
   readonly deletedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly storeCredit: Prisma.FieldRef<"User", 'Float'>
   readonly referralCount: Prisma.FieldRef<"User", 'Int'>
+  readonly shippingCredit: Prisma.FieldRef<"User", 'Float'>
   readonly isReferralValid: Prisma.FieldRef<"User", 'Boolean'>
   readonly referrerId: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
