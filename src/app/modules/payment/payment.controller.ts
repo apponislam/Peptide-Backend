@@ -3,9 +3,37 @@ import { stripeService } from "./payment.service";
 
 export class PaymentController {
     // Create checkout session
+    // static async createCheckoutSession(req: Request, res: Response) {
+    //     try {
+    //         const { userId, items, shippingInfo, metadata } = req.body;
+
+    //         if (!userId || !items || !shippingInfo) {
+    //             return res.status(400).json({
+    //                 success: false,
+    //                 error: "Missing required fields: userId, items, shippingInfo",
+    //             });
+    //         }
+
+    //         const result = await stripeService.createCheckoutSession(userId, items, shippingInfo, metadata);
+
+    //         res.json({
+    //             success: true,
+    //             sessionId: result.sessionId,
+    //             url: result.url,
+    //             orderSummary: result.orderSummary,
+    //         });
+    //     } catch (error: any) {
+    //         console.error("Checkout error:", error);
+    //         res.status(500).json({
+    //             success: false,
+    //             error: error.message || "Failed to create checkout session",
+    //         });
+    //     }
+    // }
+
     static async createCheckoutSession(req: Request, res: Response) {
         try {
-            const { userId, items, shippingInfo, metadata } = req.body;
+            const { userId, items, shippingInfo, shippingAmount, subtotal, total, metadata } = req.body;
 
             if (!userId || !items || !shippingInfo) {
                 return res.status(400).json({
@@ -14,7 +42,7 @@ export class PaymentController {
                 });
             }
 
-            const result = await stripeService.createCheckoutSession(userId, items, shippingInfo, metadata);
+            const result = await stripeService.createCheckoutSession(userId, items, shippingInfo, shippingAmount, subtotal, total, metadata);
 
             res.json({
                 success: true,

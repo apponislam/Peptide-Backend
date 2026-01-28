@@ -47,6 +47,7 @@ const register = async (name: string, email: string, password: string, referralC
         storeCredit: user.storeCredit,
         referralCount: user.referralCount,
         createdAt: user.createdAt,
+        shippingCredit: user.storeCredit,
     };
 
     const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret!, config.jwt_access_expire || "1h");
@@ -85,6 +86,7 @@ const login = async (email: string, password: string) => {
         storeCredit: user.storeCredit,
         referralCount: user.referralCount,
         createdAt: user.createdAt,
+        shippingCredit: user.storeCredit,
     };
 
     const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret!, config.jwt_access_expire! || "30d");
@@ -111,6 +113,7 @@ const getCurrentUser = async (userId: string) => {
             storeCredit: true,
             referralCount: true,
             createdAt: true,
+            shippingCredit: true,
             orders: {
                 orderBy: { createdAt: "desc" },
                 take: 10,
@@ -235,6 +238,7 @@ const updateReferralCode = async (userId: string, newCode: string) => {
             tier: true,
             storeCredit: true,
             referralCount: true,
+            shippingCredit: true,
             createdAt: true,
         },
     });
@@ -291,6 +295,7 @@ const adminLogin = async (email: string, password: string) => {
         storeCredit: user.storeCredit,
         referralCount: user.referralCount,
         createdAt: user.createdAt,
+        shippingCredit: user.storeCredit,
     };
 
     const accessToken = jwtHelper.generateToken(userData, config.jwt_access_secret!, config.jwt_access_expire! || "30d");
