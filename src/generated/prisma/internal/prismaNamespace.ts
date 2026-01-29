@@ -980,6 +980,7 @@ export const CheckoutSessionScalarFieldEnum = {
   orderId: 'orderId',
   stripeSessionId: 'stripeSessionId',
   paymentStatus: 'paymentStatus',
+  storeCreditUsed: 'storeCreditUsed',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

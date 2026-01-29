@@ -176,7 +176,7 @@ model CheckoutSession {
 
   stripeSessionId String @unique
   paymentStatus   StripePaymentStatus @default(PENDING)
-
+  storeCreditUsed Float             @default(0)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
