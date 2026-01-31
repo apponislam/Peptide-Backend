@@ -6,7 +6,7 @@ const resend = new Resend(config.resend_api_key);
 async function sendEmail() {
     try {
         const response = await resend.emails.send({
-            from: "master@peptide.club",
+            from: "Orders@peptide.club",
             to: ["apponislamdev@gmail.com"],
             subject: "Test Email",
             html: "<p>This is a test email.</p>",
