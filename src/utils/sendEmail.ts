@@ -4,9 +4,11 @@ import config from "../config";
 const resend = new Resend(config.resend_api_key);
 
 async function sendEmail() {
+    const fromEmail = config.resend_email!;
+
     try {
         const response = await resend.emails.send({
-            from: "Orders@peptide.club",
+            from: fromEmail,
             to: ["apponislamdev@gmail.com"],
             subject: "Test Email",
             html: "<p>This is a test email.</p>",

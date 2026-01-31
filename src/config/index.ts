@@ -25,6 +25,7 @@ export default {
     admin_password: process.env.ADMIN_PASSWORD,
     // Resend
     resend_api_key: process.env.RESEND_API_KEY,
+    resend_email: process.env.RESEND_EMAIL,
     // shipsation
     shipstation_api_key: process.env.SHIPSTATION_API_KEY,
     shipstation_api_secret: process.env.SHIPSTATION_API_SECRET,

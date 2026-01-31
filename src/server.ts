@@ -2,9 +2,8 @@ import "dotenv/config";
 import app from "./app";
 import { prisma } from "./lib/prisma";
 import { createAdmin } from "./app/script/seed";
-import seedProducts from "./app/script/products";
-// import sendEmail from "./utils/sendEmail";
 // import seedProducts from "./app/script/products";
+// import sendEmail from "./utils/sendEmail";
 
 const PORT = Number(process.env.PORT) || 5050;
 
