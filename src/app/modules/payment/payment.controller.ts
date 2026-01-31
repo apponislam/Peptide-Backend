@@ -22,23 +22,14 @@ export class PaymentController {
                 });
             }
 
-            const result = await stripeService.createCheckoutSession(
-                userId,
-                items,
-                shippingInfo,
-                shippingAmount,
-                subtotal,
-                storeCreditUsed || 0, // ADD THIS
-                total,
-                metadata,
-            );
+            const result = await stripeService.createCheckoutSession(userId, items, shippingInfo, shippingAmount, subtotal, storeCreditUsed || 0, total, metadata);
 
             res.json({
                 success: true,
                 sessionId: result.sessionId,
                 url: result.url,
                 orderSummary: result.orderSummary,
-                storeCreditUsed: result.storeCreditUsed, // ADD THIS
+                storeCreditUsed: result.storeCreditUsed,
             });
         } catch (error: any) {
             console.error("Checkout error:", error);
@@ -80,20 +71,21 @@ export class PaymentController {
     // Create refund
     static async createRefund(req: Request, res: Response) {
         try {
-            const { paymentIntentId, amount } = req.body;
+            const { orderId, amount } = req.body;
 
-            if (!paymentIntentId) {
+            if (!orderId) {
                 return res.status(400).json({
                     success: false,
-                    error: "paymentIntentId is required",
+                    error: "orderId is required",
                 });
             }
 
-            const refund = await stripeService.createRefund(paymentIntentId, amount);
+            // Call service method with orderId directly
+            const result = await stripeService.createRefund(orderId, amount);
 
             res.json({
                 success: true,
-                refund,
+                ...result,
             });
         } catch (error: any) {
             console.error("Refund error:", error);

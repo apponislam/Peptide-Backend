@@ -39,9 +39,9 @@ export class StripeService {
         // Member: Check shipping credit
         if (user.tier === "Member" && user.shippingCredit > 0) {
             if (user.shippingCredit >= SHIPPING_RATE) {
-                return 0; // Fully covered by credit
+                return 0;
             } else {
-                return SHIPPING_RATE - user.shippingCredit; // Partially covered
+                return SHIPPING_RATE - user.shippingCredit;
             }
         }
 
@@ -52,16 +52,7 @@ export class StripeService {
     }
 
     // Create a checkout session - UPDATED with storeCreditUsed
-    async createCheckoutSession(
-        userId: string,
-        items: CheckoutItem[],
-        shippingInfo: ShippingInfo,
-        shippingAmount: number,
-        subtotal: number,
-        storeCreditUsed: number, // NEW: Store credit amount from frontend
-        total: number,
-        metadata: Record<string, any> = {},
-    ) {
+    async createCheckoutSession(userId: string, items: CheckoutItem[], shippingInfo: ShippingInfo, shippingAmount: number, subtotal: number, storeCreditUsed: number, total: number, metadata: Record<string, any> = {}) {
         try {
             const user = await prisma.user.findUnique({
                 where: { id: userId },
@@ -341,24 +332,29 @@ export class StripeService {
         }
     }
 
-    private async createOrderFromSession(
-        session: EnhancedStripeSession,
-        userId: string,
-        shippingInfo: any,
-        shippingCost: number,
-        storeCreditUsed: number, // NEW: Add this parameter
-    ) {
+    private async createOrderFromSession(session: EnhancedStripeSession, userId: string, shippingInfo: any, shippingCost: number, storeCreditUsed: number) {
         try {
             const sessionDetails = await stripe.checkout.sessions.retrieve(session.id, {
-                expand: ["line_items.data.price.product"],
+                expand: ["line_items.data.price.product", "payment_intent"],
             });
 
             const lineItems = sessionDetails.line_items?.data || [];
+            let paymentIntentId: string;
+
+            if (typeof sessionDetails.payment_intent === "string") {
+                paymentIntentId = sessionDetails.payment_intent;
+            } else if (sessionDetails.payment_intent && typeof sessionDetails.payment_intent === "object") {
+                paymentIntentId = sessionDetails.payment_intent.id;
+            } else {
+                // If no payment intent, use a placeholder
+                paymentIntentId = `no-pi-${Date.now()}`;
+            }
 
             // Create order
             const order = await prisma.order.create({
                 data: {
                     id: `ord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                    paymentIntentId: paymentIntentId,
                     userId,
                     name: shippingInfo.name,
                     email: shippingInfo.email,
@@ -634,10 +630,19 @@ export class StripeService {
         }
     }
 
-    async createRefund(paymentIntentId: string, amount?: number) {
+    async createRefund(orderId: string, amount?: number) {
         try {
+            // Find order by orderId
+            const order = await prisma.order.findUnique({
+                where: { id: orderId },
+            });
+
+            if (!order) {
+                throw new Error("Order not found");
+            }
+
             const refundParams: Stripe.RefundCreateParams = {
-                payment_intent: paymentIntentId,
+                payment_intent: order.paymentIntentId,
             };
 
             if (amount !== undefined) {
@@ -645,7 +650,30 @@ export class StripeService {
             }
 
             const refund = await stripe.refunds.create(refundParams);
-            return refund;
+
+            // Update order status
+            await prisma.order.update({
+                where: { id: orderId },
+                data: { status: "CANCELLED" },
+            });
+
+            // Restore store credit if used
+            if (order.creditApplied > 0) {
+                await prisma.user.update({
+                    where: { id: order.userId },
+                    data: {
+                        storeCredit: {
+                            increment: order.creditApplied,
+                        },
+                    },
+                });
+            }
+
+            return {
+                stripeRefund: refund,
+                orderId: order.id,
+                storeCreditRestored: order.creditApplied,
+            };
         } catch (error: any) {
             throw new Error(`Failed to create refund: ${error.message}`);
         }

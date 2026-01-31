@@ -100,6 +100,8 @@ model Product {
 
 model Order {
   id                String      @id @default(uuid())
+  paymentIntentId   String      @default("no-payment")  
+
   userId            String
   user              User        @relation(fields: [userId], references: [id])
 
@@ -147,6 +149,7 @@ model Order {
   @@index([trackingNumber])
   @@index([email])
   @@index([shipstationOrderId])
+  @@index([paymentIntentId])
 }
 
 
