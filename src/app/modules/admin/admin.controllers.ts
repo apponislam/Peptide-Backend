@@ -3,6 +3,7 @@ import catchAsync from "../../../utils/catchAsync";
 import { adminServices } from "./admin.services";
 import sendResponse from "../../../utils/sendResponse.";
 import { OrderStatus, UserRole, UserTier } from "../../../generated/prisma/enums";
+import ApiError from "../../../errors/ApiError";
 
 // Get dashboard stats
 const getDashboardStats = catchAsync(async (req: Request, res: Response) => {
@@ -43,28 +44,40 @@ const getAllOrders = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getOrder = catchAsync(async (req: Request, res: Response) => {
+    const orderId = req.params.id as string;
+
+    if (!orderId) {
+        throw new ApiError(400, "Order ID is required");
+    }
+
+    const order = await adminServices.getOrderById(orderId);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Order retrieved successfully",
+        data: order,
+    });
+});
+
 // Update order status
-// const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
-//     const id = parseInt(req.params.id as string);
+const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
 
-//     if (isNaN(id)) {
-//         return sendResponse(res, {
-//             statusCode: 400,
-//             success: false,
-//             message: "Invalid order ID",
-//             data: null,
-//         });
-//     }
+    if (!id || typeof id !== "string") {
+        throw new ApiError(400, "Invalid order ID");
+    }
 
-//     const order = await adminServices.updateOrderStatus(id, req.body);
+    const order = await adminServices.updateOrderStatus(id, req.body);
 
-//     sendResponse(res, {
-//         statusCode: 200,
-//         success: true,
-//         message: "Order status updated successfully",
-//         data: order,
-//     });
-// });
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Order status updated successfully",
+        data: order,
+    });
+});
 
 // Get all users
 // const getAllUsers = catchAsync(async (req: Request, res: Response) => {
@@ -165,6 +178,8 @@ const getUserById = catchAsync(async (req: Request, res: Response) => {
 export const adminControllers = {
     getDashboardStats,
     getAllOrders,
+    getOrder,
+    updateOrderStatus,
     getAllUsers,
     updateUser,
     getTopSellingProducts,
