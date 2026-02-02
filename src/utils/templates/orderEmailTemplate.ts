@@ -1,12 +1,8 @@
-// orderTemplates.ts
+// orderEmailTemplates.ts
 
-export interface OrderData {
+export const getOrderConfirmationEmail = (orderData: {
     id: string;
-    user: {
-        name: string;
-        email: string;
-        tier: string;
-    };
+    user: { name: string };
     shippingInfo: {
         name: string;
         address: string;
@@ -21,165 +17,55 @@ export interface OrderData {
         creditApplied: number;
         total: number;
     };
-    status: string;
-    items: {
-        name: string;
-        quantity: number;
-        price: number;
-    }[];
+    items: Array<{ name: string; quantity: number; price: number }>;
     createdAt: string;
-    trackingNumber?: string;
-}
+}): string => {
+    const orderNumber = orderData.id.substring(0, 8);
+    const orderDate = new Date(orderData.createdAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
 
-// Simple email template generator
-export class OrderEmailTemplates {
-    // Order Confirmation Email - Simple Overview
-    static getOrderConfirmationEmail(order: OrderData): string {
-        const formattedDate = new Date(order.createdAt).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-        });
-
-        return `
+    return `
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmation</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .invoice-header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 2px solid #1a1a1a;
-            margin-bottom: 30px;
-        }
-        
-        .invoice-header h1 {
-            color: #1a1a1a;
-            margin: 0;
-            font-size: 24px;
-        }
-        
-        .order-meta {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .meta-column {
-            flex: 1;
-        }
-        
-        .meta-label {
-            font-weight: 600;
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        
-        .meta-value {
-            font-size: 16px;
-        }
-        
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-        }
-        
-        .items-table th {
-            text-align: left;
-            padding: 12px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e0e0e0;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .items-table td {
-            padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .total-row {
-            background: #f8f9fa;
-            font-weight: 600;
-        }
-        
-        .summary-box {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 30px 0;
-        }
-        
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
-        .total-amount {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1a1a1a;
-            border-top: 2px solid #e0e0e0;
-            padding-top: 15px;
-            margin-top: 15px;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .footer {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid #e0e0e0;
-            color: #666;
-            font-size: 14px;
-        }
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; padding: 20px 0; border-bottom: 2px solid #000; margin-bottom: 30px; }
+        .order-meta { display: flex; justify-content: space-between; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        .meta-column { flex: 1; }
+        .meta-label { font-weight: bold; color: #666; font-size: 14px; margin-bottom: 5px; }
+        .items-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .items-table th { text-align: left; padding: 10px; background: #f5f5f5; border-bottom: 1px solid #ddd; }
+        .items-table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .summary-box { background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .total-amount { font-size: 18px; font-weight: bold; border-top: 2px solid #ddd; padding-top: 10px; margin-top: 10px; }
+        .footer { text-align: center; padding-top: 20px; color: #666; font-size: 14px; }
     </style>
 </head>
 <body>
-    <div class="invoice-header">
-        <h1>Order Confirmation</h1>
+    <div class="header">
+        <h2>Order Confirmation</h2>
         <p>Thank you for your purchase!</p>
     </div>
     
     <div class="order-meta">
         <div class="meta-column">
             <div class="meta-label">Order #</div>
-            <div class="meta-value">${order.id.substring(0, 8)}</div>
+            <div>${orderNumber}</div>
         </div>
         <div class="meta-column">
             <div class="meta-label">Date</div>
-            <div class="meta-value">${formattedDate}</div>
+            <div>${orderDate}</div>
         </div>
         <div class="meta-column">
             <div class="meta-label">Status</div>
-            <div class="meta-value">
-                <span class="status-badge">${order.status}</span>
-            </div>
+            <div><strong>Confirmed</strong></div>
         </div>
     </div>
     
@@ -192,7 +78,7 @@ export class OrderEmailTemplates {
             </tr>
         </thead>
         <tbody>
-            ${order.items
+            ${orderData.items
                 .map(
                     (item) => `
             <tr>
@@ -209,232 +95,227 @@ export class OrderEmailTemplates {
     <div class="summary-box">
         <div class="summary-item">
             <span>Subtotal</span>
-            <span>$${order.pricing.subtotal.toFixed(2)}</span>
+            <span>$${orderData.pricing.subtotal.toFixed(2)}</span>
         </div>
         <div class="summary-item">
             <span>Shipping</span>
-            <span>$${order.pricing.shipping.toFixed(2)}</span>
+            <span>$${orderData.pricing.shipping.toFixed(2)}</span>
         </div>
         ${
-            order.pricing.creditApplied > 0
+            orderData.pricing.creditApplied > 0
                 ? `
         <div class="summary-item">
-            <span>Store Credit Used</span>
-            <span>-$${order.pricing.creditApplied.toFixed(2)}</span>
+            <span>Store Credit</span>
+            <span>-$${orderData.pricing.creditApplied.toFixed(2)}</span>
         </div>
         `
                 : ""
         }
         <div class="summary-item total-amount">
-            <span>Total</span>
-            <span>$${order.pricing.total.toFixed(2)}</span>
+            <span>Total Paid</span>
+            <span>$${orderData.pricing.total.toFixed(2)}</span>
         </div>
     </div>
     
-    <div class="shipping-info">
-        <h3 style="margin-bottom: 10px; color: #555;">Shipping To</h3>
-        <p style="margin: 0;">
-            ${order.shippingInfo.name}<br>
-            ${order.shippingInfo.address}<br>
-            ${order.shippingInfo.city}, ${order.shippingInfo.state} ${order.shippingInfo.zip}<br>
-            ${order.shippingInfo.country}
+    <div>
+        <h3>Shipping Address</h3>
+        <p>
+            ${orderData.shippingInfo.name}<br>
+            ${orderData.shippingInfo.address}<br>
+            ${orderData.shippingInfo.city}, ${orderData.shippingInfo.state} ${orderData.shippingInfo.zip}<br>
+            ${orderData.shippingInfo.country}
         </p>
     </div>
     
-    ${
-        order.trackingNumber
-            ? `
-    <div style="margin-top: 30px; padding: 15px; background: #e8f5e9; border-radius: 8px;">
-        <h3 style="margin: 0 0 10px 0; color: #2e7d32;">Tracking Information</h3>
-        <p style="margin: 0;">Your order is being prepared for shipment. Tracking: ${order.trackingNumber}</p>
-    </div>
-    `
-            : ""
-    }
-    
     <div class="footer">
-        <p>Thank you for shopping with us!<br>
-        Your order is being processed and you will receive updates via email.</p>
+        <p>Your order will be processed shortly. You'll receive another email when it ships.</p>
     </div>
 </body>
-</html>
-    `;
-    }
+</html>`;
+};
 
-    // Shipping Notification Email
-    static getShippingNotificationEmail(order: OrderData): string {
-        return `
+export const getOrderShippedEmail = (orderData: {
+    id: string;
+    user: { name: string };
+    shippingInfo: {
+        name: string;
+        address: string;
+        city: string;
+        state: string;
+        zip: string;
+    };
+    items: Array<{ name: string; quantity: number }>;
+    trackingNumber: string;
+}): string => {
+    const orderNumber = orderData.id.substring(0, 8);
+
+    return `
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Order Has Shipped!</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .header {
-            text-align: center;
-            padding: 30px 0;
-            background: #1a1a1a;
-            color: white;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .content {
-            padding: 30px;
-            background: #f8f9fa;
-        }
-        
-        .tracking-box {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            text-align: center;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .tracking-number {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin: 10px 0;
-        }
-        
-        .button {
-            display: inline-block;
-            background: #1a1a1a;
-            color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 4px;
-            margin-top: 15px;
-        }
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; padding: 30px 0; background: #f0f9ff; border-radius: 8px; margin-bottom: 30px; }
+        .tracking-box { background: white; padding: 20px; border: 2px solid #0066cc; border-radius: 8px; text-align: center; margin: 20px 0; }
+        .tracking-number { font-size: 20px; font-weight: bold; color: #0066cc; margin: 10px 0; }
+        .button { display: inline-block; background: #0066cc; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-top: 10px; }
+        .items-list { margin: 20px 0; }
+        .item { padding: 5px 0; border-bottom: 1px solid #eee; }
+        .footer { text-align: center; padding-top: 20px; color: #666; font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Your Order Has Shipped!</h1>
-        <p>Order #${order.id.substring(0, 8)} is on its way</p>
+        <h1>Your Order Has Shipped! 🚚</h1>
+        <p>Order #${orderNumber} is on its way to you</p>
     </div>
     
-    <div class="content">
-        <p>Hello ${order.user.name},</p>
-        
-        <p>Great news! Your order has been shipped and is on its way to you.</p>
-        
-        <div class="tracking-box">
-            <h3>Tracking Information</h3>
-            <div class="tracking-number">${order.trackingNumber}</div>
-            <p>You can track your package using the number above.</p>
-            <a href="#" class="button">Track Package</a>
+    <p>Hello ${orderData.user.name},</p>
+    
+    <p>Great news! Your order has been shipped and is now in transit.</p>
+    
+    <div class="tracking-box">
+        <h3>Tracking Information</h3>
+        <div class="tracking-number">${orderData.trackingNumber}</div>
+        <p>Use this number to track your package</p>
+        <a href="https://www.ups.com/track?tracknum=${orderData.trackingNumber}" class="button" target="_blank">
+            Track Package
+        </a>
+    </div>
+    
+    <div class="items-list">
+        <h3>Shipped Items</h3>
+        ${orderData.items
+            .map(
+                (item) => `
+        <div class="item">
+            ${item.name} × ${item.quantity}
         </div>
-        
-        <p><strong>Shipping Address:</strong><br>
-        ${order.shippingInfo.name}<br>
-        ${order.shippingInfo.address}<br>
-        ${order.shippingInfo.city}, ${order.shippingInfo.state} ${order.shippingInfo.zip}
+        `,
+            )
+            .join("")}
+    </div>
+    
+    <div>
+        <h3>Shipping To</h3>
+        <p>
+            ${orderData.shippingInfo.name}<br>
+            ${orderData.shippingInfo.address}<br>
+            ${orderData.shippingInfo.city}, ${orderData.shippingInfo.state} ${orderData.shippingInfo.zip}
         </p>
-        
-        <p>If you have any questions, please contact our support team.</p>
-        
-        <p>Best regards,<br>
-        The Team</p>
+    </div>
+    
+    <p><strong>Delivery Estimate:</strong> 3-5 business days</p>
+    
+    <p>If you have any questions about your delivery, please contact our support team.</p>
+    
+    <div class="footer">
+        <p>Thank you for shopping with us!<br>
+        We hope you enjoy your purchase.</p>
     </div>
 </body>
-</html>
-    `;
-    }
+</html>`;
+};
 
-    // Order Status Update Email
-    static getOrderStatusUpdateEmail(order: OrderData, newStatus: string): string {
-        return `
+export const getOrderCancelledEmail = (orderData: { id: string; user: { name: string }; items: Array<{ name: string; quantity: number }>; total: number }): string => {
+    const orderNumber = orderData.id.substring(0, 8);
+
+    return `
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Status Update</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .status-box {
-            text-align: center;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            background: #e8f5e9;
-            border: 1px solid #c8e6c9;
-        }
-        
-        .status-label {
-            font-size: 18px;
-            font-weight: 600;
-            color: #2e7d32;
-        }
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; padding: 30px 0; background: #fff5f5; border-radius: 8px; margin-bottom: 30px; }
+        .refund-box { background: #fff5f5; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .items-list { margin: 20px 0; }
+        .item { padding: 5px 0; border-bottom: 1px solid #eee; }
     </style>
 </head>
 <body>
-    <h2>Order Status Update</h2>
-    
-    <p>Hello ${order.user.name},</p>
-    
-    <p>Your order <strong>#${order.id.substring(0, 8)}</strong> status has been updated:</p>
-    
-    <div class="status-box">
-        <div class="status-label">${newStatus}</div>
+    <div class="header">
+        <h1>Order Cancelled</h1>
+        <p>Order #${orderNumber} has been cancelled</p>
     </div>
     
-    <p><strong>Order Summary:</strong><br>
-    Total: $${order.pricing.total.toFixed(2)}<br>
-    Items: ${order.items.length} product(s)</p>
+    <p>Hello ${orderData.user.name},</p>
     
-    <p>You can view your order details in your account dashboard.</p>
+    <p>Your order has been cancelled as requested.</p>
     
-    <p>Best regards,<br>
-    The Team</p>
+    <div class="refund-box">
+        <h3>Refund Information</h3>
+        <p><strong>Refund Amount:</strong> $${orderData.total.toFixed(2)}</p>
+        <p>The refund will be processed to your original payment method within 5-10 business days.</p>
+    </div>
+    
+    <div class="items-list">
+        <h3>Cancelled Items</h3>
+        ${orderData.items
+            .map(
+                (item) => `
+        <div class="item">
+            ${item.name} × ${item.quantity}
+        </div>
+        `,
+            )
+            .join("")}
+    </div>
+    
+    <p>If you didn't request this cancellation or have any questions, please contact our support team.</p>
+    
+    <p>We hope to see you again soon!</p>
 </body>
-</html>
-    `;
-    }
+</html>`;
+};
 
-    // Utility function to format currency
-    static formatCurrency(amount: number): string {
-        return `$${amount.toFixed(2)}`;
-    }
+export const getOrderDeliveredEmail = (orderData: { id: string; user: { name: string } }): string => {
+    const orderNumber = orderData.id.substring(0, 8);
 
-    // Utility function to get status color
-    static getStatusColor(status: string): string {
-        const colors: Record<string, string> = {
-            PENDING: "#ff9800",
-            PAID: "#4caf50",
-            SHIPPED: "#2196f3",
-            CANCELLED: "#f44336",
-            PROCESSING: "#ff9800",
-            COMPLETED: "#4caf50",
-        };
-        return colors[status] || "#666";
-    }
-}
+    return `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; padding: 30px 0; background: #f0fff4; border-radius: 8px; margin-bottom: 30px; }
+        .button { display: inline-block; background: #48bb78; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Your Order Has Been Delivered! 📦</h1>
+        <p>Order #${orderNumber} has arrived</p>
+    </div>
+    
+    <p>Hello ${orderData.user.name},</p>
+    
+    <p>We're happy to let you know that your order has been delivered!</p>
+    
+    <p>We hope everything arrived in perfect condition and you're satisfied with your purchase.</p>
+    
+    <p>If you have a moment, we'd love to hear about your experience with us. Your feedback helps us improve.</p>
+    
+    <div style="text-align: center; margin: 30px 0;">
+        <a href="#" class="button">Leave a Review</a>
+    </div>
+    
+    <p>If you have any issues with your order or need assistance, please don't hesitate to contact our support team.</p>
+    
+    <p>Thank you for shopping with us!</p>
+</body>
+</html>`;
+};
 
-// Export individual templates for easy use
-export const orderTemplates = {
-    confirmation: OrderEmailTemplates.getOrderConfirmationEmail,
-    shipping: OrderEmailTemplates.getShippingNotificationEmail,
-    statusUpdate: OrderEmailTemplates.getOrderStatusUpdateEmail,
+// Utility function for easy usage
+export const OrderEmailTemplates = {
+    confirmation: getOrderConfirmationEmail,
+    shipped: getOrderShippedEmail,
+    cancelled: getOrderCancelledEmail,
+    delivered: getOrderDeliveredEmail,
 };
