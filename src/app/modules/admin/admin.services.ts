@@ -481,7 +481,6 @@ const getUserById = async (id: string) => {
             createdAt: true,
             shippingCredit: true,
             updatedAt: true,
-            // Include related data
             referrer: {
                 select: {
                     id: true,
