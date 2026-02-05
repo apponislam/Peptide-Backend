@@ -19,11 +19,23 @@ enum UserTier {
   VIP
 }
 
+// enum OrderStatus {
+//   PENDING
+//   PAID
+//   SHIPPED
+//   CANCELLED
+// }
+
 enum OrderStatus {
   PENDING
-  PAID
-  SHIPPED
+  FAILED
   CANCELLED
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  RETURNED
+  REFUNDED
 }
 
 enum StripePaymentStatus {

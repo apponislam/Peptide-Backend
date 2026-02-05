@@ -28,9 +28,14 @@ export type UserTier = (typeof UserTier)[keyof typeof UserTier]
 
 export const OrderStatus = {
   PENDING: 'PENDING',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED',
   PAID: 'PAID',
+  PROCESSING: 'PROCESSING',
   SHIPPED: 'SHIPPED',
-  CANCELLED: 'CANCELLED'
+  DELIVERED: 'DELIVERED',
+  RETURNED: 'RETURNED',
+  REFUNDED: 'REFUNDED'
 } as const
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]

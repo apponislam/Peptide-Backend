@@ -459,7 +459,6 @@ const getReferralPerformance = async () => {
     return referralPerformanceArray;
 };
 
-// Get single user by ID with full details
 const getUserById = async (id: string) => {
     const user = await prisma.user.findUnique({
         where: {

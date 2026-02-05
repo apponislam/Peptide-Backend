@@ -220,6 +220,14 @@ export class StripeService {
                 case "checkout.session.async_payment_failed":
                     await this.handleAsyncPaymentFailed(event.data.object as EnhancedStripeSession);
                     break;
+
+                // case "payment_intent.succeeded":
+                //     // Update order status if needed
+                //     break;
+
+                // case "payment_intent.payment_failed":
+                //     // Update order status to FAILED
+                //     break;
             }
         } catch (error: any) {
             throw new Error(`Failed to process webhook event: ${error.message}`);
@@ -604,6 +612,17 @@ export class StripeService {
                     updatedAt: new Date(),
                 },
             });
+
+            const checkoutSession = await prisma.checkoutSession.findUnique({
+                where: { stripeSessionId: session.id },
+            });
+
+            if (checkoutSession?.orderId) {
+                await prisma.order.update({
+                    where: { id: checkoutSession.orderId },
+                    data: { status: "FAILED" },
+                });
+            }
         } catch (error) {
             console.error("Error handling async payment failed:", error);
         }
@@ -654,7 +673,8 @@ export class StripeService {
             // Update order status
             await prisma.order.update({
                 where: { id: orderId },
-                data: { status: "CANCELLED" },
+                // data: { status: "CANCELLED" },
+                data: { status: "REFUNDED" },
             });
 
             // Restore store credit if used
