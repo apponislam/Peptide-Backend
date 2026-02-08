@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { prisma } from "../../../lib/prisma";
 import { shipStationService } from "../shipstation/shipstation.service";
 import { CheckoutItem, EnhancedStripeSession, OrderSummary, ShippingInfo } from "./payment.types";
+import { sendOrderConfirmationEmail } from "../../../utils/templates/orderEmailTemplate";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-07-30.basil" as any,
@@ -302,6 +303,44 @@ export class StripeService {
 
             // Create order WITH shipping info
             const order = await this.createOrderFromSession(session, userId, shippingInfo, shippingCost, storeCreditUsed); // UPDATED
+            // Get order items for email
+            const orderItems = await prisma.orderItem.findMany({
+                where: { orderId: order.id },
+                include: { product: true },
+            });
+
+            // Prepare email data based on your schema
+            const emailData = {
+                id: order.id,
+                user: {
+                    name: user.name,
+                },
+                shippingInfo: {
+                    name: order.name,
+                    address: order.address,
+                    city: order.city,
+                    state: order.state,
+                    zip: order.zip,
+                    country: order.country,
+                },
+                pricing: {
+                    subtotal: order.subtotal,
+                    shipping: order.shipping,
+                    creditApplied: order.creditApplied,
+                    total: order.total,
+                },
+                items: orderItems.map((item) => ({
+                    name: item.product?.name || "Product",
+                    quantity: item.quantity,
+                    price: item.unitPrice,
+                })),
+                createdAt: order.createdAt.toISOString(),
+            };
+
+            // Send confirmation email (non-blocking)
+            sendOrderConfirmationEmail(user.email, emailData).catch((error) => {
+                console.error("❌ Email sending failed (non-critical):", error);
+            });
 
             // Link checkout session to order
             await prisma.checkoutSession.update({
