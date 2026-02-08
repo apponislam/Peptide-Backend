@@ -1,6 +1,7 @@
 import axios from "axios";
 import { prisma } from "../../../lib/prisma";
 import ApiError from "../../../errors/ApiError";
+import { sendOrderCancelledEmail, sendOrderDeliveredEmail } from "../../../utils/templates/orderEmailTemplate";
 
 const baseUrl = "https://ssapi.shipstation.com";
 const apiKey = process.env.SHIPSTATION_API_KEY!;
@@ -437,6 +438,135 @@ const getWarehouses = async () => {
     }
 };
 
+// Add this function to your shipstation.service.ts
+const markAsDelivered = async (orderId: string) => {
+    try {
+        const order = await prisma.order.findUnique({
+            where: { id: orderId },
+            include: {
+                user: true,
+            },
+        });
+
+        if (!order) {
+            throw new ApiError(404, `Order ${orderId} not found`);
+        }
+
+        // Update order status
+        await prisma.order.update({
+            where: { id: orderId },
+            data: {
+                status: "DELIVERED",
+                updatedAt: new Date(),
+            },
+        });
+
+        // Send delivered email
+        const emailData = {
+            id: order.id,
+            user: {
+                name: order.user?.name || order.name,
+            },
+        };
+
+        const email = order.user?.email || order.email;
+        if (email) {
+            sendOrderDeliveredEmail(email, emailData).catch((error) => {
+                console.error("❌ Delivered email failed:", error);
+            });
+        }
+
+        return {
+            success: true,
+            orderId,
+            status: "DELIVERED",
+        };
+    } catch (error: any) {
+        if (error instanceof ApiError) {
+            throw error;
+        }
+        throw new ApiError(500, `Failed to mark order as delivered: ${error.message}`);
+    }
+};
+
+const cancelOrder = async (orderId: string, reason?: string) => {
+    try {
+        const order = await prisma.order.findUnique({
+            where: { id: orderId },
+            include: {
+                user: true,
+                items: {
+                    include: {
+                        product: true,
+                    },
+                },
+            },
+        });
+
+        if (!order) {
+            throw new ApiError(404, `Order ${orderId} not found`);
+        }
+
+        // Only cancel if status is PENDING or PROCESSING
+        if (!["PENDING", "PROCESSING"].includes(order.status)) {
+            throw new ApiError(400, `Cannot cancel order with status: ${order.status}`);
+        }
+
+        // Update order status to CANCELLED
+        await prisma.order.update({
+            where: { id: orderId },
+            data: {
+                status: "CANCELLED",
+                updatedAt: new Date(),
+            },
+        });
+
+        // Restore store credit if used
+        if (order.creditApplied > 0) {
+            await prisma.user.update({
+                where: { id: order.userId },
+                data: {
+                    storeCredit: {
+                        increment: order.creditApplied,
+                    },
+                },
+            });
+        }
+
+        // Send cancellation email
+        const emailData = {
+            id: order.id,
+            user: {
+                name: order.user?.name || order.name,
+            },
+            items: order.items.map((item) => ({
+                name: item.product?.name || "Product",
+                quantity: item.quantity,
+            })),
+            total: order.total,
+        };
+
+        const email = order.user?.email || order.email;
+        if (email) {
+            sendOrderCancelledEmail(email, emailData).catch((error) => {
+                console.error("❌ Cancellation email failed:", error);
+            });
+        }
+
+        return {
+            success: true,
+            orderId,
+            status: "CANCELLED",
+            storeCreditRestored: order.creditApplied,
+        };
+    } catch (error: any) {
+        if (error instanceof ApiError) {
+            throw error;
+        }
+        throw new ApiError(500, `Failed to cancel order: ${error.message}`);
+    }
+};
+
 export const shipStationService = {
     createOrder,
     getShippingRates,
@@ -446,4 +576,6 @@ export const shipStationService = {
     markOrderAsShipped,
     getCarriers,
     getWarehouses,
+    markAsDelivered,
+    cancelOrder,
 };

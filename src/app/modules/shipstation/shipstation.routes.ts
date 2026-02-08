@@ -14,4 +14,7 @@ router.post("/ship/:orderId", shipStationController.markAsShipped);
 router.get("/carriers", shipStationController.getCarriers);
 router.get("/warehouses", shipStationController.getWarehouses);
 
+router.put("/delivered/:orderId", shipStationController.markAsDelivered);
+router.post("/order/:orderId/cancel", shipStationController.cancelOrder);
+
 export const shipmentRoutes = router;

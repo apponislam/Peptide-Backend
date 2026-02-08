@@ -155,6 +155,43 @@ const getWarehouses = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// Mark order as delivered
+const markAsDelivered = catchAsync(async (req: Request, res: Response) => {
+    const orderId = req.params.orderId as string;
+
+    if (!orderId) {
+        throw new ApiError(400, "Order ID is required");
+    }
+
+    const result = await shipStationService.markAsDelivered(orderId);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Order marked as delivered successfully",
+        data: result,
+    });
+});
+
+// Cancel order
+const cancelOrder = catchAsync(async (req: Request, res: Response) => {
+    const orderId = req.params.orderId as string;
+    const { reason } = req.body;
+
+    if (!orderId) {
+        throw new ApiError(400, "Order ID is required");
+    }
+
+    const result = await shipStationService.cancelOrder(orderId, reason);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Order cancelled successfully",
+        data: result,
+    });
+});
+
 export const shipStationController = {
     createOrder,
     getShippingRates,
@@ -164,4 +201,6 @@ export const shipStationController = {
     markAsShipped,
     getCarriers,
     getWarehouses,
+    markAsDelivered,
+    cancelOrder,
 };
