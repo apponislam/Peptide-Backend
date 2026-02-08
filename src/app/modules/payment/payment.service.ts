@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { prisma } from "../../../lib/prisma";
 import { shipStationService } from "../shipstation/shipstation.service";
 import { CheckoutItem, EnhancedStripeSession, OrderSummary, ShippingInfo } from "./payment.types";
-import { sendOrderConfirmationEmail } from "../../../utils/templates/orderEmailTemplate";
+import { sendOrderCancelledEmail, sendOrderConfirmationEmail, sendOrderRefundedEmail } from "../../../utils/templates/orderEmailTemplate";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-07-30.basil" as any,
@@ -693,6 +693,14 @@ export class StripeService {
             // Find order by orderId
             const order = await prisma.order.findUnique({
                 where: { id: orderId },
+                include: {
+                    user: true,
+                    items: {
+                        include: {
+                            product: true,
+                        },
+                    },
+                },
             });
 
             if (!order) {
@@ -725,6 +733,28 @@ export class StripeService {
                             increment: order.creditApplied,
                         },
                     },
+                });
+            }
+
+            const emailData = {
+                id: order.id,
+                user: {
+                    name: order.user?.name || order.name,
+                },
+                items: order.items.map((item) => ({
+                    name: item.product?.name || "Product",
+                    quantity: item.quantity,
+                })),
+                total: amount || order.total, // Use refund amount if partial
+                // NO refundReason parameter since it doesn't exist
+            };
+
+            // Get email from user or order
+            const email = order.user?.email || order.email;
+
+            if (email) {
+                sendOrderRefundedEmail(email, emailData).catch((error) => {
+                    console.error("❌ Refund email failed:", error);
                 });
             }
 

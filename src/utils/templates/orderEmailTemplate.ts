@@ -387,7 +387,6 @@ export const getOrderConfirmationEmail = (orderData: {
         .address-text { color: #1e293b; line-height: 1.8; }
         .footer { text-align: center; padding: 25px; background: #f8fafc; color: #64748b; font-size: 14px; border-top: 1px solid #e2e8f0; }
         .logo { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px; letter-spacing: 1px; }
-        .contact-info { margin-top: 10px; font-size: 13px; }
         .highlight { color: #3b82f6; font-weight: 600; }
         .discount { color: #10b981; font-weight: 600; }
         .credit-used { color: #f59e0b; font-weight: 600; }
@@ -499,10 +498,7 @@ export const getOrderConfirmationEmail = (orderData: {
         <div class="footer">
             <div class="logo">PEPTIDE.CLUB</div>
             <p>Questions about your order? Reply to this email or contact our support team.</p>
-            <div class="contact-info">
-                <p>📍 5500 West Airport Freeway, Irving, TX 75062</p>
-                <p>📧 support@peptide.club | 📞 (555) 0123</p>
-            </div>
+
             <p style="margin-top: 15px; font-size: 12px; color: #94a3b8;">
                 © ${new Date().getFullYear()} PEPTIDE.CLUB. All rights reserved.
             </p>
@@ -560,7 +556,6 @@ export const getOrderShippedEmail = (orderData: {
         .estimate-days { color: #047857; font-weight: 600; font-size: 18px; }
         .footer { text-align: center; padding: 25px; background: #f8fafc; color: #64748b; font-size: 14px; border-top: 1px solid #e2e8f0; }
         .logo { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px; letter-spacing: 1px; }
-        .contact-info { margin-top: 10px; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -628,10 +623,7 @@ export const getOrderShippedEmail = (orderData: {
         <div class="footer">
             <div class="logo">PEPTIDE.CLUB</div>
             <p>Thank you for shopping with us!</p>
-            <div class="contact-info">
-                <p>📍 5500 West Airport Freeway, Irving, TX 75062</p>
-                <p>📧 support@peptide.club | 📞 (555) 0123</p>
-            </div>
+
             <p style="margin-top: 15px; font-size: 12px; color: #94a3b8;">
                 © ${new Date().getFullYear()} PEPTIDE.CLUB. All rights reserved.
             </p>
@@ -673,7 +665,7 @@ export const getOrderCancelledEmail = (orderData: { id: string; user: { name: st
         .support-text { color: #92400e; line-height: 1.8; }
         .footer { text-align: center; padding: 25px; background: #f8fafc; color: #64748b; font-size: 14px; border-top: 1px solid #e2e8f0; }
         .logo { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px; letter-spacing: 1px; }
-        .contact-info { margin-top: 10px; font-size: 13px; }
+
     </style>
 </head>
 <body>
@@ -735,10 +727,7 @@ export const getOrderCancelledEmail = (orderData: { id: string; user: { name: st
         <div class="footer">
             <div class="logo">PEPTIDE.CLUB</div>
             <p>Thank you for being a valued customer.</p>
-            <div class="contact-info">
-                <p>📍 5500 West Airport Freeway, Irving, TX 75062</p>
-                <p>📧 support@peptide.club | 📞 (555) 0123</p>
-            </div>
+
             <p style="margin-top: 15px; font-size: 12px; color: #94a3b8;">
                 © ${new Date().getFullYear()} PEPTIDE.CLUB. All rights reserved.
             </p>
@@ -777,7 +766,6 @@ export const getOrderDeliveredEmail = (orderData: { id: string; user: { name: st
         .support-text { color: #1e40af; line-height: 1.8; }
         .footer { text-align: center; padding: 25px; background: #f8fafc; color: #64748b; font-size: 14px; border-top: 1px solid #e2e8f0; }
         .logo { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px; letter-spacing: 1px; }
-        .contact-info { margin-top: 10px; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -834,10 +822,138 @@ export const getOrderDeliveredEmail = (orderData: { id: string; user: { name: st
         <div class="footer">
             <div class="logo">PEPTIDE.CLUB</div>
             <p>Premium peptides, delivered with care.</p>
-            <div class="contact-info">
-                <p>📍 5500 West Airport Freeway, Irving, TX 75062</p>
-                <p>📧 support@peptide.club | 📞 (555) 0123</p>
+
+            <p style="margin-top: 15px; font-size: 12px; color: #94a3b8;">
+                © ${new Date().getFullYear()} PEPTIDE.CLUB. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>`;
+};
+
+export const getOrderRefundedEmail = (orderData: {
+    id: string;
+    user: { name: string };
+    items: Array<{ name: string; quantity: number }>;
+    total: number; // This should be the refund amount
+}): string => {
+    const orderNumber = orderData.id.replace("ord_", "").toUpperCase();
+    const refundAmount = orderData.total; // Use the total passed (which is refund amount)
+
+    return `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Refunded - PEPTIDE.CLUB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background: #f5f7fa; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header h1 { font-size: 32px; font-weight: 600; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 16px; }
+        .content { padding: 30px; }
+        .refund-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 2px solid #f59e0b; border-radius: 12px; padding: 25px; text-align: center; margin: 25px 0; }
+        .refund-title { color: #92400e; font-size: 18px; font-weight: 600; margin-bottom: 15px; }
+        .refund-amount { font-size: 24px; font-weight: 700; color: #92400e; margin: 15px 0; letter-spacing: 1px; background: white; padding: 12px 20px; border-radius: 8px; display: inline-block; border: 1px solid #fde68a; }
+        .refund-info { color: #92400e; margin: 15px 0; line-height: 1.8; }
+        .section-title { font-size: 18px; font-weight: 600; color: #1e293b; margin: 25px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; }
+        .items-grid { display: grid; gap: 12px; }
+        .item-card { background: #f8fafc; border-radius: 8px; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f59e0b; }
+        .item-name { font-weight: 500; color: #1e293b; }
+        .item-qty { color: #64748b; font-weight: 600; }
+        .support-box { background: #f0f9ff; border-radius: 8px; padding: 20px; margin-top: 25px; border-left: 4px solid #3b82f6; }
+        .support-title { color: #1e40af; font-weight: 600; margin-bottom: 10px; }
+        .support-text { color: #1e40af; line-height: 1.8; }
+        .timeline-box { background: #f0fdf4; border-radius: 8px; padding: 20px; margin-top: 20px; border-left: 4px solid #10b981; }
+        .timeline-title { color: #065f46; font-weight: 600; margin-bottom: 15px; }
+        .timeline-item { display: flex; align-items: center; margin-bottom: 12px; color: #047857; }
+        .timeline-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; margin-right: 12px; }
+        .footer { text-align: center; padding: 25px; background: #f8fafc; color: #64748b; font-size: 14px; border-top: 1px solid #e2e8f0; }
+        .logo { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>💰 Order Refunded</h1>
+            <p>Refund issued for Order #${orderNumber}</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <p style="font-size: 16px; color: #475569; margin-bottom: 25px;">Hello <strong>${orderData.user.name}</strong>,</p>
+            <p style="font-size: 16px; color: #475569; margin-bottom: 25px;">We've processed a refund for your recent order.</p>
+            
+            <!-- Refund Information -->
+            <div class="refund-box">
+                <div class="refund-title">💸 Refund Processed</div>
+                <div class="refund-amount">$${refundAmount.toFixed(2)}</div>
+                <p class="refund-info">
+                    A refund of <strong>$${refundAmount.toFixed(2)}</strong> has been issued for your order.
+                </p>
             </div>
+            
+            <!-- Refund Timeline -->
+            <div class="timeline-box">
+                <div class="timeline-title">⏰ Refund Timeline</div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div>Refund processed by PEPTIDE.CLUB</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div>Funds will appear in your account within <strong>5-10 business days</strong></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div>Processing time depends on your bank or payment provider</div>
+                </div>
+            </div>
+            
+            <!-- Refunded Items -->
+            <h2 class="section-title">📦 Refunded Items</h2>
+            <div class="items-grid">
+                ${orderData.items
+                    .map(
+                        (item) => `
+                <div class="item-card">
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-qty">Qty: ${item.quantity}</span>
+                </div>
+                `,
+                    )
+                    .join("")}
+            </div>
+            
+            <!-- Support Information -->
+            <div class="support-box">
+                <div class="support-title">❓ Questions About Your Refund?</div>
+                <p class="support-text">
+                    If you have any questions about this refund or need assistance,<br>
+                    please reply to this email or contact our support team.
+                </p>
+            </div>
+            
+            <!-- Hope to See You Again -->
+            <div style="margin-top: 30px; padding: 20px; background: #f0fdf4; border-radius: 8px; border-left: 4px solid #10b981;">
+                <p style="color: #047857; margin: 0; text-align: center; font-size: 16px;">
+                    Thank you for being a valued PEPTIDE.CLUB customer!
+                </p>
+                <p style="color: #047857; margin-top: 10px; text-align: center;">
+                    We hope to have the opportunity to serve you again in the future.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="logo">PEPTIDE.CLUB</div>
+            <p>Premium peptides, delivered with care.</p>
             <p style="margin-top: 15px; font-size: 12px; color: #94a3b8;">
                 © ${new Date().getFullYear()} PEPTIDE.CLUB. All rights reserved.
             </p>
@@ -896,12 +1012,25 @@ export async function sendOrderDeliveredEmail(to: string, orderData: any) {
     });
 }
 
+export async function sendOrderRefundedEmail(to: string, orderData: any) {
+    process.nextTick(async () => {
+        try {
+            const html = getOrderRefundedEmail(orderData);
+            await sendEmail(to, `💰 Order Refunded #${orderData.id.replace("ord_", "").toUpperCase()} - PEPTIDE.CLUB`, html);
+            console.log(`✅ Order refunded email sent to ${to}`);
+        } catch (error) {
+            console.error("❌ Failed to send order refunded email:", error);
+        }
+    });
+}
+
 // Utility functions for easy usage
 export const OrderEmailTemplates = {
     confirmation: getOrderConfirmationEmail,
     shipped: getOrderShippedEmail,
     cancelled: getOrderCancelledEmail,
     delivered: getOrderDeliveredEmail,
+    refunded: getOrderRefundedEmail,
 };
 
 // Export email sending functions as well
@@ -910,4 +1039,5 @@ export const OrderEmailSenders = {
     shipped: sendOrderShippedEmail,
     cancelled: sendOrderCancelledEmail,
     delivered: sendOrderDeliveredEmail,
+    refunded: sendOrderRefundedEmail,
 };
