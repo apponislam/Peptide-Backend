@@ -489,7 +489,7 @@ const markAsDelivered = async (orderId: string) => {
     }
 };
 
-const cancelOrder = async (orderId: string, reason?: string) => {
+const cancelOrder = async (orderId: string) => {
     try {
         const order = await prisma.order.findUnique({
             where: { id: orderId },

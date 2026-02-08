@@ -176,13 +176,12 @@ const markAsDelivered = catchAsync(async (req: Request, res: Response) => {
 // Cancel order
 const cancelOrder = catchAsync(async (req: Request, res: Response) => {
     const orderId = req.params.orderId as string;
-    const { reason } = req.body;
 
     if (!orderId) {
         throw new ApiError(400, "Order ID is required");
     }
 
-    const result = await shipStationService.cancelOrder(orderId, reason);
+    const result = await shipStationService.cancelOrder(orderId);
 
     sendResponse(res, {
         statusCode: 200,
