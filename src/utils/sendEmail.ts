@@ -14,10 +14,10 @@ export async function sendEmail(to: string | string[], subject: string, html: st
             html: html,
         });
 
-        console.log("Email sent:", response);
+        // console.log("Email sent:", response);
         return { success: true, data: response };
     } catch (error: any) {
-        console.error("Error:", error);
+        // console.error("Error:", error);
         return { success: false, error: error.message };
     }
 }
