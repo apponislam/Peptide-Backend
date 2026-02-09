@@ -366,6 +366,89 @@ const updateTracking = async (orderId: string, trackingNumber: string, carrier: 
     }
 };
 
+// const markOrderAsShipped = async (orderId: string) => {
+//     try {
+//         const order = await prisma.order.findUnique({
+//             where: { id: orderId },
+//             include: {
+//                 user: true,
+//                 items: {
+//                     include: {
+//                         product: true,
+//                     },
+//                 },
+//             },
+//         });
+
+//         if (!order) {
+//             throw new ApiError(404, `Order ${orderId} not found`);
+//         }
+
+//         if (!order.shipstationOrderId) {
+//             throw new ApiError(400, `Order ${orderId} does not have a ShipStation order ID. Create ShipStation order first.`);
+//         }
+
+//         // Update order status in database
+//         await prisma.order.update({
+//             where: { id: orderId },
+//             data: {
+//                 status: "SHIPPED",
+//                 updatedAt: new Date(),
+//             },
+//         });
+
+//         // Mark as shipped in ShipStation
+//         const markShippedData = {
+//             orderId: Number(order.shipstationOrderId),
+//             notifyCustomer: true,
+//             notifySalesChannel: true,
+//         };
+
+//         const response = await axios.put(`${baseUrl}/orders/markasshipped`, markShippedData, {
+//             headers: getAuthHeader(),
+//         });
+
+//         // Send shipping confirmation email (using your existing pattern)
+//         const emailData = {
+//             id: order.id,
+//             user: {
+//                 name: order.user?.name || order.name,
+//             },
+//             shippingInfo: {
+//                 name: order.name,
+//                 address: order.address || "",
+//                 city: order.city || "",
+//                 state: order.state || "",
+//                 zip: order.zip || "",
+//             },
+//             items: order.items.map((item) => ({
+//                 name: item.product?.name || "Product",
+//                 quantity: item.quantity,
+//             })),
+//             trackingNumber: order.trackingNumber || "TRACKING_PENDING",
+//         };
+
+//         const email = order.user?.email || order.email;
+//         if (email) {
+//             sendOrderShippedEmail(email, emailData).catch((error) => {
+//                 console.error("❌ Shipping email failed:", error);
+//             });
+//         }
+
+//         return response.data;
+//     } catch (error: any) {
+//         if (error instanceof ApiError) {
+//             throw error;
+//         }
+
+//         if (error.response) {
+//             throw new ApiError(error.response.status, `Failed to mark order as shipped: ${error.response.data?.message || error.message}`);
+//         }
+
+//         throw new ApiError(500, `Failed to mark order as shipped: ${error.message}`);
+//     }
+// };
+
 const markOrderAsShipped = async (orderId: string) => {
     try {
         const order = await prisma.order.findUnique({
@@ -384,6 +467,8 @@ const markOrderAsShipped = async (orderId: string) => {
             throw new ApiError(404, `Order ${orderId} not found`);
         }
 
+        console.log(`DEBUG: Order ${orderId} found, status: ${order.status}, shipstationOrderId: ${order.shipstationOrderId}`);
+
         // Update order status in database
         await prisma.order.update({
             where: { id: orderId },
@@ -393,18 +478,9 @@ const markOrderAsShipped = async (orderId: string) => {
             },
         });
 
-        // Mark as shipped in ShipStation
-        const markShippedData = {
-            orderId: orderId,
-            notifyCustomer: true,
-            notifySalesChannel: true,
-        };
+        console.log(`✅ Database updated to SHIPPED`);
 
-        const response = await axios.post(`${baseUrl}/orders/markasshipped`, markShippedData, {
-            headers: getAuthHeader(),
-        });
-
-        // Send shipping confirmation email (using your existing pattern)
+        // Send shipping confirmation email
         const emailData = {
             id: order.id,
             user: {
@@ -426,19 +502,24 @@ const markOrderAsShipped = async (orderId: string) => {
 
         const email = order.user?.email || order.email;
         if (email) {
+            console.log(`📧 Sending shipping email to: ${email}`);
             sendOrderShippedEmail(email, emailData).catch((error) => {
                 console.error("❌ Shipping email failed:", error);
             });
         }
 
-        return response.data;
+        return {
+            success: true,
+            message: "Order marked as shipped successfully",
+            orderId: order.id,
+            emailSent: !!email,
+            note: "ShipStation integration skipped - order updated locally only",
+        };
     } catch (error: any) {
+        console.error(`❌ Error in markOrderAsShipped:`, error.message);
+
         if (error instanceof ApiError) {
             throw error;
-        }
-
-        if (error.response) {
-            throw new ApiError(error.response.status, `Failed to mark order as shipped: ${error.response.data?.message || error.message}`);
         }
 
         throw new ApiError(500, `Failed to mark order as shipped: ${error.message}`);
