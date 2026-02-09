@@ -1,7 +1,7 @@
 import axios from "axios";
 import { prisma } from "../../../lib/prisma";
 import ApiError from "../../../errors/ApiError";
-import { sendOrderCancelledEmail, sendOrderDeliveredEmail } from "../../../utils/templates/orderEmailTemplate";
+import { sendOrderCancelledEmail, sendOrderDeliveredEmail, sendOrderShippedEmail } from "../../../utils/templates/orderEmailTemplate";
 
 const baseUrl = "https://ssapi.shipstation.com";
 const apiKey = process.env.SHIPSTATION_API_KEY!;
@@ -370,6 +370,14 @@ const markOrderAsShipped = async (orderId: string) => {
     try {
         const order = await prisma.order.findUnique({
             where: { id: orderId },
+            include: {
+                user: true,
+                items: {
+                    include: {
+                        product: true,
+                    },
+                },
+            },
         });
 
         if (!order) {
@@ -395,6 +403,33 @@ const markOrderAsShipped = async (orderId: string) => {
         const response = await axios.post(`${baseUrl}/orders/markasshipped`, markShippedData, {
             headers: getAuthHeader(),
         });
+
+        // Send shipping confirmation email (using your existing pattern)
+        const emailData = {
+            id: order.id,
+            user: {
+                name: order.user?.name || order.name,
+            },
+            shippingInfo: {
+                name: order.name,
+                address: order.address || "",
+                city: order.city || "",
+                state: order.state || "",
+                zip: order.zip || "",
+            },
+            items: order.items.map((item) => ({
+                name: item.product?.name || "Product",
+                quantity: item.quantity,
+            })),
+            trackingNumber: order.trackingNumber || "TRACKING_PENDING",
+        };
+
+        const email = order.user?.email || order.email;
+        if (email) {
+            sendOrderShippedEmail(email, emailData).catch((error) => {
+                console.error("❌ Shipping email failed:", error);
+            });
+        }
 
         return response.data;
     } catch (error: any) {
