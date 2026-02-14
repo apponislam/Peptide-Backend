@@ -392,39 +392,6 @@ const getTopSellingProducts = async (limit: number = 5) => {
     return productsWithSales.sort((a, b) => b.sales - a.sales).slice(0, limit);
 };
 
-// Get Referral Performance (simplified)
-// const getReferralPerformance = async () => {
-//     // Get top referrer
-//     const topReferrer = await prisma.user.findFirst({
-//         where: {
-//             referralCount: { gt: 0 },
-//         },
-//         orderBy: {
-//             referralCount: "desc",
-//         },
-//         select: {
-//             name: true,
-//             referralCount: true,
-//         },
-//     });
-
-//     // Get total commissions
-//     const totalCommissions = await prisma.commission.aggregate({
-//         where: {
-//             status: "PAID",
-//         },
-//         _sum: {
-//             amount: true,
-//         },
-//     });
-
-//     return {
-//         topReferrer: topReferrer?.name || "No top referrer yet",
-//         referrals: topReferrer?.referralCount || 0,
-//         totalCommissions: totalCommissions._sum.amount || 0,
-//     };
-// };
-
 const getReferralPerformance = async () => {
     // Get top 3 referrers
     const topReferrers = await prisma.user.findMany({

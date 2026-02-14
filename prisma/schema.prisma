@@ -19,13 +19,6 @@ enum UserTier {
   VIP
 }
 
-// enum OrderStatus {
-//   PENDING
-//   PAID
-//   SHIPPED
-//   CANCELLED
-// }
-
 enum OrderStatus {
   PENDING
   FAILED
@@ -103,7 +96,7 @@ model Product {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-    orderItems OrderItem[]
+  orderItems OrderItem[]
 
   @@index([isDeleted])
   @@index([createdAt])
