@@ -79,18 +79,6 @@ const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-// Get all users
-// const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-//     const users = await adminServices.getAllUsers();
-
-//     sendResponse(res, {
-//         statusCode: 200,
-//         success: true,
-//         message: "Users retrieved successfully",
-//         data: users,
-//     });
-// });
-
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     const { page = 1, limit = 10, search = "", role, tier, sortBy = "createdAt", sortOrder = "desc" } = req.query;
 

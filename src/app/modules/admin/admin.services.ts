@@ -251,15 +251,22 @@ const getAllUsers = async (params: { page?: number; limit?: number; search?: str
         where.tier = params.tier;
     }
 
-    const orderBy: Prisma.UserOrderByWithRelationInput = { createdAt: "desc" };
+    // FIX THIS PART - Use a single field for orderBy
+    let orderBy: Prisma.UserOrderByWithRelationInput = {};
 
     if (params.sortBy) {
         const allowedSortFields = ["name", "email", "createdAt", "role", "tier", "referralCount", "storeCredit"];
 
         if (allowedSortFields.includes(params.sortBy)) {
-            const sortField = params.sortBy as keyof Prisma.UserOrderByWithRelationInput;
-            orderBy[sortField] = params.sortOrder || "desc";
+            orderBy = {
+                [params.sortBy]: params.sortOrder || "desc",
+            };
+        } else {
+            orderBy = { createdAt: "desc" };
         }
+    } else {
+        // Default sort
+        orderBy = { createdAt: "desc" };
     }
 
     // Get users with pagination
