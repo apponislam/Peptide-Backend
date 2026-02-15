@@ -1,3 +1,120 @@
+// import { Request, Response } from "express";
+// import { productServices } from "./product.services";
+// import catchAsync from "../../../utils/catchAsync";
+// import sendResponse from "../../../utils/sendResponse.";
+
+// // Create product
+// const createProduct = catchAsync(async (req: Request, res: Response) => {
+//     const product = await productServices.createProduct(req.body);
+
+//     sendResponse(res, {
+//         statusCode: 201,
+//         success: true,
+//         message: "Product created successfully",
+//         data: product,
+//     });
+// });
+
+// // Get all products
+// const getAllProducts = catchAsync(async (req: Request, res: Response) => {
+//     // Extract query parameters
+//     const { search = "", page = 1, limit = 12, sortBy = "createdAt", sortOrder = "desc" } = req.query;
+
+//     const pageNum = parseInt(page as string);
+//     const limitNum = parseInt(limit as string);
+//     const skip = (pageNum - 1) * limitNum;
+
+//     const result = await productServices.getAllProducts({
+//         search: search as string,
+//         skip,
+//         take: limitNum,
+//         sortBy: sortBy as string,
+//         sortOrder: sortOrder as "asc" | "desc",
+//     });
+
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Products retrieved successfully",
+//         data: result.products,
+//         meta: result.meta,
+//     });
+// });
+
+// // Get single product
+// const getSingleProduct = catchAsync(async (req: Request, res: Response) => {
+//     const id = parseInt(req.params.id as string);
+//     const product = await productServices.getSingleProduct(id);
+
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Product retrieved successfully",
+//         data: product,
+//     });
+// });
+
+// // Update product
+// const updateProduct = catchAsync(async (req: Request, res: Response) => {
+//     const id = parseInt(req.params.id as string);
+//     const product = await productServices.updateProduct(id, req.body);
+
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Product updated successfully",
+//         data: product,
+//     });
+// });
+
+// // Delete product
+// const deleteProduct = catchAsync(async (req: Request, res: Response) => {
+//     const id = parseInt(req.params.id as string);
+//     const product = await productServices.deleteProduct(id);
+
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Product deleted successfully",
+//         data: product,
+//     });
+// });
+
+// // Get deleted products (admin only)
+// const getDeletedProducts = catchAsync(async (req: Request, res: Response) => {
+//     const products = await productServices.getDeletedProducts();
+
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Deleted products retrieved successfully",
+//         data: products,
+//     });
+// });
+
+// // Restore product
+// const restoreProduct = catchAsync(async (req: Request, res: Response) => {
+//     const id = parseInt(req.params.id as string);
+//     const product = await productServices.restoreProduct(id);
+
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Product restored successfully",
+//         data: product,
+//     });
+// });
+
+// export const productControllers = {
+//     createProduct,
+//     getAllProducts,
+//     getSingleProduct,
+//     updateProduct,
+//     deleteProduct,
+//     getDeletedProducts,
+//     restoreProduct,
+// };
+
 import { Request, Response } from "express";
 import { productServices } from "./product.services";
 import catchAsync from "../../../utils/catchAsync";
@@ -5,7 +122,35 @@ import sendResponse from "../../../utils/sendResponse.";
 
 // Create product
 const createProduct = catchAsync(async (req: Request, res: Response) => {
-    const product = await productServices.createProduct(req.body);
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    // Parse JSON fields
+    const productData: any = {
+        name: req.body.name,
+        desc: req.body.desc,
+        details: req.body.details,
+    };
+
+    // Parse JSON fields (if they come as strings from FormData)
+    if (req.body.sizes) productData.sizes = JSON.parse(req.body.sizes);
+    if (req.body.references) productData.references = JSON.parse(req.body.references);
+
+    // Handle image file
+    if (files?.image?.[0]) {
+        productData.image = `/uploads/product-images/${files.image[0].filename}`;
+    }
+
+    // Handle COA file (store as object with file details)
+    if (files?.coa?.[0]) {
+        productData.coa = {
+            url: `/uploads/coa/${files.coa[0].filename}`,
+            filename: files.coa[0].originalname,
+            mimetype: files.coa[0].mimetype,
+            size: files.coa[0].size,
+        };
+    }
+
+    const product = await productServices.createProduct(productData);
 
     sendResponse(res, {
         statusCode: 201,
@@ -57,7 +202,36 @@ const getSingleProduct = catchAsync(async (req: Request, res: Response) => {
 // Update product
 const updateProduct = catchAsync(async (req: Request, res: Response) => {
     const id = parseInt(req.params.id as string);
-    const product = await productServices.updateProduct(id, req.body);
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    // Build update data dynamically
+    const updateData: any = {};
+
+    // Handle regular fields
+    if (req.body.name) updateData.name = req.body.name;
+    if (req.body.desc) updateData.desc = req.body.desc;
+    if (req.body.details) updateData.details = req.body.details;
+
+    // Handle JSON fields (parse if they come as strings)
+    if (req.body.sizes) updateData.sizes = JSON.parse(req.body.sizes);
+    if (req.body.references) updateData.references = JSON.parse(req.body.references);
+
+    // Handle image file
+    if (files?.image?.[0]) {
+        updateData.image = `/uploads/product-images/${files.image[0].filename}`;
+    }
+
+    // Handle COA file
+    if (files?.coa?.[0]) {
+        updateData.coa = {
+            url: `/uploads/coa/${files.coa[0].filename}`,
+            filename: files.coa[0].originalname,
+            mimetype: files.coa[0].mimetype,
+            size: files.coa[0].size,
+        };
+    }
+
+    const product = await productServices.updateProduct(id, updateData);
 
     sendResponse(res, {
         statusCode: 200,
