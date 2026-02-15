@@ -18,6 +18,7 @@ declare const _default: {
             role: UserRole;
             storeCredit: number;
             referralCount: number;
+            shippingCredit: number;
             createdAt: Date;
             orders: {
                 id: string;
@@ -89,6 +90,7 @@ export declare const adminServices: {
             createdAt: Date;
             updatedAt: Date;
             userId: string;
+            paymentIntentId: string;
             phone: string;
             address: string;
             city: string;
@@ -116,6 +118,116 @@ export declare const adminServices: {
             totalPages: number;
         };
     }>;
+    getOrderById: (orderId: string) => Promise<{
+        checkoutSessions: {
+            id: string;
+            createdAt: Date;
+            stripeSessionId: string;
+            paymentStatus: import("../../../generated/prisma/enums").StripePaymentStatus;
+            storeCreditUsed: number;
+        }[];
+        user: {
+            id: string;
+            email: string;
+            name: string;
+            tier: UserTier;
+            storeCredit: number;
+            shippingCredit: number;
+        };
+        items: ({
+            product: {
+                id: number;
+                name: string;
+                sizes: import("@prisma/client/runtime/client").JsonValue;
+            } | null;
+        } & {
+            id: string;
+            orderId: string;
+            productId: number | null;
+            quantity: number;
+            unitPrice: number;
+            discountedPrice: number;
+        })[];
+        commissions: ({
+            referrer: {
+                id: string;
+                email: string;
+                name: string;
+                tier: UserTier;
+            };
+            buyer: {
+                id: string;
+                email: string;
+                name: string;
+            };
+        } & {
+            id: string;
+            referrerId: string;
+            createdAt: Date;
+            updatedAt: Date;
+            status: import("../../../generated/prisma/enums").CommissionStatus;
+            orderId: string;
+            buyerId: string;
+            amount: number;
+        })[];
+    } & {
+        id: string;
+        email: string;
+        name: string;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string;
+        paymentIntentId: string;
+        phone: string;
+        address: string;
+        city: string;
+        state: string;
+        zip: string;
+        country: string;
+        originalPrice: number;
+        discountPercentage: number;
+        discountAmount: number;
+        subtotal: number;
+        shipping: number;
+        creditApplied: number;
+        total: number;
+        status: OrderStatus;
+        shipstationOrderId: number | null;
+        trackingNumber: string | null;
+        labelUrl: string | null;
+        commissionAmount: number | null;
+        commissionPaid: boolean;
+    }>;
+    updateOrderStatus: (id: string, data: {
+        status: OrderStatus;
+    }) => Promise<{
+        id: string;
+        email: string;
+        name: string;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string;
+        paymentIntentId: string;
+        phone: string;
+        address: string;
+        city: string;
+        state: string;
+        zip: string;
+        country: string;
+        originalPrice: number;
+        discountPercentage: number;
+        discountAmount: number;
+        subtotal: number;
+        shipping: number;
+        creditApplied: number;
+        total: number;
+        status: OrderStatus;
+        shipstationOrderId: number | null;
+        trackingNumber: string | null;
+        labelUrl: string | null;
+        commissionAmount: number | null;
+        commissionPaid: boolean;
+    }>;
     getAllUsers: (params: {
         page?: number;
         limit?: number;
@@ -134,6 +246,7 @@ export declare const adminServices: {
             role: UserRole;
             storeCredit: number;
             referralCount: number;
+            shippingCredit: number;
             createdAt: Date;
             orders: {
                 id: string;
@@ -165,6 +278,7 @@ export declare const adminServices: {
         deletedAt: Date | null;
         storeCredit: number;
         referralCount: number;
+        shippingCredit: number;
         isReferralValid: boolean;
         referrerId: string | null;
         createdAt: Date;
@@ -192,6 +306,7 @@ export declare const adminServices: {
             isActive: boolean;
             storeCredit: number;
             referralCount: number;
+            shippingCredit: number;
             isReferralValid: boolean;
             referrerId: string | null;
             createdAt: Date;

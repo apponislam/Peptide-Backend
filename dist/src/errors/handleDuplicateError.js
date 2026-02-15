@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const handleDuplicateError = (err) => {
     const errorSources = [];
     let statusCode = 409;
@@ -34,5 +36,5 @@ const handleDuplicateError = (err) => {
         errorSources,
     };
 };
-export default handleDuplicateError;
+exports.default = handleDuplicateError;
 //# sourceMappingURL=handleDuplicateError.js.map

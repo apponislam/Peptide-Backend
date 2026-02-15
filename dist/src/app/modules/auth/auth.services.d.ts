@@ -12,6 +12,7 @@ export declare const authServices: {
             storeCredit: number;
             referralCount: number;
             createdAt: Date;
+            shippingCredit: number;
         };
     }>;
     login: (email: string, password: string) => Promise<{
@@ -27,6 +28,7 @@ export declare const authServices: {
             storeCredit: number;
             referralCount: number;
             createdAt: Date;
+            shippingCredit: number;
         };
     }>;
     getCurrentUser: (userId: string) => Promise<{
@@ -38,6 +40,7 @@ export declare const authServices: {
         role: import("../../../generated/prisma/enums").UserRole;
         storeCredit: number;
         referralCount: number;
+        shippingCredit: number;
         createdAt: Date;
         orders: {
             id: string;
@@ -89,6 +92,7 @@ export declare const authServices: {
         role: import("../../../generated/prisma/enums").UserRole;
         storeCredit: number;
         referralCount: number;
+        shippingCredit: number;
         createdAt: Date;
     }>;
     checkReferralCodeAvailability: (code: string) => Promise<boolean>;
@@ -105,6 +109,7 @@ export declare const authServices: {
             storeCredit: number;
             referralCount: number;
             createdAt: Date;
+            shippingCredit: number;
         };
     }>;
 };

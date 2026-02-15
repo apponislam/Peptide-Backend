@@ -1,7 +1,12 @@
-import dotenv from "dotenv";
-import path from "path";
-dotenv.config({ path: path.join(process.cwd(), ".env") });
-export default {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+const path_1 = __importDefault(require("path"));
+dotenv_1.default.config({ path: path_1.default.join(process.cwd(), ".env") });
+exports.default = {
     node_env: process.env.NODE_ENV,
     port: process.env.PORT,
     database_url: process.env.DATABASE_URL,
@@ -24,6 +29,7 @@ export default {
     admin_password: process.env.ADMIN_PASSWORD,
     // Resend
     resend_api_key: process.env.RESEND_API_KEY,
+    resend_email: process.env.RESEND_EMAIL,
     // shipsation
     shipstation_api_key: process.env.SHIPSTATION_API_KEY,
     shipstation_api_secret: process.env.SHIPSTATION_API_SECRET,

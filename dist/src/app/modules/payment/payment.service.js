@@ -1,14 +1,21 @@
-import Stripe from "stripe";
-import { prisma } from "../../../lib/prisma";
-import { shipStationService } from "../shipstation/shipstation.service";
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.stripeService = exports.StripeService = void 0;
+const stripe_1 = __importDefault(require("stripe"));
+const prisma_1 = require("../../../lib/prisma");
+const shipstation_service_1 = require("../shipstation/shipstation.service");
+const orderEmailTemplate_1 = require("../../../utils/templates/orderEmailTemplate");
+const stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY, {
     apiVersion: "2025-07-30.basil",
 });
-export class StripeService {
+class StripeService {
     // Calculate order summary
     calculateOrderSummary(items, userStoreCredit = 0, shippingCost = 0) {
         const originalSubtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        const discount = 0; // You can implement discount logic here
+        const discount = 0;
         const subtotalAfterDiscount = originalSubtotal - discount;
         const storeCreditsApplied = Math.min(userStoreCredit, subtotalAfterDiscount);
         const totalBeforeShipping = subtotalAfterDiscount - storeCreditsApplied;
@@ -21,16 +28,44 @@ export class StripeService {
             total,
         };
     }
-    // Create a checkout session
-    async createCheckoutSession(userId, items, shippingInfo, metadata = {}) {
+    // Calculate shipping cost based on user tier and shipping credit
+    async calculateShippingCost(user, items, shippingAmountFromRequest) {
+        const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const SHIPPING_RATE = 6.95;
+        // Founder/VIP: Always free shipping
+        if (user.tier === "Founder" || user.tier === "VIP") {
+            return 0;
+        }
+        // Member: Check shipping credit
+        if (user.tier === "Member" && user.shippingCredit > 0) {
+            if (user.shippingCredit >= SHIPPING_RATE) {
+                return 0;
+            }
+            else {
+                return SHIPPING_RATE - user.shippingCredit;
+            }
+        }
+        // No shipping credit or other tiers: Check subtotal
+        if (subtotal >= 150)
+            return 0;
+        return SHIPPING_RATE;
+    }
+    // Create a checkout session - UPDATED with storeCreditUsed
+    async createCheckoutSession(userId, items, shippingInfo, shippingAmount, subtotal, storeCreditUsed, total, metadata = {}) {
         try {
-            const user = await prisma.user.findUnique({
+            const user = await prisma_1.prisma.user.findUnique({
                 where: { id: userId },
             });
             if (!user) {
                 throw new Error("User not found");
             }
-            const orderSummary = this.calculateOrderSummary(items, user.storeCredit);
+            // Validate store credit usage
+            if (storeCreditUsed > user.storeCredit) {
+                throw new Error(`Insufficient store credit. Available: $${user.storeCredit}, Requested: $${storeCreditUsed}`);
+            }
+            // Calculate shipping cost based on user data
+            const calculatedShipping = await this.calculateShippingCost(user, items, shippingAmount);
+            const orderSummary = this.calculateOrderSummary(items, user.storeCredit, calculatedShipping);
             const lineItems = items.map((item) => ({
                 price_data: {
                     currency: "usd",
@@ -42,10 +77,47 @@ export class StripeService {
                             productId: item.productId.toString(),
                         },
                     },
-                    unit_amount: Math.round(item.price * 100),
+                    unit_amount: Math.round(item.price * 100), // Frontend sends adjusted prices
                 },
                 quantity: item.quantity,
             }));
+            // Create shipping options based on calculated cost
+            const shippingOptions = [];
+            if (calculatedShipping === 0) {
+                shippingOptions.push({
+                    shipping_rate_data: {
+                        type: "fixed_amount",
+                        fixed_amount: {
+                            amount: 0,
+                            currency: "usd",
+                        },
+                        display_name: "Free Shipping",
+                    },
+                });
+            }
+            else {
+                shippingOptions.push({
+                    shipping_rate_data: {
+                        type: "fixed_amount",
+                        fixed_amount: {
+                            amount: Math.round(calculatedShipping * 100),
+                            currency: "usd",
+                        },
+                        display_name: "Standard Shipping",
+                    },
+                });
+            }
+            // Reserve store credit immediately
+            if (storeCreditUsed > 0) {
+                await prisma_1.prisma.user.update({
+                    where: { id: userId },
+                    data: {
+                        storeCredit: {
+                            decrement: parseFloat(storeCreditUsed.toFixed(2)),
+                        },
+                    },
+                });
+            }
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ["card"],
                 line_items: lineItems,
@@ -53,25 +125,11 @@ export class StripeService {
                 success_url: `${process.env.FRONTEND_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
                 cancel_url: `${process.env.FRONTEND_URL}/checkout/cancel`,
                 customer_email: shippingInfo.email,
-                // shipping_address_collection: {
-                //     allowed_countries: ["US", "CA"],
-                // },
                 billing_address_collection: "required",
                 shipping_address_collection: {
                     allowed_countries: ["US", "CA"],
                 },
-                shipping_options: [
-                    {
-                        shipping_rate_data: {
-                            type: "fixed_amount",
-                            fixed_amount: {
-                                amount: 0,
-                                currency: "usd",
-                            },
-                            display_name: "Standard Shipping",
-                        },
-                    },
-                ],
+                shipping_options: shippingOptions,
                 metadata: {
                     userId,
                     shippingName: shippingInfo.name,
@@ -82,6 +140,13 @@ export class StripeService {
                     shippingState: shippingInfo.state,
                     shippingZip: shippingInfo.zip,
                     shippingCountry: shippingInfo.country,
+                    userShippingCredit: user.shippingCredit || 0,
+                    userTier: user.tier,
+                    calculatedShipping: calculatedShipping.toString(),
+                    frontendShippingAmount: shippingAmount.toString(),
+                    frontendSubtotal: subtotal.toString(),
+                    frontendTotal: total.toString(),
+                    storeCreditUsed: storeCreditUsed.toString(), // NEW: Track store credit used
                     ...metadata,
                     orderSummary: JSON.stringify(orderSummary),
                 },
@@ -89,12 +154,13 @@ export class StripeService {
                     enabled: true,
                 },
             });
-            const checkoutSession = await prisma.checkoutSession.create({
+            const checkoutSession = await prisma_1.prisma.checkoutSession.create({
                 data: {
                     id: session.id,
                     userId,
                     stripeSessionId: session.id,
                     paymentStatus: "PENDING",
+                    storeCreditUsed, // NEW: Store in checkout session
                 },
             });
             return {
@@ -102,13 +168,31 @@ export class StripeService {
                 url: session.url,
                 checkoutSession,
                 orderSummary,
+                shippingCost: calculatedShipping,
+                storeCreditUsed, // Return for frontend
             };
         }
         catch (error) {
+            // Restore store credit if failed
+            if (storeCreditUsed > 0 && userId) {
+                try {
+                    await prisma_1.prisma.user.update({
+                        where: { id: userId },
+                        data: {
+                            storeCredit: {
+                                increment: storeCreditUsed,
+                            },
+                        },
+                    });
+                }
+                catch (restoreError) {
+                    console.error("Failed to restore store credit:", restoreError);
+                }
+            }
             throw new Error(`Failed to create checkout session: ${error.message}`);
         }
     }
-    // Process webhook events (called by webhook controller)
+    // Process webhook events
     async processWebhookEvent(event) {
         try {
             switch (event.type) {
@@ -124,6 +208,12 @@ export class StripeService {
                 case "checkout.session.async_payment_failed":
                     await this.handleAsyncPaymentFailed(event.data.object);
                     break;
+                // case "payment_intent.succeeded":
+                //     // Update order status if needed
+                //     break;
+                // case "payment_intent.payment_failed":
+                //     // Update order status to FAILED
+                //     break;
             }
         }
         catch (error) {
@@ -136,7 +226,13 @@ export class StripeService {
             throw new Error("No userId in session metadata");
         }
         try {
-            // Get shipping from metadata (individual fields, not JSON)
+            const user = await prisma_1.prisma.user.findUnique({
+                where: { id: userId },
+            });
+            if (!user) {
+                throw new Error("User not found");
+            }
+            // Get shipping from metadata
             const shippingInfo = {
                 name: session.metadata?.shippingName || "",
                 email: session.metadata?.shippingEmail || "",
@@ -147,8 +243,36 @@ export class StripeService {
                 zip: session.metadata?.shippingZip || "",
                 country: session.metadata?.shippingCountry || "US",
             };
+            // Parse data from metadata
+            const shippingCost = parseFloat(session.metadata?.calculatedShipping || "0");
+            const userShippingCredit = parseFloat(session.metadata?.userShippingCredit || "0");
+            const userTier = session.metadata?.userTier || "Member";
+            const storeCreditUsed = parseFloat(session.metadata?.storeCreditUsed || "0"); // NEW
+            // Update user shipping credit if they used it
+            if (userTier === "Member" && userShippingCredit > 0 && shippingCost === 0) {
+                const creditUsed = Math.min(userShippingCredit, 6.95);
+                await prisma_1.prisma.user.update({
+                    where: { id: userId },
+                    data: {
+                        shippingCredit: {
+                            decrement: creditUsed,
+                        },
+                    },
+                });
+            }
+            else if (userTier === "Member" && userShippingCredit > 0 && shippingCost > 0) {
+                const creditUsed = 6.95 - shippingCost;
+                await prisma_1.prisma.user.update({
+                    where: { id: userId },
+                    data: {
+                        shippingCredit: {
+                            decrement: creditUsed,
+                        },
+                    },
+                });
+            }
             // Update checkout session
-            await prisma.checkoutSession.update({
+            await prisma_1.prisma.checkoutSession.update({
                 where: { stripeSessionId: session.id },
                 data: {
                     paymentStatus: "PAID",
@@ -156,40 +280,103 @@ export class StripeService {
                 },
             });
             // Create order WITH shipping info
-            const order = await this.createOrderFromSession(session, userId, shippingInfo);
+            const order = await this.createOrderFromSession(session, userId, shippingInfo, shippingCost, storeCreditUsed); // UPDATED
+            // Get order items for email
+            const orderItems = await prisma_1.prisma.orderItem.findMany({
+                where: { orderId: order.id },
+                include: { product: true },
+            });
+            // Prepare email data based on your schema
+            const emailData = {
+                id: order.id,
+                user: {
+                    name: user.name,
+                },
+                shippingInfo: {
+                    name: order.name,
+                    address: order.address,
+                    city: order.city,
+                    state: order.state,
+                    zip: order.zip,
+                    country: order.country,
+                },
+                pricing: {
+                    subtotal: order.subtotal,
+                    shipping: order.shipping,
+                    creditApplied: order.creditApplied,
+                    total: order.total,
+                },
+                items: orderItems.map((item) => ({
+                    name: item.product?.name || "Product",
+                    quantity: item.quantity,
+                    price: item.unitPrice,
+                })),
+                createdAt: order.createdAt.toISOString(),
+            };
+            // Send confirmation email (non-blocking)
+            (0, orderEmailTemplate_1.sendOrderConfirmationEmail)(user.email, emailData).catch((error) => {
+                console.error("❌ Email sending failed (non-critical):", error);
+            });
             // Link checkout session to order
-            await prisma.checkoutSession.update({
+            await prisma_1.prisma.checkoutSession.update({
                 where: { stripeSessionId: session.id },
                 data: { orderId: order.id },
             });
             // Process commissions
             await this.processCommissions(order);
-            // Create ShipStation order (with try-catch so it doesn't break)
+            // Create ShipStation order
             try {
-                await shipStationService.createOrder(order.id);
+                await shipstation_service_1.shipStationService.createOrder(order.id);
             }
             catch (shipstationError) {
                 console.error("ShipStation error (non-fatal):", shipstationError);
-                // Don't throw - let order be created even if ShipStation fails
             }
         }
         catch (error) {
             console.error("Error handling checkout session completed:", error);
+            // Restore store credit if order creation fails
+            const storeCreditUsed = parseFloat(session.metadata?.storeCreditUsed || "0");
+            if (storeCreditUsed > 0 && userId) {
+                try {
+                    await prisma_1.prisma.user.update({
+                        where: { id: userId },
+                        data: {
+                            storeCredit: {
+                                increment: storeCreditUsed,
+                            },
+                        },
+                    });
+                }
+                catch (restoreError) {
+                    console.error("Failed to restore store credit:", restoreError);
+                }
+            }
             throw error;
         }
     }
-    async createOrderFromSession(session, userId, shippingInfo) {
+    async createOrderFromSession(session, userId, shippingInfo, shippingCost, storeCreditUsed) {
         try {
             const sessionDetails = await stripe.checkout.sessions.retrieve(session.id, {
-                expand: ["line_items.data.price.product"],
+                expand: ["line_items.data.price.product", "payment_intent"],
             });
             const lineItems = sessionDetails.line_items?.data || [];
-            // Use shippingInfo from metadata (your form)
-            const order = await prisma.order.create({
+            let paymentIntentId;
+            if (typeof sessionDetails.payment_intent === "string") {
+                paymentIntentId = sessionDetails.payment_intent;
+            }
+            else if (sessionDetails.payment_intent && typeof sessionDetails.payment_intent === "object") {
+                paymentIntentId = sessionDetails.payment_intent.id;
+            }
+            else {
+                // If no payment intent, use a placeholder
+                paymentIntentId = `no-pi-${Date.now()}`;
+            }
+            // Create order
+            const order = await prisma_1.prisma.order.create({
                 data: {
                     id: `ord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                    paymentIntentId: paymentIntentId,
                     userId,
-                    // Use shippingInfo from your form
                     name: shippingInfo.name,
                     email: shippingInfo.email,
                     phone: shippingInfo.phone,
@@ -198,13 +385,12 @@ export class StripeService {
                     state: shippingInfo.state,
                     zip: shippingInfo.zip,
                     country: shippingInfo.country,
-                    // Calculate prices
                     originalPrice: session.amount_subtotal ? session.amount_subtotal / 100 : 0,
-                    discountAmount: 0, // You need to calculate this
+                    discountAmount: 0,
                     discountPercentage: 0,
                     subtotal: session.amount_subtotal ? session.amount_subtotal / 100 : 0,
-                    shipping: session.shipping_cost?.amount_total ? session.shipping_cost.amount_total / 100 : 0,
-                    creditApplied: 0, // Calculate from metadata
+                    shipping: shippingCost,
+                    creditApplied: storeCreditUsed, // NEW: Store credit applied
                     total: session.amount_total ? session.amount_total / 100 : 0,
                     status: "PAID",
                     commissionAmount: 0,
@@ -216,7 +402,7 @@ export class StripeService {
                 const productId = this.extractProductIdFromLineItem(item);
                 if (productId > 0) {
                     // Fetch product to get price from sizes
-                    const product = await prisma.product.findUnique({
+                    const product = await prisma_1.prisma.product.findUnique({
                         where: { id: productId },
                     });
                     let unitPrice = 0;
@@ -226,7 +412,7 @@ export class StripeService {
                             unitPrice = sizes[0]?.price || 0;
                         }
                     }
-                    await prisma.orderItem.create({
+                    await prisma_1.prisma.orderItem.create({
                         data: {
                             id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
                             orderId: order.id,
@@ -277,7 +463,8 @@ export class StripeService {
             console.log("=== PROCESSING COMMISSIONS START ===");
             console.log("Order ID:", order.id);
             console.log("Order Subtotal:", order.subtotal);
-            const user = await prisma.user.findUnique({
+            console.log("Store Credit Used:", order.creditApplied); // NEW: Log store credit
+            const user = await prisma_1.prisma.user.findUnique({
                 where: { id: order.userId },
                 include: { referrer: true },
             });
@@ -285,15 +472,12 @@ export class StripeService {
             console.log("User isReferralValid BEFORE:", user?.isReferralValid);
             console.log("User referrer:", user?.referrer?.id);
             if (user?.referrer) {
-                // Check if this is the FIRST purchase for this user
                 const isFirstPurchase = !user.isReferralValid;
                 if (isFirstPurchase) {
                     console.log("🎯 FIRST PURCHASE - Validating referral");
-                    // Get current count and tier
                     const currentCount = user.referrer.referralCount;
                     const currentTier = user.referrer.tier;
                     const newCount = currentCount + 1;
-                    // Check if tier should change
                     let newTier = currentTier;
                     if (newCount >= 10 && currentTier !== "Founder") {
                         newTier = "Founder";
@@ -301,17 +485,15 @@ export class StripeService {
                     else if (newCount >= 3 && currentTier === "Member") {
                         newTier = "VIP";
                     }
-                    // Mark referral valid
-                    await prisma.user.update({
+                    await prisma_1.prisma.user.update({
                         where: { id: user.id },
                         data: { isReferralValid: true },
                     });
-                    // Update referrer
                     const updateData = { referralCount: { increment: 1 } };
                     if (newTier !== currentTier) {
                         updateData.tier = newTier;
                     }
-                    await prisma.user.update({
+                    await prisma_1.prisma.user.update({
                         where: { id: user.referrer.id },
                         data: updateData,
                     });
@@ -329,17 +511,17 @@ export class StripeService {
                 if (commissionRate > 0) {
                     const commissionAmount = order.subtotal * commissionRate;
                     console.log("💰 Commission Amount:", commissionAmount);
-                    // Give commission to referrer
-                    await prisma.user.update({
+                    await prisma_1.prisma.user.update({
                         where: { id: user.referrer.id },
                         data: {
-                            storeCredit: { increment: commissionAmount },
+                            storeCredit: {
+                                increment: parseFloat(commissionAmount.toFixed(2)),
+                            },
                         },
                     });
                     console.log("✅ Commission added to referrer's store credit");
-                    // Create commission record
                     const commissionId = `com_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                    await prisma.commission.create({
+                    await prisma_1.prisma.commission.create({
                         data: {
                             id: commissionId,
                             orderId: order.id,
@@ -350,8 +532,7 @@ export class StripeService {
                         },
                     });
                     console.log("✅ Created commission record:", commissionId);
-                    // Update order with commission
-                    await prisma.order.update({
+                    await prisma_1.prisma.order.update({
                         where: { id: order.id },
                         data: { commissionAmount },
                     });
@@ -368,30 +549,26 @@ export class StripeService {
         }
         catch (error) {
             console.error("❌ Error processing commissions:", error);
-            if (error instanceof Error) {
-                console.error("Error message:", error.message);
-            }
         }
     }
-    async updateUserStoreCredit(userId, creditUsed) {
-        try {
-            await prisma.user.update({
-                where: { id: userId },
-                data: {
-                    storeCredit: {
-                        decrement: creditUsed,
-                    },
-                },
-            });
-        }
-        catch (error) {
-            console.error("Error updating user store credit:", error);
-        }
-    }
+    // Restore store credit on cancel/expire
     async handleCheckoutSessionExpired(session) {
         try {
-            await prisma.checkoutSession.update({
-                where: { id: session.id },
+            const userId = session.metadata?.userId;
+            const storeCreditUsed = parseFloat(session.metadata?.storeCreditUsed || "0");
+            // Restore store credit
+            if (storeCreditUsed > 0 && userId) {
+                await prisma_1.prisma.user.update({
+                    where: { id: userId },
+                    data: {
+                        storeCredit: {
+                            increment: storeCreditUsed,
+                        },
+                    },
+                });
+            }
+            await prisma_1.prisma.checkoutSession.update({
+                where: { stripeSessionId: session.id },
                 data: {
                     paymentStatus: "FAILED",
                     updatedAt: new Date(),
@@ -402,22 +579,45 @@ export class StripeService {
             console.error("Error handling expired session:", error);
         }
     }
-    async handleAsyncPaymentSucceeded(session) {
-        await this.handleCheckoutSessionCompleted(session);
-    }
+    // Restore store credit on payment failure
     async handleAsyncPaymentFailed(session) {
         try {
-            await prisma.checkoutSession.update({
-                where: { id: session.id },
+            const userId = session.metadata?.userId;
+            const storeCreditUsed = parseFloat(session.metadata?.storeCreditUsed || "0");
+            // Restore store credit
+            if (storeCreditUsed > 0 && userId) {
+                await prisma_1.prisma.user.update({
+                    where: { id: userId },
+                    data: {
+                        storeCredit: {
+                            increment: storeCreditUsed,
+                        },
+                    },
+                });
+            }
+            await prisma_1.prisma.checkoutSession.update({
+                where: { stripeSessionId: session.id },
                 data: {
                     paymentStatus: "FAILED",
                     updatedAt: new Date(),
                 },
             });
+            const checkoutSession = await prisma_1.prisma.checkoutSession.findUnique({
+                where: { stripeSessionId: session.id },
+            });
+            if (checkoutSession?.orderId) {
+                await prisma_1.prisma.order.update({
+                    where: { id: checkoutSession.orderId },
+                    data: { status: "FAILED" },
+                });
+            }
         }
         catch (error) {
             console.error("Error handling async payment failed:", error);
         }
+    }
+    async handleAsyncPaymentSucceeded(session) {
+        await this.handleCheckoutSessionCompleted(session);
     }
     async createPaymentIntent(amount, metadata = {}) {
         try {
@@ -435,18 +635,71 @@ export class StripeService {
             throw new Error(`Failed to create payment intent: ${error.message}`);
         }
     }
-    async createRefund(paymentIntentId, amount) {
+    async createRefund(orderId, amount) {
         try {
-            // Prepare the refund parameters
+            // Find order by orderId
+            const order = await prisma_1.prisma.order.findUnique({
+                where: { id: orderId },
+                include: {
+                    user: true,
+                    items: {
+                        include: {
+                            product: true,
+                        },
+                    },
+                },
+            });
+            if (!order) {
+                throw new Error("Order not found");
+            }
             const refundParams = {
-                payment_intent: paymentIntentId,
+                payment_intent: order.paymentIntentId,
             };
-            // Only add amount if it's provided
             if (amount !== undefined) {
                 refundParams.amount = Math.round(amount * 100);
             }
             const refund = await stripe.refunds.create(refundParams);
-            return refund;
+            // Update order status
+            await prisma_1.prisma.order.update({
+                where: { id: orderId },
+                // data: { status: "CANCELLED" },
+                data: { status: "REFUNDED" },
+            });
+            // Restore store credit if used
+            if (order.creditApplied > 0) {
+                await prisma_1.prisma.user.update({
+                    where: { id: order.userId },
+                    data: {
+                        storeCredit: {
+                            increment: order.creditApplied,
+                        },
+                    },
+                });
+            }
+            const emailData = {
+                id: order.id,
+                user: {
+                    name: order.user?.name || order.name,
+                },
+                items: order.items.map((item) => ({
+                    name: item.product?.name || "Product",
+                    quantity: item.quantity,
+                })),
+                total: amount || order.total, // Use refund amount if partial
+                // NO refundReason parameter since it doesn't exist
+            };
+            // Get email from user or order
+            const email = order.user?.email || order.email;
+            if (email) {
+                (0, orderEmailTemplate_1.sendOrderRefundedEmail)(email, emailData).catch((error) => {
+                    console.error("❌ Refund email failed:", error);
+                });
+            }
+            return {
+                stripeRefund: refund,
+                orderId: order.id,
+                storeCreditRestored: order.creditApplied,
+            };
         }
         catch (error) {
             throw new Error(`Failed to create refund: ${error.message}`);
@@ -471,5 +724,6 @@ export class StripeService {
         }
     }
 }
-export const stripeService = new StripeService();
+exports.StripeService = StripeService;
+exports.stripeService = new StripeService();
 //# sourceMappingURL=payment.service.js.map

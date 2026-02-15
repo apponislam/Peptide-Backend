@@ -1,5 +1,11 @@
-import { prisma } from "../../../lib/prisma";
-import ApiError from "../../../errors/ApiError";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.referralServices = void 0;
+const prisma_1 = require("../../../lib/prisma");
+const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
 // Calculate tier based on referral count
 const getTierData = (referralCount) => {
     if (referralCount >= 10) {
@@ -13,13 +19,13 @@ const getTierData = (referralCount) => {
 // Get referral stats for a user
 const getReferralStats = async (userId) => {
     try {
-        const user = await prisma.user.findUnique({
+        const user = await prisma_1.prisma.user.findUnique({
             where: { id: userId },
         });
         if (!user) {
-            throw new ApiError(404, "User not found");
+            throw new ApiError_1.default(404, "User not found");
         }
-        const referrals = await prisma.user.findMany({
+        const referrals = await prisma_1.prisma.user.findMany({
             where: { referrerId: userId },
             select: {
                 id: true,
@@ -29,7 +35,7 @@ const getReferralStats = async (userId) => {
             },
             orderBy: { createdAt: "desc" },
         });
-        const commissions = await prisma.commission.findMany({
+        const commissions = await prisma_1.prisma.commission.findMany({
             where: { referrerId: userId },
             orderBy: { createdAt: "desc" },
         });
@@ -45,13 +51,13 @@ const getReferralStats = async (userId) => {
         };
     }
     catch (error) {
-        if (error instanceof ApiError) {
+        if (error instanceof ApiError_1.default) {
             throw error;
         }
-        throw new ApiError(500, "Failed to fetch referral stats");
+        throw new ApiError_1.default(500, "Failed to fetch referral stats");
     }
 };
-export const referralServices = {
+exports.referralServices = {
     getReferralStats,
     getTierData,
 };

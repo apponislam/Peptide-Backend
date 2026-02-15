@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const handleCastError = (err) => {
     const errorSources = [];
     let statusCode = 400;
@@ -47,5 +49,5 @@ const handleCastError = (err) => {
         errorSources,
     };
 };
-export default handleCastError;
+exports.default = handleCastError;
 //# sourceMappingURL=handleCastError.js.map

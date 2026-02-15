@@ -49,6 +49,8 @@ export declare const productServices: {
         details: string;
         references: import("@prisma/client/runtime/client").JsonValue;
         coa: import("@prisma/client/runtime/client").JsonValue | null;
+        image: string | null;
+        inStock: boolean;
         isDeleted: boolean;
     }>;
     getAllProducts: (options?: GetAllProductsOptions) => Promise<{
@@ -63,6 +65,8 @@ export declare const productServices: {
             details: string;
             references: import("@prisma/client/runtime/client").JsonValue;
             coa: import("@prisma/client/runtime/client").JsonValue | null;
+            image: string | null;
+            inStock: boolean;
             isDeleted: boolean;
         }[];
         meta: {
@@ -83,6 +87,8 @@ export declare const productServices: {
         details: string;
         references: import("@prisma/client/runtime/client").JsonValue;
         coa: import("@prisma/client/runtime/client").JsonValue | null;
+        image: string | null;
+        inStock: boolean;
         isDeleted: boolean;
     }>;
     updateProduct: (id: number, data: UpdateProductData) => Promise<{
@@ -96,6 +102,8 @@ export declare const productServices: {
         details: string;
         references: import("@prisma/client/runtime/client").JsonValue;
         coa: import("@prisma/client/runtime/client").JsonValue | null;
+        image: string | null;
+        inStock: boolean;
         isDeleted: boolean;
     }>;
     deleteProduct: (id: number) => Promise<{
@@ -109,6 +117,8 @@ export declare const productServices: {
         details: string;
         references: import("@prisma/client/runtime/client").JsonValue;
         coa: import("@prisma/client/runtime/client").JsonValue | null;
+        image: string | null;
+        inStock: boolean;
         isDeleted: boolean;
     }>;
     getDeletedProducts: () => Promise<{
@@ -122,6 +132,8 @@ export declare const productServices: {
         details: string;
         references: import("@prisma/client/runtime/client").JsonValue;
         coa: import("@prisma/client/runtime/client").JsonValue | null;
+        image: string | null;
+        inStock: boolean;
         isDeleted: boolean;
     }[]>;
     restoreProduct: (id: number) => Promise<{
@@ -135,6 +147,8 @@ export declare const productServices: {
         details: string;
         references: import("@prisma/client/runtime/client").JsonValue;
         coa: import("@prisma/client/runtime/client").JsonValue | null;
+        image: string | null;
+        inStock: boolean;
         isDeleted: boolean;
     }>;
 };

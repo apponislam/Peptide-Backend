@@ -11,9 +11,14 @@ export declare const UserTier: {
 export type UserTier = (typeof UserTier)[keyof typeof UserTier];
 export declare const OrderStatus: {
     readonly PENDING: "PENDING";
-    readonly PAID: "PAID";
-    readonly SHIPPED: "SHIPPED";
+    readonly FAILED: "FAILED";
     readonly CANCELLED: "CANCELLED";
+    readonly PAID: "PAID";
+    readonly PROCESSING: "PROCESSING";
+    readonly SHIPPED: "SHIPPED";
+    readonly DELIVERED: "DELIVERED";
+    readonly RETURNED: "RETURNED";
+    readonly REFUNDED: "REFUNDED";
 };
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 export declare const StripePaymentStatus: {

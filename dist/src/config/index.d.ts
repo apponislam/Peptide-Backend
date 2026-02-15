@@ -15,6 +15,7 @@ declare const _default: {
     admin_email: string | undefined;
     admin_password: string | undefined;
     resend_api_key: string | undefined;
+    resend_email: string | undefined;
     shipstation_api_key: string | undefined;
     shipstation_api_secret: string | undefined;
 };

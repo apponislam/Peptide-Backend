@@ -1,5 +1,7 @@
+"use strict";
 // import { TErrorSources, TGenericErrorResponse } from "../interfaces/error";
 // // import { Prisma } from "../../generated/prisma/client";
+Object.defineProperty(exports, "__esModule", { value: true });
 // const handlePrismaError = (err: any): TGenericErrorResponse => {
 //     const errorSources: TErrorSources = [];
 //     let statusCode = 400;
@@ -45,13 +47,13 @@
 //     };
 // };
 // export default handlePrismaError;
-import { Prisma } from "../generated/prisma/client";
+const client_1 = require("../generated/prisma/client");
 const handlePrismaError = (err) => {
     const errorSources = [];
     let statusCode = 400;
     let message = "Database error";
     // Handle PrismaClientValidationError (validation errors)
-    if (err instanceof Prisma.PrismaClientValidationError) {
+    if (err instanceof client_1.Prisma.PrismaClientValidationError) {
         statusCode = 400;
         message = "Validation error";
         const errorMessage = err.message;
@@ -141,5 +143,5 @@ const handlePrismaError = (err) => {
         errorSources,
     };
 };
-export default handlePrismaError;
+exports.default = handlePrismaError;
 //# sourceMappingURL=handlePrismaError.js.map

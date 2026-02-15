@@ -1,14 +1,16 @@
-// import { Request, Response } from "express";
-// import catchAsync from "../../../utils/catchAsync";
-// import { productServices } from "./product.services";
-// import sendResponse from "../../../utils/sendResponse.";
-import { productServices } from "./product.services";
-import catchAsync from "../../../utils/catchAsync";
-import sendResponse from "../../../utils/sendResponse.";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.productControllers = void 0;
+const product_services_1 = require("./product.services");
+const catchAsync_1 = __importDefault(require("../../../utils/catchAsync"));
+const sendResponse_1 = __importDefault(require("../../../utils/sendResponse."));
 // Create product
-const createProduct = catchAsync(async (req, res) => {
-    const product = await productServices.createProduct(req.body);
-    sendResponse(res, {
+const createProduct = (0, catchAsync_1.default)(async (req, res) => {
+    const product = await product_services_1.productServices.createProduct(req.body);
+    (0, sendResponse_1.default)(res, {
         statusCode: 201,
         success: true,
         message: "Product created successfully",
@@ -16,20 +18,20 @@ const createProduct = catchAsync(async (req, res) => {
     });
 });
 // Get all products
-const getAllProducts = catchAsync(async (req, res) => {
+const getAllProducts = (0, catchAsync_1.default)(async (req, res) => {
     // Extract query parameters
     const { search = "", page = 1, limit = 12, sortBy = "createdAt", sortOrder = "desc" } = req.query;
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
     const skip = (pageNum - 1) * limitNum;
-    const result = await productServices.getAllProducts({
+    const result = await product_services_1.productServices.getAllProducts({
         search: search,
         skip,
         take: limitNum,
         sortBy: sortBy,
         sortOrder: sortOrder,
     });
-    sendResponse(res, {
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Products retrieved successfully",
@@ -38,10 +40,10 @@ const getAllProducts = catchAsync(async (req, res) => {
     });
 });
 // Get single product
-const getSingleProduct = catchAsync(async (req, res) => {
+const getSingleProduct = (0, catchAsync_1.default)(async (req, res) => {
     const id = parseInt(req.params.id);
-    const product = await productServices.getSingleProduct(id);
-    sendResponse(res, {
+    const product = await product_services_1.productServices.getSingleProduct(id);
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Product retrieved successfully",
@@ -49,10 +51,10 @@ const getSingleProduct = catchAsync(async (req, res) => {
     });
 });
 // Update product
-const updateProduct = catchAsync(async (req, res) => {
+const updateProduct = (0, catchAsync_1.default)(async (req, res) => {
     const id = parseInt(req.params.id);
-    const product = await productServices.updateProduct(id, req.body);
-    sendResponse(res, {
+    const product = await product_services_1.productServices.updateProduct(id, req.body);
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Product updated successfully",
@@ -60,10 +62,10 @@ const updateProduct = catchAsync(async (req, res) => {
     });
 });
 // Delete product
-const deleteProduct = catchAsync(async (req, res) => {
+const deleteProduct = (0, catchAsync_1.default)(async (req, res) => {
     const id = parseInt(req.params.id);
-    const product = await productServices.deleteProduct(id);
-    sendResponse(res, {
+    const product = await product_services_1.productServices.deleteProduct(id);
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Product deleted successfully",
@@ -71,9 +73,9 @@ const deleteProduct = catchAsync(async (req, res) => {
     });
 });
 // Get deleted products (admin only)
-const getDeletedProducts = catchAsync(async (req, res) => {
-    const products = await productServices.getDeletedProducts();
-    sendResponse(res, {
+const getDeletedProducts = (0, catchAsync_1.default)(async (req, res) => {
+    const products = await product_services_1.productServices.getDeletedProducts();
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Deleted products retrieved successfully",
@@ -81,17 +83,17 @@ const getDeletedProducts = catchAsync(async (req, res) => {
     });
 });
 // Restore product
-const restoreProduct = catchAsync(async (req, res) => {
+const restoreProduct = (0, catchAsync_1.default)(async (req, res) => {
     const id = parseInt(req.params.id);
-    const product = await productServices.restoreProduct(id);
-    sendResponse(res, {
+    const product = await product_services_1.productServices.restoreProduct(id);
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Product restored successfully",
         data: product,
     });
 });
-export const productControllers = {
+exports.productControllers = {
     createProduct,
     getAllProducts,
     getSingleProduct,

@@ -10,6 +10,7 @@ export declare function createAdmin(): Promise<{
     deletedAt: Date | null;
     storeCredit: number;
     referralCount: number;
+    shippingCredit: number;
     isReferralValid: boolean;
     referrerId: string | null;
     createdAt: Date;

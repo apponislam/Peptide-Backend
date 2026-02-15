@@ -1,20 +1,26 @@
-import bcrypt from "bcryptjs";
-import config from "../../config";
-import { prisma } from "../../lib/prisma";
-export async function createAdmin() {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createAdmin = createAdmin;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const config_1 = __importDefault(require("../../config"));
+const prisma_1 = require("../../lib/prisma");
+async function createAdmin() {
     try {
-        const adminEmail = config.admin_email || "master@peptide.club";
-        const existingAdmin = await prisma.user.findUnique({
+        const adminEmail = config_1.default.admin_email || "master@peptide.club";
+        const existingAdmin = await prisma_1.prisma.user.findUnique({
             where: { email: adminEmail },
         });
         if (existingAdmin) {
             console.log("✅ Admin already exists");
             return existingAdmin;
         }
-        const hashedPassword = await bcrypt.hash(config.admin_password || "master123", Number(config.bcrypt_salt_rounds));
-        const masterUser = await prisma.user.create({
+        const hashedPassword = await bcryptjs_1.default.hash(config_1.default.admin_password || "master123", Number(config_1.default.bcrypt_salt_rounds));
+        const masterUser = await prisma_1.prisma.user.create({
             data: {
-                name: config.admin_name || "Jacob Vlance",
+                name: config_1.default.admin_name || "Jacob Vlance",
                 email: adminEmail,
                 password: hashedPassword,
                 referralCode: "JAKE",

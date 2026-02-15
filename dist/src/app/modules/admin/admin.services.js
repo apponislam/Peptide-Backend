@@ -1,17 +1,23 @@
-import { prisma } from "../../../lib/prisma";
-import ApiError from "../../../errors/ApiError";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.adminServices = void 0;
+const prisma_1 = require("../../../lib/prisma");
+const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
 // Get dashboard stats
 const getDashboardStats = async () => {
-    const totalOrders = await prisma.order.count();
-    const totalRevenue = await prisma.order.aggregate({
+    const totalOrders = await prisma_1.prisma.order.count();
+    const totalRevenue = await prisma_1.prisma.order.aggregate({
         _sum: { total: true },
     });
-    const totalCustomers = await prisma.user.count({
+    const totalCustomers = await prisma_1.prisma.user.count({
         where: {
             isActive: true,
         },
     });
-    const totalProducts = await prisma.product.count({
+    const totalProducts = await prisma_1.prisma.product.count({
         where: {
             isDeleted: false,
         },
@@ -82,7 +88,7 @@ const getAllOrders = async (params) => {
     }
     // Get orders with pagination
     const [orders, total] = await Promise.all([
-        prisma.order.findMany({
+        prisma_1.prisma.order.findMany({
             where,
             include: {
                 user: {
@@ -119,7 +125,7 @@ const getAllOrders = async (params) => {
             skip,
             take: limit,
         }),
-        prisma.order.count({ where }),
+        prisma_1.prisma.order.count({ where }),
     ]);
     const totalPages = Math.ceil(total / limit);
     return {
@@ -132,20 +138,80 @@ const getAllOrders = async (params) => {
         },
     };
 };
+const getOrderById = async (orderId) => {
+    const order = await prisma_1.prisma.order.findUnique({
+        where: { id: orderId },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    tier: true,
+                    storeCredit: true,
+                    shippingCredit: true,
+                },
+            },
+            items: {
+                include: {
+                    product: {
+                        select: {
+                            id: true,
+                            name: true,
+                            sizes: true,
+                        },
+                    },
+                },
+            },
+            commissions: {
+                include: {
+                    referrer: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            tier: true,
+                        },
+                    },
+                    buyer: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                        },
+                    },
+                },
+            },
+            checkoutSessions: {
+                select: {
+                    id: true,
+                    stripeSessionId: true,
+                    paymentStatus: true,
+                    storeCreditUsed: true,
+                    createdAt: true,
+                },
+            },
+        },
+    });
+    if (!order) {
+        throw new ApiError_1.default(404, "Order not found");
+    }
+    return order;
+};
 // Update order status
-// const updateOrderStatus = async (id: number, data: { status: string }) => {
-//     const existingOrder = await prisma.order.findUnique({
-//         where: { id },
-//     });
-//     if (!existingOrder) {
-//         throw new ApiError(404, "Order not found");
-//     }
-//     const order = await prisma.order.update({
-//         where: { id },
-//         data: { status: data.status },
-//     });
-//     return order;
-// };
+const updateOrderStatus = async (id, data) => {
+    const existingOrder = await prisma_1.prisma.order.findUnique({
+        where: { id },
+    });
+    if (!existingOrder) {
+        throw new ApiError_1.default(404, "Order not found");
+    }
+    const order = await prisma_1.prisma.order.update({
+        where: { id },
+        data: { status: data.status },
+    });
+    return order;
+};
 // Get all users
 const getAllUsers = async (params) => {
     const page = params.page || 1;
@@ -161,17 +227,26 @@ const getAllUsers = async (params) => {
     if (params.tier) {
         where.tier = params.tier;
     }
-    const orderBy = { createdAt: "desc" };
+    // FIX THIS PART - Use a single field for orderBy
+    let orderBy = {};
     if (params.sortBy) {
         const allowedSortFields = ["name", "email", "createdAt", "role", "tier", "referralCount", "storeCredit"];
         if (allowedSortFields.includes(params.sortBy)) {
-            const sortField = params.sortBy;
-            orderBy[sortField] = params.sortOrder || "desc";
+            orderBy = {
+                [params.sortBy]: params.sortOrder || "desc",
+            };
         }
+        else {
+            orderBy = { createdAt: "desc" };
+        }
+    }
+    else {
+        // Default sort
+        orderBy = { createdAt: "desc" };
     }
     // Get users with pagination
     const [users, total] = await Promise.all([
-        prisma.user.findMany({
+        prisma_1.prisma.user.findMany({
             select: {
                 id: true,
                 name: true,
@@ -181,6 +256,7 @@ const getAllUsers = async (params) => {
                 storeCredit: true,
                 referralCount: true,
                 createdAt: true,
+                shippingCredit: true,
                 role: true,
                 orders: {
                     select: {
@@ -196,7 +272,7 @@ const getAllUsers = async (params) => {
             skip,
             take: limit,
         }),
-        prisma.user.count({ where }),
+        prisma_1.prisma.user.count({ where }),
     ]);
     const totalPages = Math.ceil(total / limit);
     return {
@@ -209,17 +285,17 @@ const getAllUsers = async (params) => {
         },
     };
 };
-export default {
+exports.default = {
     getAllUsers,
 };
 const updateUser = async (id, data) => {
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma_1.prisma.user.findUnique({
         where: { id },
     });
     if (!existingUser) {
-        throw new ApiError(404, "User not found");
+        throw new ApiError_1.default(404, "User not found");
     }
-    const user = await prisma.user.update({
+    const user = await prisma_1.prisma.user.update({
         where: { id },
         data: {
             ...(data.storeCredit !== undefined && { storeCredit: data.storeCredit }),
@@ -231,7 +307,7 @@ const updateUser = async (id, data) => {
 };
 const getTopSellingProducts = async (limit = 5) => {
     // Get product sales from order items of paid orders
-    const orderItems = await prisma.orderItem.groupBy({
+    const orderItems = await prisma_1.prisma.orderItem.groupBy({
         by: ["productId"],
         where: {
             order: {
@@ -248,7 +324,7 @@ const getTopSellingProducts = async (limit = 5) => {
             quantity: true,
         },
     });
-    const products = await prisma.product.findMany({
+    const products = await prisma_1.prisma.product.findMany({
         where: {
             id: {
                 in: orderItems.map((item) => item.productId).filter(Boolean),
@@ -272,39 +348,9 @@ const getTopSellingProducts = async (limit = 5) => {
     // Sort by sales and limit
     return productsWithSales.sort((a, b) => b.sales - a.sales).slice(0, limit);
 };
-// Get Referral Performance (simplified)
-// const getReferralPerformance = async () => {
-//     // Get top referrer
-//     const topReferrer = await prisma.user.findFirst({
-//         where: {
-//             referralCount: { gt: 0 },
-//         },
-//         orderBy: {
-//             referralCount: "desc",
-//         },
-//         select: {
-//             name: true,
-//             referralCount: true,
-//         },
-//     });
-//     // Get total commissions
-//     const totalCommissions = await prisma.commission.aggregate({
-//         where: {
-//             status: "PAID",
-//         },
-//         _sum: {
-//             amount: true,
-//         },
-//     });
-//     return {
-//         topReferrer: topReferrer?.name || "No top referrer yet",
-//         referrals: topReferrer?.referralCount || 0,
-//         totalCommissions: totalCommissions._sum.amount || 0,
-//     };
-// };
 const getReferralPerformance = async () => {
     // Get top 3 referrers
-    const topReferrers = await prisma.user.findMany({
+    const topReferrers = await prisma_1.prisma.user.findMany({
         where: {
             referralCount: { gt: 0 },
         },
@@ -320,7 +366,7 @@ const getReferralPerformance = async () => {
     });
     // Get total commissions for EACH referrer from Commission table
     const referralPerformanceArray = await Promise.all(topReferrers.map(async (referrer) => {
-        const commissions = await prisma.commission.aggregate({
+        const commissions = await prisma_1.prisma.commission.aggregate({
             where: {
                 referrerId: referrer.id,
                 status: "PAID",
@@ -337,9 +383,8 @@ const getReferralPerformance = async () => {
     }));
     return referralPerformanceArray;
 };
-// Get single user by ID with full details
 const getUserById = async (id) => {
-    const user = await prisma.user.findUnique({
+    const user = await prisma_1.prisma.user.findUnique({
         where: {
             id,
             isActive: true,
@@ -357,8 +402,8 @@ const getUserById = async (id) => {
             isReferralValid: true,
             referrerId: true,
             createdAt: true,
+            shippingCredit: true,
             updatedAt: true,
-            // Include related data
             referrer: {
                 select: {
                     id: true,
@@ -466,7 +511,7 @@ const getUserById = async (id) => {
         },
     });
     if (!user) {
-        throw new ApiError(404, "User not found");
+        throw new ApiError_1.default(404, "User not found");
     }
     // Calculate user stats
     const totalOrders = user.orders.length;
@@ -477,7 +522,7 @@ const getUserById = async (id) => {
     // Get recent activity (last 30 days)
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    const recentOrders = await prisma.order.count({
+    const recentOrders = await prisma_1.prisma.order.count({
         where: {
             userId: id,
             createdAt: {
@@ -503,9 +548,11 @@ const getUserById = async (id) => {
         },
     };
 };
-export const adminServices = {
+exports.adminServices = {
     getDashboardStats,
     getAllOrders,
+    getOrderById,
+    updateOrderStatus,
     getAllUsers,
     updateUser,
     getTopSellingProducts,

@@ -1,10 +1,17 @@
-import catchAsync from "../../../utils/catchAsync";
-import { adminServices } from "./admin.services";
-import sendResponse from "../../../utils/sendResponse.";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.adminControllers = void 0;
+const catchAsync_1 = __importDefault(require("../../../utils/catchAsync"));
+const admin_services_1 = require("./admin.services");
+const sendResponse_1 = __importDefault(require("../../../utils/sendResponse."));
+const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
 // Get dashboard stats
-const getDashboardStats = catchAsync(async (req, res) => {
-    const stats = await adminServices.getDashboardStats();
-    sendResponse(res, {
+const getDashboardStats = (0, catchAsync_1.default)(async (req, res) => {
+    const stats = await admin_services_1.adminServices.getDashboardStats();
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Dashboard stats retrieved successfully",
@@ -12,9 +19,9 @@ const getDashboardStats = catchAsync(async (req, res) => {
     });
 });
 // Get all orders
-const getAllOrders = catchAsync(async (req, res) => {
+const getAllOrders = (0, catchAsync_1.default)(async (req, res) => {
     const { page = 1, limit = 10, search = "", status, userId, sortBy = "createdAt", sortOrder = "desc", startDate, endDate, minAmount, maxAmount } = req.query;
-    const result = await adminServices.getAllOrders({
+    const result = await admin_services_1.adminServices.getAllOrders({
         page: Number(page),
         limit: Number(limit),
         search: search,
@@ -27,7 +34,7 @@ const getAllOrders = catchAsync(async (req, res) => {
         ...(minAmount && { minAmount: Number(minAmount) }),
         ...(maxAmount && { maxAmount: Number(maxAmount) }),
     });
-    sendResponse(res, {
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Orders retrieved successfully",
@@ -35,38 +42,36 @@ const getAllOrders = catchAsync(async (req, res) => {
         meta: result.meta,
     });
 });
+const getOrder = (0, catchAsync_1.default)(async (req, res) => {
+    const orderId = req.params.id;
+    if (!orderId) {
+        throw new ApiError_1.default(400, "Order ID is required");
+    }
+    const order = await admin_services_1.adminServices.getOrderById(orderId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: "Order retrieved successfully",
+        data: order,
+    });
+});
 // Update order status
-// const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
-//     const id = parseInt(req.params.id as string);
-//     if (isNaN(id)) {
-//         return sendResponse(res, {
-//             statusCode: 400,
-//             success: false,
-//             message: "Invalid order ID",
-//             data: null,
-//         });
-//     }
-//     const order = await adminServices.updateOrderStatus(id, req.body);
-//     sendResponse(res, {
-//         statusCode: 200,
-//         success: true,
-//         message: "Order status updated successfully",
-//         data: order,
-//     });
-// });
-// Get all users
-// const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-//     const users = await adminServices.getAllUsers();
-//     sendResponse(res, {
-//         statusCode: 200,
-//         success: true,
-//         message: "Users retrieved successfully",
-//         data: users,
-//     });
-// });
-const getAllUsers = catchAsync(async (req, res) => {
+const updateOrderStatus = (0, catchAsync_1.default)(async (req, res) => {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    if (!id || typeof id !== "string") {
+        throw new ApiError_1.default(400, "Invalid order ID");
+    }
+    const order = await admin_services_1.adminServices.updateOrderStatus(id, req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: "Order status updated successfully",
+        data: order,
+    });
+});
+const getAllUsers = (0, catchAsync_1.default)(async (req, res) => {
     const { page = 1, limit = 10, search = "", role, tier, sortBy = "createdAt", sortOrder = "desc" } = req.query;
-    const result = await adminServices.getAllUsers({
+    const result = await admin_services_1.adminServices.getAllUsers({
         page: Number(page),
         limit: Number(limit),
         search: search,
@@ -75,7 +80,7 @@ const getAllUsers = catchAsync(async (req, res) => {
         sortBy: sortBy,
         sortOrder: sortOrder,
     });
-    sendResponse(res, {
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Users retrieved successfully",
@@ -84,10 +89,10 @@ const getAllUsers = catchAsync(async (req, res) => {
     });
 });
 // Update user
-const updateUser = catchAsync(async (req, res) => {
+const updateUser = (0, catchAsync_1.default)(async (req, res) => {
     const id = req.params.id;
-    const user = await adminServices.updateUser(id, req.body);
-    sendResponse(res, {
+    const user = await admin_services_1.adminServices.updateUser(id, req.body);
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "User updated successfully",
@@ -95,10 +100,10 @@ const updateUser = catchAsync(async (req, res) => {
     });
 });
 // Get top selling products
-const getTopSellingProducts = catchAsync(async (req, res) => {
+const getTopSellingProducts = (0, catchAsync_1.default)(async (req, res) => {
     const limit = parseInt(req.query.limit) || 5;
-    const products = await adminServices.getTopSellingProducts(limit);
-    sendResponse(res, {
+    const products = await admin_services_1.adminServices.getTopSellingProducts(limit);
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Top selling products retrieved successfully",
@@ -106,36 +111,38 @@ const getTopSellingProducts = catchAsync(async (req, res) => {
     });
 });
 // Get referral performance
-const getReferralPerformance = catchAsync(async (req, res) => {
-    const performance = await adminServices.getReferralPerformance();
-    sendResponse(res, {
+const getReferralPerformance = (0, catchAsync_1.default)(async (req, res) => {
+    const performance = await admin_services_1.adminServices.getReferralPerformance();
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "Referral performance retrieved successfully",
         data: performance,
     });
 });
-const getUserById = catchAsync(async (req, res) => {
+const getUserById = (0, catchAsync_1.default)(async (req, res) => {
     const id = req.params.id;
     if (!id) {
-        return sendResponse(res, {
+        return (0, sendResponse_1.default)(res, {
             statusCode: 400,
             success: false,
             message: "User ID is required",
             data: null,
         });
     }
-    const result = await adminServices.getUserById(id);
-    sendResponse(res, {
+    const result = await admin_services_1.adminServices.getUserById(id);
+    (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "User retrieved successfully",
         data: result,
     });
 });
-export const adminControllers = {
+exports.adminControllers = {
     getDashboardStats,
     getAllOrders,
+    getOrder,
+    updateOrderStatus,
     getAllUsers,
     updateUser,
     getTopSellingProducts,

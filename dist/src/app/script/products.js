@@ -1,4 +1,7 @@
-import { prisma } from "../../lib/prisma";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.seedProducts = seedProducts;
+const prisma_1 = require("../../lib/prisma");
 const PRODUCTS = [
     { name: "Retatrutide", sizes: [{ mg: 10, price: 129 }], desc: "Triple receptor agonist for laboratory research.", details: "Retatrutide (LY3437943) is a synthetic research peptide used in laboratory settings only.", references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/37366315/", title: "Triple-Hormone-Receptor Agonist Retatrutide for Obesity" }] },
     { name: "BPC-157", sizes: [{ mg: 10, price: 65 }], desc: "Pentadecapeptide for tissue research.", details: "BPC-157 is a synthetic peptide composed of 15 amino acids used in laboratory research settings.", references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/40131143/", title: "Safety of Intravenous Infusion of BPC157 in Humans" }] },
@@ -30,17 +33,17 @@ const PRODUCTS = [
     { name: "BAC Water 3mL", sizes: [{ mg: 3, price: 6 }], desc: "Sterile bacteriostatic water for research.", details: "Bacteriostatic Water (3mL) is sterile water containing 0.9% benzyl alcohol used for reconstituting research peptides.", references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/", title: "PubMed Research Database" }] },
     { name: "BAC Water 10mL", sizes: [{ mg: 10, price: 12 }], desc: "Sterile bacteriostatic water for research.", details: "Bacteriostatic Water (10mL) is sterile water containing 0.9% benzyl alcohol used for reconstituting multiple research peptide vials.", references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/", title: "PubMed Research Database" }] },
 ];
-export async function seedProducts() {
+async function seedProducts() {
     try {
         console.log("🔄 Syncing products...");
         // Clear existing products
         // await prisma.product.deleteMany();
-        await prisma.$executeRaw `TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE;`;
+        await prisma_1.prisma.$executeRaw `TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE;`;
         // Create products
         for (const product of PRODUCTS) {
             // Use optional chaining with fallback
             const basePrice = product.sizes[0]?.price || 0;
-            await prisma.product.create({
+            await prisma_1.prisma.product.create({
                 data: {
                     // id: product.id,
                     name: product.name,
@@ -71,5 +74,5 @@ export async function seedProducts() {
 //             await prisma.$disconnect();
 //         });
 // }
-export default seedProducts;
+exports.default = seedProducts;
 //# sourceMappingURL=products.js.map

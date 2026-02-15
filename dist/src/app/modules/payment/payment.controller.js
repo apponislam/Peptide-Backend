@@ -1,21 +1,25 @@
-import { stripeService } from "./payment.service";
-export class PaymentController {
-    // Create checkout session
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PaymentController = void 0;
+const payment_service_1 = require("./payment.service");
+class PaymentController {
     static async createCheckoutSession(req, res) {
         try {
-            const { userId, items, shippingInfo, metadata } = req.body;
+            const { userId, items, shippingInfo, shippingAmount, subtotal, storeCreditUsed, // ADD THIS
+            total, metadata, } = req.body;
             if (!userId || !items || !shippingInfo) {
                 return res.status(400).json({
                     success: false,
                     error: "Missing required fields: userId, items, shippingInfo",
                 });
             }
-            const result = await stripeService.createCheckoutSession(userId, items, shippingInfo, metadata);
+            const result = await payment_service_1.stripeService.createCheckoutSession(userId, items, shippingInfo, shippingAmount, subtotal, storeCreditUsed || 0, total, metadata);
             res.json({
                 success: true,
                 sessionId: result.sessionId,
                 url: result.url,
                 orderSummary: result.orderSummary,
+                storeCreditUsed: result.storeCreditUsed,
             });
         }
         catch (error) {
@@ -36,7 +40,7 @@ export class PaymentController {
                     error: "Valid amount is required",
                 });
             }
-            const result = await stripeService.createPaymentIntent(amount, metadata);
+            const result = await payment_service_1.stripeService.createPaymentIntent(amount, metadata);
             res.json({
                 success: true,
                 clientSecret: result.clientSecret,
@@ -54,17 +58,18 @@ export class PaymentController {
     // Create refund
     static async createRefund(req, res) {
         try {
-            const { paymentIntentId, amount } = req.body;
-            if (!paymentIntentId) {
+            const { orderId, amount } = req.body;
+            if (!orderId) {
                 return res.status(400).json({
                     success: false,
-                    error: "paymentIntentId is required",
+                    error: "orderId is required",
                 });
             }
-            const refund = await stripeService.createRefund(paymentIntentId, amount);
+            // Call service method with orderId directly
+            const result = await payment_service_1.stripeService.createRefund(orderId, amount);
             res.json({
                 success: true,
-                refund,
+                ...result,
             });
         }
         catch (error) {
@@ -85,7 +90,7 @@ export class PaymentController {
                     error: "Invalid session ID",
                 });
             }
-            const session = await stripeService.getSessionStatus(sessionId);
+            const session = await payment_service_1.stripeService.getSessionStatus(sessionId);
             res.json({
                 success: true,
                 session,
@@ -100,4 +105,5 @@ export class PaymentController {
         }
     }
 }
+exports.PaymentController = PaymentController;
 //# sourceMappingURL=payment.controller.js.map

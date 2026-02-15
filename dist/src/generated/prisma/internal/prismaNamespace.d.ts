@@ -46,8 +46,8 @@ export type PrismaVersion = {
     engine: string;
 };
 /**
- * Prisma Client JS version: 7.2.0
- * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
+ * Prisma Client JS version: 7.3.0
+ * Query Engine version: 9d6ad21cbbceab97458517b147a6a09ff43aa735
  */
 export declare const prismaVersion: PrismaVersion;
 /**
@@ -743,6 +743,7 @@ export declare const UserScalarFieldEnum: {
     readonly deletedAt: "deletedAt";
     readonly storeCredit: "storeCredit";
     readonly referralCount: "referralCount";
+    readonly shippingCredit: "shippingCredit";
     readonly isReferralValid: "isReferralValid";
     readonly referrerId: "referrerId";
     readonly createdAt: "createdAt";
@@ -757,6 +758,8 @@ export declare const ProductScalarFieldEnum: {
     readonly details: "details";
     readonly references: "references";
     readonly coa: "coa";
+    readonly image: "image";
+    readonly inStock: "inStock";
     readonly isDeleted: "isDeleted";
     readonly deletedAt: "deletedAt";
     readonly createdAt: "createdAt";
@@ -765,6 +768,7 @@ export declare const ProductScalarFieldEnum: {
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum];
 export declare const OrderScalarFieldEnum: {
     readonly id: "id";
+    readonly paymentIntentId: "paymentIntentId";
     readonly userId: "userId";
     readonly name: "name";
     readonly email: "email";
@@ -806,6 +810,7 @@ export declare const CheckoutSessionScalarFieldEnum: {
     readonly orderId: "orderId";
     readonly stripeSessionId: "stripeSessionId";
     readonly paymentStatus: "paymentStatus";
+    readonly storeCreditUsed: "storeCreditUsed";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };

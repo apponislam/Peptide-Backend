@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
-export declare class ShipStationController {
-    static createOrder(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
-    static getShippingRates(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
-    static createLabel(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
-    static listOrders(req: Request, res: Response): Promise<void>;
-    static updateTracking(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
-    static markAsShipped(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
-    static getCarriers(req: Request, res: Response): Promise<void>;
-    static getWarehouses(req: Request, res: Response): Promise<void>;
-}
+export declare const shipStationController: {
+    createOrder: (req: Request, res: Response, next: import("express").NextFunction) => Promise<void>;
+    getShippingRates: (req: Request, res: Response, next: import("express").NextFunction) => Promise<void>;
+    createLabel: (req: Request, res: Response, next: import("express").NextFunction) => Promise<void>;
+    listOrders: (req: Request, res: Response, next: import("express").NextFunction) => Promise<void>;
+    updateTracking: (req: Request, res: Response, next: import("express").NextFunction) => Promise<void>;
+    markAsShipped: (req: Request, res: Response, next: import("express").NextFunction) => Promise<void>;
+    getCarriers: (req: Request, res: Response, next: import("express").NextFunction) => Promise<void>;
+    getWarehouses: (req: Request, res: Response, next: import("express").NextFunction) => Promise<void>;
+    markAsDelivered: (req: Request, res: Response, next: import("express").NextFunction) => Promise<void>;
+    cancelOrder: (req: Request, res: Response, next: import("express").NextFunction) => Promise<void>;
+};
 //# sourceMappingURL=shipstation.controllers.d.ts.map

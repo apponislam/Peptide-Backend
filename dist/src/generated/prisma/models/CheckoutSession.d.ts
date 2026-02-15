@@ -8,8 +8,16 @@ import type * as Prisma from "../internal/prismaNamespace.js";
 export type CheckoutSessionModel = runtime.Types.Result.DefaultSelection<Prisma.$CheckoutSessionPayload>;
 export type AggregateCheckoutSession = {
     _count: CheckoutSessionCountAggregateOutputType | null;
+    _avg: CheckoutSessionAvgAggregateOutputType | null;
+    _sum: CheckoutSessionSumAggregateOutputType | null;
     _min: CheckoutSessionMinAggregateOutputType | null;
     _max: CheckoutSessionMaxAggregateOutputType | null;
+};
+export type CheckoutSessionAvgAggregateOutputType = {
+    storeCreditUsed: number | null;
+};
+export type CheckoutSessionSumAggregateOutputType = {
+    storeCreditUsed: number | null;
 };
 export type CheckoutSessionMinAggregateOutputType = {
     id: string | null;
@@ -17,6 +25,7 @@ export type CheckoutSessionMinAggregateOutputType = {
     orderId: string | null;
     stripeSessionId: string | null;
     paymentStatus: $Enums.StripePaymentStatus | null;
+    storeCreditUsed: number | null;
     createdAt: Date | null;
     updatedAt: Date | null;
 };
@@ -26,6 +35,7 @@ export type CheckoutSessionMaxAggregateOutputType = {
     orderId: string | null;
     stripeSessionId: string | null;
     paymentStatus: $Enums.StripePaymentStatus | null;
+    storeCreditUsed: number | null;
     createdAt: Date | null;
     updatedAt: Date | null;
 };
@@ -35,9 +45,16 @@ export type CheckoutSessionCountAggregateOutputType = {
     orderId: number;
     stripeSessionId: number;
     paymentStatus: number;
+    storeCreditUsed: number;
     createdAt: number;
     updatedAt: number;
     _all: number;
+};
+export type CheckoutSessionAvgAggregateInputType = {
+    storeCreditUsed?: true;
+};
+export type CheckoutSessionSumAggregateInputType = {
+    storeCreditUsed?: true;
 };
 export type CheckoutSessionMinAggregateInputType = {
     id?: true;
@@ -45,6 +62,7 @@ export type CheckoutSessionMinAggregateInputType = {
     orderId?: true;
     stripeSessionId?: true;
     paymentStatus?: true;
+    storeCreditUsed?: true;
     createdAt?: true;
     updatedAt?: true;
 };
@@ -54,6 +72,7 @@ export type CheckoutSessionMaxAggregateInputType = {
     orderId?: true;
     stripeSessionId?: true;
     paymentStatus?: true;
+    storeCreditUsed?: true;
     createdAt?: true;
     updatedAt?: true;
 };
@@ -63,6 +82,7 @@ export type CheckoutSessionCountAggregateInputType = {
     orderId?: true;
     stripeSessionId?: true;
     paymentStatus?: true;
+    storeCreditUsed?: true;
     createdAt?: true;
     updatedAt?: true;
     _all?: true;
@@ -105,6 +125,18 @@ export type CheckoutSessionAggregateArgs<ExtArgs extends runtime.Types.Extension
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
+     * Select which fields to average
+    **/
+    _avg?: CheckoutSessionAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+    **/
+    _sum?: CheckoutSessionSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
      * Select which fields to find the minimum value
     **/
     _min?: CheckoutSessionMinAggregateInputType;
@@ -126,6 +158,8 @@ export type CheckoutSessionGroupByArgs<ExtArgs extends runtime.Types.Extensions.
     take?: number;
     skip?: number;
     _count?: CheckoutSessionCountAggregateInputType | true;
+    _avg?: CheckoutSessionAvgAggregateInputType;
+    _sum?: CheckoutSessionSumAggregateInputType;
     _min?: CheckoutSessionMinAggregateInputType;
     _max?: CheckoutSessionMaxAggregateInputType;
 };
@@ -135,9 +169,12 @@ export type CheckoutSessionGroupByOutputType = {
     orderId: string | null;
     stripeSessionId: string;
     paymentStatus: $Enums.StripePaymentStatus;
+    storeCreditUsed: number;
     createdAt: Date;
     updatedAt: Date;
     _count: CheckoutSessionCountAggregateOutputType | null;
+    _avg: CheckoutSessionAvgAggregateOutputType | null;
+    _sum: CheckoutSessionSumAggregateOutputType | null;
     _min: CheckoutSessionMinAggregateOutputType | null;
     _max: CheckoutSessionMaxAggregateOutputType | null;
 };
@@ -153,6 +190,7 @@ export type CheckoutSessionWhereInput = {
     orderId?: Prisma.StringNullableFilter<"CheckoutSession"> | string | null;
     stripeSessionId?: Prisma.StringFilter<"CheckoutSession"> | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFilter<"CheckoutSession"> | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFilter<"CheckoutSession"> | number;
     createdAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string;
     user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
@@ -164,6 +202,7 @@ export type CheckoutSessionOrderByWithRelationInput = {
     orderId?: Prisma.SortOrderInput | Prisma.SortOrder;
     stripeSessionId?: Prisma.SortOrder;
     paymentStatus?: Prisma.SortOrder;
+    storeCreditUsed?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
     user?: Prisma.UserOrderByWithRelationInput;
@@ -178,6 +217,7 @@ export type CheckoutSessionWhereUniqueInput = Prisma.AtLeast<{
     userId?: Prisma.StringFilter<"CheckoutSession"> | string;
     orderId?: Prisma.StringNullableFilter<"CheckoutSession"> | string | null;
     paymentStatus?: Prisma.EnumStripePaymentStatusFilter<"CheckoutSession"> | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFilter<"CheckoutSession"> | number;
     createdAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string;
     user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
@@ -189,11 +229,14 @@ export type CheckoutSessionOrderByWithAggregationInput = {
     orderId?: Prisma.SortOrderInput | Prisma.SortOrder;
     stripeSessionId?: Prisma.SortOrder;
     paymentStatus?: Prisma.SortOrder;
+    storeCreditUsed?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
     _count?: Prisma.CheckoutSessionCountOrderByAggregateInput;
+    _avg?: Prisma.CheckoutSessionAvgOrderByAggregateInput;
     _max?: Prisma.CheckoutSessionMaxOrderByAggregateInput;
     _min?: Prisma.CheckoutSessionMinOrderByAggregateInput;
+    _sum?: Prisma.CheckoutSessionSumOrderByAggregateInput;
 };
 export type CheckoutSessionScalarWhereWithAggregatesInput = {
     AND?: Prisma.CheckoutSessionScalarWhereWithAggregatesInput | Prisma.CheckoutSessionScalarWhereWithAggregatesInput[];
@@ -204,6 +247,7 @@ export type CheckoutSessionScalarWhereWithAggregatesInput = {
     orderId?: Prisma.StringNullableWithAggregatesFilter<"CheckoutSession"> | string | null;
     stripeSessionId?: Prisma.StringWithAggregatesFilter<"CheckoutSession"> | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusWithAggregatesFilter<"CheckoutSession"> | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatWithAggregatesFilter<"CheckoutSession"> | number;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"CheckoutSession"> | Date | string;
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CheckoutSession"> | Date | string;
 };
@@ -211,6 +255,7 @@ export type CheckoutSessionCreateInput = {
     id?: string;
     stripeSessionId: string;
     paymentStatus?: $Enums.StripePaymentStatus;
+    storeCreditUsed?: number;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     user: Prisma.UserCreateNestedOneWithoutCheckoutSessionsInput;
@@ -222,6 +267,7 @@ export type CheckoutSessionUncheckedCreateInput = {
     orderId?: string | null;
     stripeSessionId: string;
     paymentStatus?: $Enums.StripePaymentStatus;
+    storeCreditUsed?: number;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
@@ -229,6 +275,7 @@ export type CheckoutSessionUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFieldUpdateOperationsInput | number;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     user?: Prisma.UserUpdateOneRequiredWithoutCheckoutSessionsNestedInput;
@@ -240,6 +287,7 @@ export type CheckoutSessionUncheckedUpdateInput = {
     orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFieldUpdateOperationsInput | number;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -249,6 +297,7 @@ export type CheckoutSessionCreateManyInput = {
     orderId?: string | null;
     stripeSessionId: string;
     paymentStatus?: $Enums.StripePaymentStatus;
+    storeCreditUsed?: number;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
@@ -256,6 +305,7 @@ export type CheckoutSessionUpdateManyMutationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFieldUpdateOperationsInput | number;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -265,6 +315,7 @@ export type CheckoutSessionUncheckedUpdateManyInput = {
     orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFieldUpdateOperationsInput | number;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -282,8 +333,12 @@ export type CheckoutSessionCountOrderByAggregateInput = {
     orderId?: Prisma.SortOrder;
     stripeSessionId?: Prisma.SortOrder;
     paymentStatus?: Prisma.SortOrder;
+    storeCreditUsed?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
+};
+export type CheckoutSessionAvgOrderByAggregateInput = {
+    storeCreditUsed?: Prisma.SortOrder;
 };
 export type CheckoutSessionMaxOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -291,6 +346,7 @@ export type CheckoutSessionMaxOrderByAggregateInput = {
     orderId?: Prisma.SortOrder;
     stripeSessionId?: Prisma.SortOrder;
     paymentStatus?: Prisma.SortOrder;
+    storeCreditUsed?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
@@ -300,8 +356,12 @@ export type CheckoutSessionMinOrderByAggregateInput = {
     orderId?: Prisma.SortOrder;
     stripeSessionId?: Prisma.SortOrder;
     paymentStatus?: Prisma.SortOrder;
+    storeCreditUsed?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
+};
+export type CheckoutSessionSumOrderByAggregateInput = {
+    storeCreditUsed?: Prisma.SortOrder;
 };
 export type CheckoutSessionCreateNestedManyWithoutUserInput = {
     create?: Prisma.XOR<Prisma.CheckoutSessionCreateWithoutUserInput, Prisma.CheckoutSessionUncheckedCreateWithoutUserInput> | Prisma.CheckoutSessionCreateWithoutUserInput[] | Prisma.CheckoutSessionUncheckedCreateWithoutUserInput[];
@@ -386,6 +446,7 @@ export type CheckoutSessionCreateWithoutUserInput = {
     id?: string;
     stripeSessionId: string;
     paymentStatus?: $Enums.StripePaymentStatus;
+    storeCreditUsed?: number;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     order?: Prisma.OrderCreateNestedOneWithoutCheckoutSessionsInput;
@@ -395,6 +456,7 @@ export type CheckoutSessionUncheckedCreateWithoutUserInput = {
     orderId?: string | null;
     stripeSessionId: string;
     paymentStatus?: $Enums.StripePaymentStatus;
+    storeCreditUsed?: number;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
@@ -428,6 +490,7 @@ export type CheckoutSessionScalarWhereInput = {
     orderId?: Prisma.StringNullableFilter<"CheckoutSession"> | string | null;
     stripeSessionId?: Prisma.StringFilter<"CheckoutSession"> | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFilter<"CheckoutSession"> | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFilter<"CheckoutSession"> | number;
     createdAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"CheckoutSession"> | Date | string;
 };
@@ -435,6 +498,7 @@ export type CheckoutSessionCreateWithoutOrderInput = {
     id?: string;
     stripeSessionId: string;
     paymentStatus?: $Enums.StripePaymentStatus;
+    storeCreditUsed?: number;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     user: Prisma.UserCreateNestedOneWithoutCheckoutSessionsInput;
@@ -444,6 +508,7 @@ export type CheckoutSessionUncheckedCreateWithoutOrderInput = {
     userId: string;
     stripeSessionId: string;
     paymentStatus?: $Enums.StripePaymentStatus;
+    storeCreditUsed?: number;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
@@ -473,6 +538,7 @@ export type CheckoutSessionCreateManyUserInput = {
     orderId?: string | null;
     stripeSessionId: string;
     paymentStatus?: $Enums.StripePaymentStatus;
+    storeCreditUsed?: number;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
@@ -480,6 +546,7 @@ export type CheckoutSessionUpdateWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFieldUpdateOperationsInput | number;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     order?: Prisma.OrderUpdateOneWithoutCheckoutSessionsNestedInput;
@@ -489,6 +556,7 @@ export type CheckoutSessionUncheckedUpdateWithoutUserInput = {
     orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFieldUpdateOperationsInput | number;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -497,6 +565,7 @@ export type CheckoutSessionUncheckedUpdateManyWithoutUserInput = {
     orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFieldUpdateOperationsInput | number;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -505,6 +574,7 @@ export type CheckoutSessionCreateManyOrderInput = {
     userId: string;
     stripeSessionId: string;
     paymentStatus?: $Enums.StripePaymentStatus;
+    storeCreditUsed?: number;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
@@ -512,6 +582,7 @@ export type CheckoutSessionUpdateWithoutOrderInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFieldUpdateOperationsInput | number;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     user?: Prisma.UserUpdateOneRequiredWithoutCheckoutSessionsNestedInput;
@@ -521,6 +592,7 @@ export type CheckoutSessionUncheckedUpdateWithoutOrderInput = {
     userId?: Prisma.StringFieldUpdateOperationsInput | string;
     stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFieldUpdateOperationsInput | number;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -529,6 +601,7 @@ export type CheckoutSessionUncheckedUpdateManyWithoutOrderInput = {
     userId?: Prisma.StringFieldUpdateOperationsInput | string;
     stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string;
     paymentStatus?: Prisma.EnumStripePaymentStatusFieldUpdateOperationsInput | $Enums.StripePaymentStatus;
+    storeCreditUsed?: Prisma.FloatFieldUpdateOperationsInput | number;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -538,6 +611,7 @@ export type CheckoutSessionSelect<ExtArgs extends runtime.Types.Extensions.Inter
     orderId?: boolean;
     stripeSessionId?: boolean;
     paymentStatus?: boolean;
+    storeCreditUsed?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
@@ -549,6 +623,7 @@ export type CheckoutSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
     orderId?: boolean;
     stripeSessionId?: boolean;
     paymentStatus?: boolean;
+    storeCreditUsed?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
@@ -560,6 +635,7 @@ export type CheckoutSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
     orderId?: boolean;
     stripeSessionId?: boolean;
     paymentStatus?: boolean;
+    storeCreditUsed?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
@@ -571,10 +647,11 @@ export type CheckoutSessionSelectScalar = {
     orderId?: boolean;
     stripeSessionId?: boolean;
     paymentStatus?: boolean;
+    storeCreditUsed?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type CheckoutSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "orderId" | "stripeSessionId" | "paymentStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["checkoutSession"]>;
+export type CheckoutSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "orderId" | "stripeSessionId" | "paymentStatus" | "storeCreditUsed" | "createdAt" | "updatedAt", ExtArgs["result"]["checkoutSession"]>;
 export type CheckoutSessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     order?: boolean | Prisma.CheckoutSession$orderArgs<ExtArgs>;
@@ -599,6 +676,7 @@ export type $CheckoutSessionPayload<ExtArgs extends runtime.Types.Extensions.Int
         orderId: string | null;
         stripeSessionId: string;
         paymentStatus: $Enums.StripePaymentStatus;
+        storeCreditUsed: number;
         createdAt: Date;
         updatedAt: Date;
     }, ExtArgs["result"]["checkoutSession"]>;
@@ -962,6 +1040,7 @@ export interface CheckoutSessionFieldRefs {
     readonly orderId: Prisma.FieldRef<"CheckoutSession", 'String'>;
     readonly stripeSessionId: Prisma.FieldRef<"CheckoutSession", 'String'>;
     readonly paymentStatus: Prisma.FieldRef<"CheckoutSession", 'StripePaymentStatus'>;
+    readonly storeCreditUsed: Prisma.FieldRef<"CheckoutSession", 'Float'>;
     readonly createdAt: Prisma.FieldRef<"CheckoutSession", 'DateTime'>;
     readonly updatedAt: Prisma.FieldRef<"CheckoutSession", 'DateTime'>;
 }
