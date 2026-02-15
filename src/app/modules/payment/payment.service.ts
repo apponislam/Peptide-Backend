@@ -379,6 +379,89 @@ export class StripeService {
         }
     }
 
+    // private async createOrderFromSession(session: EnhancedStripeSession, userId: string, shippingInfo: any, shippingCost: number, storeCreditUsed: number) {
+    //     try {
+    //         const sessionDetails = await stripe.checkout.sessions.retrieve(session.id, {
+    //             expand: ["line_items.data.price.product", "payment_intent"],
+    //         });
+
+    //         const lineItems = sessionDetails.line_items?.data || [];
+    //         let paymentIntentId: string;
+
+    //         if (typeof sessionDetails.payment_intent === "string") {
+    //             paymentIntentId = sessionDetails.payment_intent;
+    //         } else if (sessionDetails.payment_intent && typeof sessionDetails.payment_intent === "object") {
+    //             paymentIntentId = sessionDetails.payment_intent.id;
+    //         } else {
+    //             // If no payment intent, use a placeholder
+    //             paymentIntentId = `no-pi-${Date.now()}`;
+    //         }
+
+    //         // Create order
+    //         const order = await prisma.order.create({
+    //             data: {
+    //                 id: `ord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    //                 paymentIntentId: paymentIntentId,
+    //                 userId,
+    //                 name: shippingInfo.name,
+    //                 email: shippingInfo.email,
+    //                 phone: shippingInfo.phone,
+    //                 address: shippingInfo.address,
+    //                 city: shippingInfo.city,
+    //                 state: shippingInfo.state,
+    //                 zip: shippingInfo.zip,
+    //                 country: shippingInfo.country,
+    //                 originalPrice: session.amount_subtotal ? session.amount_subtotal / 100 : 0,
+    //                 discountAmount: 0,
+    //                 discountPercentage: 0,
+    //                 subtotal: session.amount_subtotal ? session.amount_subtotal / 100 : 0,
+    //                 shipping: shippingCost,
+    //                 creditApplied: storeCreditUsed, // NEW: Store credit applied
+    //                 total: session.amount_total ? session.amount_total / 100 : 0,
+    //                 status: "PAID",
+    //                 commissionAmount: 0,
+    //                 commissionPaid: false,
+    //             },
+    //         });
+
+    //         // Create order items
+    //         for (const item of lineItems) {
+    //             const productId = this.extractProductIdFromLineItem(item);
+
+    //             if (productId > 0) {
+    //                 // Fetch product to get price from sizes
+    //                 const product = await prisma.product.findUnique({
+    //                     where: { id: productId },
+    //                 });
+
+    //                 let unitPrice = 0;
+    //                 if (product?.sizes) {
+    //                     const sizes = JSON.parse(JSON.stringify(product.sizes));
+    //                     if (Array.isArray(sizes) && sizes.length > 0) {
+    //                         unitPrice = sizes[0]?.price || 0;
+    //                     }
+    //                 }
+
+    //                 await prisma.orderItem.create({
+    //                     data: {
+    //                         id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    //                         orderId: order.id,
+    //                         productId,
+    //                         quantity: item.quantity || 1,
+    //                         unitPrice: unitPrice,
+    //                         discountedPrice: item.amount_total ? item.amount_total / 100 : 0,
+    //                     },
+    //                 });
+    //             }
+    //         }
+
+    //         return order;
+    //     } catch (error) {
+    //         console.error("Error creating order from session:", error);
+    //         throw error;
+    //     }
+    // }
+
     private async createOrderFromSession(session: EnhancedStripeSession, userId: string, shippingInfo: any, shippingCost: number, storeCreditUsed: number) {
         try {
             const sessionDetails = await stripe.checkout.sessions.retrieve(session.id, {
@@ -393,8 +476,17 @@ export class StripeService {
             } else if (sessionDetails.payment_intent && typeof sessionDetails.payment_intent === "object") {
                 paymentIntentId = sessionDetails.payment_intent.id;
             } else {
-                // If no payment intent, use a placeholder
                 paymentIntentId = `no-pi-${Date.now()}`;
+            }
+
+            // Parse item details from metadata if available
+            let itemDetails: any[] = [];
+            try {
+                if (session.metadata?.itemDetails) {
+                    itemDetails = JSON.parse(session.metadata.itemDetails);
+                }
+            } catch (e) {
+                console.error("Failed to parse itemDetails from metadata:", e);
             }
 
             // Create order
@@ -416,7 +508,7 @@ export class StripeService {
                     discountPercentage: 0,
                     subtotal: session.amount_subtotal ? session.amount_subtotal / 100 : 0,
                     shipping: shippingCost,
-                    creditApplied: storeCreditUsed, // NEW: Store credit applied
+                    creditApplied: storeCreditUsed,
                     total: session.amount_total ? session.amount_total / 100 : 0,
                     status: "PAID",
                     commissionAmount: 0,
@@ -424,32 +516,38 @@ export class StripeService {
                 },
             });
 
-            // Create order items
-            for (const item of lineItems) {
+            // Create order items WITH SIZE from metadata
+            for (let i = 0; i < lineItems.length; i++) {
+                const item = lineItems[i];
                 const productId = this.extractProductIdFromLineItem(item);
 
-                if (productId > 0) {
-                    // Fetch product to get price from sizes
-                    const product = await prisma.product.findUnique({
-                        where: { id: productId },
-                    });
+                // Get size from itemDetails metadata if available
+                let size: number | null = null;
+                if (itemDetails[i]) {
+                    size = itemDetails[i].size || null;
+                }
 
-                    let unitPrice = 0;
-                    if (product?.sizes) {
-                        const sizes = JSON.parse(JSON.stringify(product.sizes));
-                        if (Array.isArray(sizes) && sizes.length > 0) {
-                            unitPrice = sizes[0]?.price || 0;
-                        }
+                // If not found in metadata, try to extract from description
+                if (!size && item.description) {
+                    const mgMatch = item.description.match(/(\d+)mg/);
+                    if (mgMatch) {
+                        size = parseInt(mgMatch[1]);
                     }
+                }
 
+                // Get unit price (the discounted price from Stripe)
+                const discountedPrice = item.amount_total ? item.amount_total / 100 / (item.quantity || 1) : 0;
+
+                if (productId > 0) {
                     await prisma.orderItem.create({
                         data: {
                             id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
                             orderId: order.id,
                             productId,
+                            size: size, // Now we store the size!
                             quantity: item.quantity || 1,
-                            unitPrice: unitPrice,
-                            discountedPrice: item.amount_total ? item.amount_total / 100 : 0,
+                            unitPrice: discountedPrice, // Store the actual price paid
+                            discountedPrice: discountedPrice,
                         },
                     });
                 }

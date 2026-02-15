@@ -6,6 +6,12 @@ import { uploadProductFiles } from "../../middlewares/multer";
 
 const router = express.Router();
 
+// amdin routes
+router.get("/admin", auth, productControllers.getAllProductsAdmin);
+router.get("/admin/:id", auth, productControllers.getSingleProductAdmin);
+
+router.post("/get-by-ids", productControllers.getProductsByIds);
+
 // Public routes
 router.get("/", productControllers.getAllProducts);
 router.get("/:id", productControllers.getSingleProduct);
@@ -16,6 +22,8 @@ router.patch("/:id", auth, uploadProductFiles, productControllers.updateProduct)
 router.delete("/:id", auth, productControllers.deleteProduct);
 
 // Admin only - manage deleted products
+// router.get("/admin", auth, productControllers.getAllProductsAdmin);
+// router.get("/admin/:id", auth, productControllers.getSingleProductAdmin);
 router.get("/admin/deleted", auth, productControllers.getDeletedProducts);
 router.patch("/admin/restore/:id", auth, productControllers.restoreProduct);
 

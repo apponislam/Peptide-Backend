@@ -298,11 +298,72 @@ interface GetAllProductsOptions {
     sortOrder?: "asc" | "desc";
 }
 
+// const getAllProducts = async (options: GetAllProductsOptions = {}) => {
+//     const { search = "", skip = 0, take = 12, sortBy = "createdAt", sortOrder = "desc" } = options;
+
+//     const where: any = {
+//         isDeleted: false,
+//         inStock: true,
+//         sizes: {
+//             array_contains: [
+//                 {
+//                     quantity: {
+//                         gt: 0,
+//                     },
+//                 },
+//             ],
+//         },
+//     };
+
+//     // Add search filter if provided
+//     if (search) {
+//         where.name = {
+//             contains: search,
+//             mode: "insensitive" as const,
+//         };
+//     }
+
+//     const products = await prisma.product.findMany({
+//         where,
+//         skip,
+//         take,
+//         orderBy: {
+//             [sortBy]: sortOrder,
+//         },
+//     });
+
+//     const total = await prisma.product.count({ where });
+
+//     return {
+//         products,
+//         meta: {
+//             page: Math.floor(skip / take) + 1,
+//             limit: take,
+//             total,
+//             totalPages: Math.ceil(total / take),
+//         },
+//     };
+// };
+
+// Get single product by ID
+
 const getAllProducts = async (options: GetAllProductsOptions = {}) => {
     const { search = "", skip = 0, take = 12, sortBy = "createdAt", sortOrder = "desc" } = options;
 
+    // First, get ALL products without any filter to see what's there
+    const allProductsUnfiltered = await prisma.product.findMany({
+        where: {
+            isDeleted: false,
+            inStock: true,
+        },
+    });
+
+    // console.log("Total products in DB:", allProductsUnfiltered.length);
+    // console.log("First product sizes:", allProductsUnfiltered[0]?.sizes);
+
     const where: any = {
         isDeleted: false,
+        inStock: true,
     };
 
     // Add search filter if provided
@@ -313,20 +374,34 @@ const getAllProducts = async (options: GetAllProductsOptions = {}) => {
         };
     }
 
-    const products = await prisma.product.findMany({
+    // Get all products first
+    const allProducts = await prisma.product.findMany({
         where,
-        skip,
-        take,
         orderBy: {
             [sortBy]: sortOrder,
         },
     });
 
-    // Get total count for pagination
-    const total = await prisma.product.count({ where });
+    // console.log("Products after basic filters:", allProducts.length);
+
+    // Filter in JavaScript
+    const filteredProducts = allProducts.filter((product) => {
+        const sizes = product.sizes as Array<{ quantity: number }>;
+        const hasStock = sizes.some((size) => size.quantity > 0);
+        if (!hasStock) {
+            console.log(`Product ${product.id} - ${product.name} has no stock:`, sizes);
+        }
+        return hasStock;
+    });
+
+    // console.log("Products after stock filter:", filteredProducts.length);
+
+    // Apply pagination
+    const paginatedProducts = filteredProducts.slice(skip, skip + take);
+    const total = filteredProducts.length;
 
     return {
-        products,
+        products: paginatedProducts,
         meta: {
             page: Math.floor(skip / take) + 1,
             limit: take,
@@ -336,17 +411,26 @@ const getAllProducts = async (options: GetAllProductsOptions = {}) => {
     };
 };
 
-// Get single product by ID
 const getSingleProduct = async (id: number) => {
+    // First get the product without the quantity filter
     const product = await prisma.product.findFirst({
         where: {
             id,
             isDeleted: false,
+            inStock: true,
         },
     });
 
     if (!product) {
         throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+    }
+
+    // Then check if it has any size with quantity > 0
+    const sizes = product.sizes as Array<{ quantity: number }>;
+    const hasStock = sizes.some((size) => size.quantity > 0);
+
+    if (!hasStock) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Product not available");
     }
 
     return product;
@@ -455,6 +539,85 @@ const restoreProduct = async (id: number) => {
     return product;
 };
 
+// Admin route - get all products (only isDeleted: false)
+const getAllProductsAdmin = async (options: GetAllProductsOptions = {}) => {
+    const { search = "", skip = 0, take = 12, sortBy = "createdAt", sortOrder = "desc" } = options;
+
+    const where: any = {
+        isDeleted: false,
+    };
+
+    if (search) {
+        where.name = {
+            contains: search,
+            mode: "insensitive" as const,
+        };
+    }
+
+    const products = await prisma.product.findMany({
+        where,
+        skip,
+        take,
+        orderBy: {
+            [sortBy]: sortOrder,
+        },
+    });
+
+    const total = await prisma.product.count({ where });
+
+    return {
+        products,
+        meta: {
+            page: Math.floor(skip / take) + 1,
+            limit: take,
+            total,
+            totalPages: Math.ceil(total / take),
+        },
+    };
+};
+
+// Admin route - get single product (only isDeleted: false)
+const getSingleProductAdmin = async (id: number) => {
+    const product = await prisma.product.findFirst({
+        where: {
+            id,
+            isDeleted: false,
+        },
+    });
+
+    if (!product) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+    }
+
+    return product;
+};
+
+const getProductsByIds = async (ids: number[]) => {
+    // Remove duplicates
+    const uniqueIds = [...new Set(ids)];
+
+    const products = await prisma.product.findMany({
+        where: {
+            id: {
+                in: uniqueIds,
+            },
+            isDeleted: false,
+            inStock: true,
+        },
+    });
+
+    // Create a map for easy lookup
+    const productMap = new Map();
+    products.forEach((product) => {
+        productMap.set(product.id, product);
+    });
+
+    return {
+        products,
+        productMap,
+    };
+};
+
 export const productServices = {
     createProduct,
     getAllProducts,
@@ -463,4 +626,11 @@ export const productServices = {
     deleteProduct,
     getDeletedProducts,
     restoreProduct,
+
+    // for admin
+    getAllProductsAdmin,
+    getSingleProductAdmin,
+
+    // for repeat
+    getProductsByIds,
 };

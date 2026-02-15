@@ -119,6 +119,8 @@ import { Request, Response } from "express";
 import { productServices } from "./product.services";
 import catchAsync from "../../../utils/catchAsync";
 import sendResponse from "../../../utils/sendResponse.";
+import ApiError from "../../../errors/ApiError";
+import HttpStatus from "http-status";
 
 // Create product
 const createProduct = catchAsync(async (req: Request, res: Response) => {
@@ -279,6 +281,61 @@ const restoreProduct = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// Admin - get all products
+const getAllProductsAdmin = catchAsync(async (req: Request, res: Response) => {
+    const { search = "", page = 1, limit = 12, sortBy = "createdAt", sortOrder = "desc" } = req.query;
+
+    const pageNum = parseInt(page as string);
+    const limitNum = parseInt(limit as string);
+    const skip = (pageNum - 1) * limitNum;
+
+    const result = await productServices.getAllProductsAdmin({
+        search: search as string,
+        skip,
+        take: limitNum,
+        sortBy: sortBy as string,
+        sortOrder: sortOrder as "asc" | "desc",
+    });
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Products retrieved successfully",
+        data: result.products,
+        meta: result.meta,
+    });
+});
+
+// Admin - get single product
+const getSingleProductAdmin = catchAsync(async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id as string);
+    const product = await productServices.getSingleProductAdmin(id); // Calls admin version
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Product retrieved successfully",
+        data: product,
+    });
+});
+
+const getProductsByIds = catchAsync(async (req: Request, res: Response) => {
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        throw new ApiError(HttpStatus.BAD_REQUEST, "Product IDs are required");
+    }
+
+    const result = await productServices.getProductsByIds(ids);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Products retrieved successfully",
+        data: result.products,
+    });
+});
+
 export const productControllers = {
     createProduct,
     getAllProducts,
@@ -287,4 +344,11 @@ export const productControllers = {
     deleteProduct,
     getDeletedProducts,
     restoreProduct,
+
+    // for admin
+    getAllProductsAdmin,
+    getSingleProductAdmin,
+
+    // for repeat order
+    getProductsByIds,
 };
