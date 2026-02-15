@@ -89,6 +89,8 @@ model Product {
   details    String   @db.Text
   references Json
   coa        Json?
+  image       String?  
+  inStock     Boolean   @default(true)
 
   isDeleted   Boolean  @default(false)
   deletedAt  DateTime?

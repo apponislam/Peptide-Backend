@@ -39,6 +39,8 @@ export type ProductMinAggregateOutputType = {
   name: string | null
   desc: string | null
   details: string | null
+  image: string | null
+  inStock: boolean | null
   isDeleted: boolean | null
   deletedAt: Date | null
   createdAt: Date | null
@@ -50,6 +52,8 @@ export type ProductMaxAggregateOutputType = {
   name: string | null
   desc: string | null
   details: string | null
+  image: string | null
+  inStock: boolean | null
   isDeleted: boolean | null
   deletedAt: Date | null
   createdAt: Date | null
@@ -64,6 +68,8 @@ export type ProductCountAggregateOutputType = {
   details: number
   references: number
   coa: number
+  image: number
+  inStock: number
   isDeleted: number
   deletedAt: number
   createdAt: number
@@ -85,6 +91,8 @@ export type ProductMinAggregateInputType = {
   name?: true
   desc?: true
   details?: true
+  image?: true
+  inStock?: true
   isDeleted?: true
   deletedAt?: true
   createdAt?: true
@@ -96,6 +104,8 @@ export type ProductMaxAggregateInputType = {
   name?: true
   desc?: true
   details?: true
+  image?: true
+  inStock?: true
   isDeleted?: true
   deletedAt?: true
   createdAt?: true
@@ -110,6 +120,8 @@ export type ProductCountAggregateInputType = {
   details?: true
   references?: true
   coa?: true
+  image?: true
+  inStock?: true
   isDeleted?: true
   deletedAt?: true
   createdAt?: true
@@ -211,6 +223,8 @@ export type ProductGroupByOutputType = {
   details: string
   references: runtime.JsonValue
   coa: runtime.JsonValue | null
+  image: string | null
+  inStock: boolean
   isDeleted: boolean
   deletedAt: Date | null
   createdAt: Date
@@ -248,6 +262,8 @@ export type ProductWhereInput = {
   details?: Prisma.StringFilter<"Product"> | string
   references?: Prisma.JsonFilter<"Product">
   coa?: Prisma.JsonNullableFilter<"Product">
+  image?: Prisma.StringNullableFilter<"Product"> | string | null
+  inStock?: Prisma.BoolFilter<"Product"> | boolean
   isDeleted?: Prisma.BoolFilter<"Product"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"Product"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
@@ -263,6 +279,8 @@ export type ProductOrderByWithRelationInput = {
   details?: Prisma.SortOrder
   references?: Prisma.SortOrder
   coa?: Prisma.SortOrderInput | Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
+  inStock?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -281,6 +299,8 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   details?: Prisma.StringFilter<"Product"> | string
   references?: Prisma.JsonFilter<"Product">
   coa?: Prisma.JsonNullableFilter<"Product">
+  image?: Prisma.StringNullableFilter<"Product"> | string | null
+  inStock?: Prisma.BoolFilter<"Product"> | boolean
   isDeleted?: Prisma.BoolFilter<"Product"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"Product"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
@@ -296,6 +316,8 @@ export type ProductOrderByWithAggregationInput = {
   details?: Prisma.SortOrder
   references?: Prisma.SortOrder
   coa?: Prisma.SortOrderInput | Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
+  inStock?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -318,6 +340,8 @@ export type ProductScalarWhereWithAggregatesInput = {
   details?: Prisma.StringWithAggregatesFilter<"Product"> | string
   references?: Prisma.JsonWithAggregatesFilter<"Product">
   coa?: Prisma.JsonNullableWithAggregatesFilter<"Product">
+  image?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
+  inStock?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
   isDeleted?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Product"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
@@ -331,6 +355,8 @@ export type ProductCreateInput = {
   details: string
   references: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: string | null
+  inStock?: boolean
   isDeleted?: boolean
   deletedAt?: Date | string | null
   createdAt?: Date | string
@@ -346,6 +372,8 @@ export type ProductUncheckedCreateInput = {
   details: string
   references: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: string | null
+  inStock?: boolean
   isDeleted?: boolean
   deletedAt?: Date | string | null
   createdAt?: Date | string
@@ -360,6 +388,8 @@ export type ProductUpdateInput = {
   details?: Prisma.StringFieldUpdateOperationsInput | string
   references?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inStock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -375,6 +405,8 @@ export type ProductUncheckedUpdateInput = {
   details?: Prisma.StringFieldUpdateOperationsInput | string
   references?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inStock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -390,6 +422,8 @@ export type ProductCreateManyInput = {
   details: string
   references: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: string | null
+  inStock?: boolean
   isDeleted?: boolean
   deletedAt?: Date | string | null
   createdAt?: Date | string
@@ -403,6 +437,8 @@ export type ProductUpdateManyMutationInput = {
   details?: Prisma.StringFieldUpdateOperationsInput | string
   references?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inStock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -417,6 +453,8 @@ export type ProductUncheckedUpdateManyInput = {
   details?: Prisma.StringFieldUpdateOperationsInput | string
   references?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inStock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -431,6 +469,8 @@ export type ProductCountOrderByAggregateInput = {
   details?: Prisma.SortOrder
   references?: Prisma.SortOrder
   coa?: Prisma.SortOrder
+  image?: Prisma.SortOrder
+  inStock?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -446,6 +486,8 @@ export type ProductMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   desc?: Prisma.SortOrder
   details?: Prisma.SortOrder
+  image?: Prisma.SortOrder
+  inStock?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -457,6 +499,8 @@ export type ProductMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   desc?: Prisma.SortOrder
   details?: Prisma.SortOrder
+  image?: Prisma.SortOrder
+  inStock?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -495,6 +539,8 @@ export type ProductCreateWithoutOrderItemsInput = {
   details: string
   references: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: string | null
+  inStock?: boolean
   isDeleted?: boolean
   deletedAt?: Date | string | null
   createdAt?: Date | string
@@ -509,6 +555,8 @@ export type ProductUncheckedCreateWithoutOrderItemsInput = {
   details: string
   references: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: string | null
+  inStock?: boolean
   isDeleted?: boolean
   deletedAt?: Date | string | null
   createdAt?: Date | string
@@ -538,6 +586,8 @@ export type ProductUpdateWithoutOrderItemsInput = {
   details?: Prisma.StringFieldUpdateOperationsInput | string
   references?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inStock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -552,6 +602,8 @@ export type ProductUncheckedUpdateWithoutOrderItemsInput = {
   details?: Prisma.StringFieldUpdateOperationsInput | string
   references?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coa?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inStock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -597,6 +649,8 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   details?: boolean
   references?: boolean
   coa?: boolean
+  image?: boolean
+  inStock?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
   createdAt?: boolean
@@ -613,6 +667,8 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   details?: boolean
   references?: boolean
   coa?: boolean
+  image?: boolean
+  inStock?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
   createdAt?: boolean
@@ -627,6 +683,8 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   details?: boolean
   references?: boolean
   coa?: boolean
+  image?: boolean
+  inStock?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
   createdAt?: boolean
@@ -641,13 +699,15 @@ export type ProductSelectScalar = {
   details?: boolean
   references?: boolean
   coa?: boolean
+  image?: boolean
+  inStock?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sizes" | "desc" | "details" | "references" | "coa" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sizes" | "desc" | "details" | "references" | "coa" | "image" | "inStock" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orderItems?: boolean | Prisma.Product$orderItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -668,6 +728,8 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     details: string
     references: runtime.JsonValue
     coa: runtime.JsonValue | null
+    image: string | null
+    inStock: boolean
     isDeleted: boolean
     deletedAt: Date | null
     createdAt: Date
@@ -1103,6 +1165,8 @@ export interface ProductFieldRefs {
   readonly details: Prisma.FieldRef<"Product", 'String'>
   readonly references: Prisma.FieldRef<"Product", 'Json'>
   readonly coa: Prisma.FieldRef<"Product", 'Json'>
+  readonly image: Prisma.FieldRef<"Product", 'String'>
+  readonly inStock: Prisma.FieldRef<"Product", 'Boolean'>
   readonly isDeleted: Prisma.FieldRef<"Product", 'Boolean'>
   readonly deletedAt: Prisma.FieldRef<"Product", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Product", 'DateTime'>
