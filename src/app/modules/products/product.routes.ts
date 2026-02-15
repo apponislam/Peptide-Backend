@@ -1,7 +1,7 @@
 import express from "express";
 import { productControllers } from "./product.controllers";
 import auth from "../../middlewares/auth";
-import upload from "../../middlewares/multer";
+import { uploadAndCompress } from "../../middlewares/multer";
 
 const router = express.Router();
 
@@ -18,15 +18,17 @@ router.delete("/:id", auth, productControllers.deleteProduct);
 router.get("/admin/deleted", auth, productControllers.getDeletedProducts);
 router.patch("/admin/restore/:id", auth, productControllers.restoreProduct);
 
-router.post("/demo-upload", upload.single("image"), (req, res) => {
-    console.log("=== DEMO IMAGE UPLOAD ===");
-    console.log("File info:", req.file);
-    console.log("Body:", req.body);
+router.post("/demo-upload", uploadAndCompress, (req, res) => {
+    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
     res.json({
-        message: "Demo upload received",
-        file: req.file,
-        body: req.body,
+        message: "Image uploaded & compressed successfully!",
+        file: {
+            filename: req.file.filename,
+            url: `/uploads/product-images/${req.file.filename}`,
+            mimetype: req.file.mimetype,
+            size: req.file.size,
+        },
     });
 });
 
