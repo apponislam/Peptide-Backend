@@ -392,47 +392,6 @@ const getTopSellingProducts = async (limit: number = 5) => {
     return productsWithSales.sort((a, b) => b.sales - a.sales).slice(0, limit);
 };
 
-const getReferralPerformance = async () => {
-    // Get top 3 referrers
-    const topReferrers = await prisma.user.findMany({
-        where: {
-            referralCount: { gt: 0 },
-        },
-        orderBy: {
-            referralCount: "desc",
-        },
-        take: 3,
-        select: {
-            id: true,
-            name: true,
-            referralCount: true,
-        },
-    });
-
-    // Get total commissions for EACH referrer from Commission table
-    const referralPerformanceArray = await Promise.all(
-        topReferrers.map(async (referrer) => {
-            const commissions = await prisma.commission.aggregate({
-                where: {
-                    referrerId: referrer.id,
-                    status: "PAID",
-                },
-                _sum: {
-                    amount: true,
-                },
-            });
-
-            return {
-                topReferrer: referrer.name,
-                referrals: referrer.referralCount,
-                totalCommissions: commissions._sum.amount || 0,
-            };
-        }),
-    );
-
-    return referralPerformanceArray;
-};
-
 const getUserById = async (id: string) => {
     const user = await prisma.user.findUnique({
         where: {
@@ -604,6 +563,47 @@ const getUserById = async (id: string) => {
     };
 };
 
+const getReferralPerformance = async () => {
+    // Get top 3 referrers
+    const topReferrers = await prisma.user.findMany({
+        where: {
+            referralCount: { gt: 0 },
+        },
+        orderBy: {
+            referralCount: "desc",
+        },
+        take: 3,
+        select: {
+            id: true,
+            name: true,
+            referralCount: true,
+        },
+    });
+
+    // Get total commissions for EACH referrer from Commission table
+    const referralPerformanceArray = await Promise.all(
+        topReferrers.map(async (referrer) => {
+            const commissions = await prisma.commission.aggregate({
+                where: {
+                    referrerId: referrer.id,
+                    status: "PAID",
+                },
+                _sum: {
+                    amount: true,
+                },
+            });
+
+            return {
+                topReferrer: referrer.name,
+                referrals: referrer.referralCount,
+                totalCommissions: commissions._sum.amount || 0,
+            };
+        }),
+    );
+
+    return referralPerformanceArray;
+};
+
 export const adminServices = {
     getDashboardStats,
     getAllOrders,
@@ -611,7 +611,7 @@ export const adminServices = {
     updateOrderStatus,
     getAllUsers,
     updateUser,
+    getUserById,
     getTopSellingProducts,
     getReferralPerformance,
-    getUserById,
 };

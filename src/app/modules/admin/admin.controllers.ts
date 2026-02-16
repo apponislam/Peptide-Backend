@@ -115,6 +115,28 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getUserById = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id as string;
+
+    if (!id) {
+        return sendResponse(res, {
+            statusCode: 400,
+            success: false,
+            message: "User ID is required",
+            data: null,
+        });
+    }
+
+    const result = await adminServices.getUserById(id);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "User retrieved successfully",
+        data: result,
+    });
+});
+
 // Get top selling products
 const getTopSellingProducts = catchAsync(async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 5;
@@ -141,28 +163,6 @@ const getReferralPerformance = catchAsync(async (req: Request, res: Response) =>
     });
 });
 
-const getUserById = catchAsync(async (req: Request, res: Response) => {
-    const id = req.params.id as string;
-
-    if (!id) {
-        return sendResponse(res, {
-            statusCode: 400,
-            success: false,
-            message: "User ID is required",
-            data: null,
-        });
-    }
-
-    const result = await adminServices.getUserById(id);
-
-    sendResponse(res, {
-        statusCode: 200,
-        success: true,
-        message: "User retrieved successfully",
-        data: result,
-    });
-});
-
 export const adminControllers = {
     getDashboardStats,
     getAllOrders,
@@ -170,7 +170,7 @@ export const adminControllers = {
     updateOrderStatus,
     getAllUsers,
     updateUser,
+    getUserById,
     getTopSellingProducts,
     getReferralPerformance,
-    getUserById,
 };
