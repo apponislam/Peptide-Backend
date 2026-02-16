@@ -26,6 +26,7 @@ router.delete("/:id", auth, productControllers.deleteProduct);
 // router.get("/admin/:id", auth, productControllers.getSingleProductAdmin);
 router.get("/admin/deleted", auth, productControllers.getDeletedProducts);
 router.patch("/admin/restore/:id", auth, productControllers.restoreProduct);
+router.patch("/admin/toggle-stock/:id", auth, productControllers.toggleProductStock);
 
 // router.post("/demo-upload", uploadAndCompress, (req, res) => {
 //     if (!req.file) return res.status(400).json({ message: "No file uploaded" });

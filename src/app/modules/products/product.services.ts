@@ -618,6 +618,28 @@ const getProductsByIds = async (ids: number[]) => {
     };
 };
 
+const toggleProductStock = async (id: number) => {
+    const existingProduct = await prisma.product.findFirst({
+        where: {
+            id,
+            isDeleted: false,
+        },
+    });
+
+    if (!existingProduct) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+    }
+
+    const product = await prisma.product.update({
+        where: { id },
+        data: {
+            inStock: !existingProduct.inStock,
+        },
+    });
+
+    return product;
+};
+
 export const productServices = {
     createProduct,
     getAllProducts,
@@ -630,6 +652,7 @@ export const productServices = {
     // for admin
     getAllProductsAdmin,
     getSingleProductAdmin,
+    toggleProductStock,
 
     // for repeat
     getProductsByIds,

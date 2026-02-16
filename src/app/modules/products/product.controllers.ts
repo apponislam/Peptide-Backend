@@ -336,6 +336,19 @@ const getProductsByIds = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// Toggle product inStock status
+const toggleProductStock = catchAsync(async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id as string);
+    const product = await productServices.toggleProductStock(id);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: `Product stock status toggled to ${product.inStock ? "in stock" : "out of stock"}`,
+        data: product,
+    });
+});
+
 export const productControllers = {
     createProduct,
     getAllProducts,
@@ -348,6 +361,7 @@ export const productControllers = {
     // for admin
     getAllProductsAdmin,
     getSingleProductAdmin,
+    toggleProductStock,
 
     // for repeat order
     getProductsByIds,
