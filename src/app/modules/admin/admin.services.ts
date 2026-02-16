@@ -345,53 +345,6 @@ const updateUser = async (
     return user;
 };
 
-const getTopSellingProducts = async (limit: number = 5) => {
-    // Get product sales from order items of paid orders
-    const orderItems = await prisma.orderItem.groupBy({
-        by: ["productId"],
-        where: {
-            order: {
-                status: "PAID",
-            },
-            productId: {
-                not: null,
-            },
-        },
-        _count: {
-            id: true,
-        },
-        _sum: {
-            quantity: true,
-        },
-    });
-
-    const products = await prisma.product.findMany({
-        where: {
-            id: {
-                in: orderItems.map((item) => item.productId!).filter(Boolean),
-            },
-            isDeleted: false,
-        },
-        select: {
-            id: true,
-            name: true,
-        },
-    });
-
-    const productsWithSales = orderItems.map((item) => {
-        const product = products.find((p) => p.id === item.productId);
-        return {
-            id: item.productId!,
-            name: product?.name || "Unknown Product",
-            sales: item._count.id,
-            totalQuantity: item._sum.quantity || 0,
-        };
-    });
-
-    // Sort by sales and limit
-    return productsWithSales.sort((a, b) => b.sales - a.sales).slice(0, limit);
-};
-
 const getUserById = async (id: string) => {
     const user = await prisma.user.findUnique({
         where: {
@@ -561,6 +514,53 @@ const getUserById = async (id: string) => {
             isReferralValid: user.isReferralValid,
         },
     };
+};
+
+const getTopSellingProducts = async (limit: number = 5) => {
+    // Get product sales from order items of paid orders
+    const orderItems = await prisma.orderItem.groupBy({
+        by: ["productId"],
+        where: {
+            order: {
+                status: "PAID",
+            },
+            productId: {
+                not: null,
+            },
+        },
+        _count: {
+            id: true,
+        },
+        _sum: {
+            quantity: true,
+        },
+    });
+
+    const products = await prisma.product.findMany({
+        where: {
+            id: {
+                in: orderItems.map((item) => item.productId!).filter(Boolean),
+            },
+            isDeleted: false,
+        },
+        select: {
+            id: true,
+            name: true,
+        },
+    });
+
+    const productsWithSales = orderItems.map((item) => {
+        const product = products.find((p) => p.id === item.productId);
+        return {
+            id: item.productId!,
+            name: product?.name || "Unknown Product",
+            sales: item._count.id,
+            totalQuantity: item._sum.quantity || 0,
+        };
+    });
+
+    // Sort by sales and limit
+    return productsWithSales.sort((a, b) => b.sales - a.sales).slice(0, limit);
 };
 
 const getReferralPerformance = async () => {
