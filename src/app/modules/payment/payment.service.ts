@@ -309,6 +309,38 @@ export class StripeService {
                 include: { product: true },
             });
 
+            // Update each product's quantity
+            for (const item of orderItems) {
+                if (!item.productId) continue;
+
+                const product = await prisma.product.findUnique({
+                    where: { id: item.productId },
+                });
+
+                if (product) {
+                    const sizes = product.sizes as Array<{ mg: number; price: number; quantity: number }>;
+
+                    const sizeIndex = sizes.findIndex((s) => s.mg === item.size);
+
+                    if (sizeIndex !== -1) {
+                        // Decrease the quantity
+                        sizes[sizeIndex].quantity -= item.quantity;
+
+                        // Update the product
+                        await prisma.product.update({
+                            where: { id: item.productId },
+                            data: {
+                                sizes: sizes as any,
+                                // Optionally update inStock flag if all sizes are out of stock
+                                inStock: sizes.some((s) => s.quantity > 0),
+                            },
+                        });
+
+                        console.log(`✅ Decreased ${item.product?.name} ${item.size}mg by ${item.quantity}. New quantity: ${sizes[sizeIndex].quantity}`);
+                    }
+                }
+            }
+
             // Prepare email data based on your schema
             const emailData = {
                 id: order.id,
@@ -378,89 +410,6 @@ export class StripeService {
             throw error;
         }
     }
-
-    // private async createOrderFromSession(session: EnhancedStripeSession, userId: string, shippingInfo: any, shippingCost: number, storeCreditUsed: number) {
-    //     try {
-    //         const sessionDetails = await stripe.checkout.sessions.retrieve(session.id, {
-    //             expand: ["line_items.data.price.product", "payment_intent"],
-    //         });
-
-    //         const lineItems = sessionDetails.line_items?.data || [];
-    //         let paymentIntentId: string;
-
-    //         if (typeof sessionDetails.payment_intent === "string") {
-    //             paymentIntentId = sessionDetails.payment_intent;
-    //         } else if (sessionDetails.payment_intent && typeof sessionDetails.payment_intent === "object") {
-    //             paymentIntentId = sessionDetails.payment_intent.id;
-    //         } else {
-    //             // If no payment intent, use a placeholder
-    //             paymentIntentId = `no-pi-${Date.now()}`;
-    //         }
-
-    //         // Create order
-    //         const order = await prisma.order.create({
-    //             data: {
-    //                 id: `ord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-    //                 paymentIntentId: paymentIntentId,
-    //                 userId,
-    //                 name: shippingInfo.name,
-    //                 email: shippingInfo.email,
-    //                 phone: shippingInfo.phone,
-    //                 address: shippingInfo.address,
-    //                 city: shippingInfo.city,
-    //                 state: shippingInfo.state,
-    //                 zip: shippingInfo.zip,
-    //                 country: shippingInfo.country,
-    //                 originalPrice: session.amount_subtotal ? session.amount_subtotal / 100 : 0,
-    //                 discountAmount: 0,
-    //                 discountPercentage: 0,
-    //                 subtotal: session.amount_subtotal ? session.amount_subtotal / 100 : 0,
-    //                 shipping: shippingCost,
-    //                 creditApplied: storeCreditUsed, // NEW: Store credit applied
-    //                 total: session.amount_total ? session.amount_total / 100 : 0,
-    //                 status: "PAID",
-    //                 commissionAmount: 0,
-    //                 commissionPaid: false,
-    //             },
-    //         });
-
-    //         // Create order items
-    //         for (const item of lineItems) {
-    //             const productId = this.extractProductIdFromLineItem(item);
-
-    //             if (productId > 0) {
-    //                 // Fetch product to get price from sizes
-    //                 const product = await prisma.product.findUnique({
-    //                     where: { id: productId },
-    //                 });
-
-    //                 let unitPrice = 0;
-    //                 if (product?.sizes) {
-    //                     const sizes = JSON.parse(JSON.stringify(product.sizes));
-    //                     if (Array.isArray(sizes) && sizes.length > 0) {
-    //                         unitPrice = sizes[0]?.price || 0;
-    //                     }
-    //                 }
-
-    //                 await prisma.orderItem.create({
-    //                     data: {
-    //                         id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-    //                         orderId: order.id,
-    //                         productId,
-    //                         quantity: item.quantity || 1,
-    //                         unitPrice: unitPrice,
-    //                         discountedPrice: item.amount_total ? item.amount_total / 100 : 0,
-    //                     },
-    //                 });
-    //             }
-    //         }
-
-    //         return order;
-    //     } catch (error) {
-    //         console.error("Error creating order from session:", error);
-    //         throw error;
-    //     }
-    // }
 
     private async createOrderFromSession(session: EnhancedStripeSession, userId: string, shippingInfo: any, shippingCost: number, storeCreditUsed: number) {
         try {
