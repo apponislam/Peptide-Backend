@@ -7,7 +7,6 @@ require("dotenv/config");
 const app_1 = __importDefault(require("./app"));
 const prisma_1 = require("./lib/prisma");
 const seed_1 = require("./app/script/seed");
-// import seedProducts from "./app/script/products";
 // import sendEmail from "./utils/sendEmail";
 const PORT = Number(process.env.PORT) || 5050;
 async function main() {

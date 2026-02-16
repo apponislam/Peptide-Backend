@@ -156,6 +156,7 @@ exports.OrderItemScalarFieldEnum = {
     id: 'id',
     orderId: 'orderId',
     productId: 'productId',
+    size: 'size',
     quantity: 'quantity',
     unitPrice: 'unitPrice',
     discountedPrice: 'discountedPrice'
