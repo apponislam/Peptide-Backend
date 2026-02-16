@@ -516,13 +516,120 @@ const getUserById = async (id: string) => {
     };
 };
 
-const getTopSellingProducts = async (limit: number = 5) => {
-    // Get product sales from order items of paid orders
+// const getTopSellingProducts = async (limit: number = 5) => {
+//     // Get product sales from order items of paid orders
+//     const orderItems = await prisma.orderItem.groupBy({
+//         by: ["productId"],
+//         where: {
+//             order: {
+//                 status: "PAID",
+//             },
+//             productId: {
+//                 not: null,
+//             },
+//         },
+//         _count: {
+//             id: true,
+//         },
+//         _sum: {
+//             quantity: true,
+//         },
+//     });
+
+//     const products = await prisma.product.findMany({
+//         where: {
+//             id: {
+//                 in: orderItems.map((item) => item.productId!).filter(Boolean),
+//             },
+//             isDeleted: false,
+//         },
+//         select: {
+//             id: true,
+//             name: true,
+//         },
+//     });
+
+//     const productsWithSales = orderItems.map((item) => {
+//         const product = products.find((p) => p.id === item.productId);
+//         return {
+//             id: item.productId!,
+//             name: product?.name || "Unknown Product",
+//             sales: item._count.id,
+//             totalQuantity: item._sum.quantity || 0,
+//         };
+//     });
+
+//     // Sort by sales and limit
+//     return productsWithSales.sort((a, b) => b.sales - a.sales).slice(0, limit);
+// };
+
+// const getReferralPerformance = async () => {
+//     // Get top 3 referrers
+//     const topReferrers = await prisma.user.findMany({
+//         where: {
+//             referralCount: { gt: 0 },
+//         },
+//         orderBy: {
+//             referralCount: "desc",
+//         },
+//         take: 3,
+//         select: {
+//             id: true,
+//             name: true,
+//             referralCount: true,
+//         },
+//     });
+
+//     // Get total commissions for EACH referrer from Commission table
+//     const referralPerformanceArray = await Promise.all(
+//         topReferrers.map(async (referrer) => {
+//             const commissions = await prisma.commission.aggregate({
+//                 where: {
+//                     referrerId: referrer.id,
+//                     status: "PAID",
+//                 },
+//                 _sum: {
+//                     amount: true,
+//                 },
+//             });
+
+//             return {
+//                 topReferrer: referrer.name,
+//                 referrals: referrer.referralCount,
+//                 totalCommissions: commissions._sum.amount || 0,
+//             };
+//         }),
+//     );
+
+//     return referralPerformanceArray;
+// };
+
+// Updated service functions
+
+// Updated service functions
+
+const getTopSellingProducts = async (limit: number = 5, year?: number, month?: number) => {
+    // Build date filter
+    let dateFilter = {};
+    if (year) {
+        const startDate = new Date(year, month ? month - 1 : 0, 1);
+        const endDate = month ? new Date(year, month, 0, 23, 59, 59, 999) : new Date(year + 1, 0, 0, 23, 59, 59, 999);
+
+        dateFilter = {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+        };
+    }
+
+    // Get product sales from order items of paid orders with date filter
     const orderItems = await prisma.orderItem.groupBy({
         by: ["productId"],
         where: {
             order: {
                 status: "PAID",
+                ...(year && dateFilter),
             },
             productId: {
                 not: null,
@@ -563,12 +670,19 @@ const getTopSellingProducts = async (limit: number = 5) => {
     return productsWithSales.sort((a, b) => b.sales - a.sales).slice(0, limit);
 };
 
-const getReferralPerformance = async () => {
-    // Get top 3 referrers
+const getReferralPerformance = async (tier?: string) => {
+    // Build where clause with tier filter
+    const whereClause: any = {
+        referralCount: { gt: 0 },
+    };
+
+    if (tier) {
+        whereClause.tier = tier;
+    }
+
+    // Get top 3 referrers with optional tier filter
     const topReferrers = await prisma.user.findMany({
-        where: {
-            referralCount: { gt: 0 },
-        },
+        where: whereClause,
         orderBy: {
             referralCount: "desc",
         },
@@ -576,6 +690,7 @@ const getReferralPerformance = async () => {
         select: {
             id: true,
             name: true,
+            tier: true,
             referralCount: true,
         },
     });
@@ -595,6 +710,7 @@ const getReferralPerformance = async () => {
 
             return {
                 topReferrer: referrer.name,
+                tier: referrer.tier,
                 referrals: referrer.referralCount,
                 totalCommissions: commissions._sum.amount || 0,
             };

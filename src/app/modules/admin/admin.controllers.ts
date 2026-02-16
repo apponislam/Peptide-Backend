@@ -137,11 +137,39 @@ const getUserById = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-// Get top selling products
+// // Get top selling products
+// const getTopSellingProducts = catchAsync(async (req: Request, res: Response) => {
+//     const limit = parseInt(req.query.limit as string) || 5;
+
+//     const products = await adminServices.getTopSellingProducts(limit);
+
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Top selling products retrieved successfully",
+//         data: products,
+//     });
+// });
+
+// // Get referral performance
+// const getReferralPerformance = catchAsync(async (req: Request, res: Response) => {
+//     const performance = await adminServices.getReferralPerformance();
+
+//     sendResponse(res, {
+//         statusCode: 200,
+//         success: true,
+//         message: "Referral performance retrieved successfully",
+//         data: performance,
+//     });
+// });
+
+// Updated controller functions
 const getTopSellingProducts = catchAsync(async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 5;
+    const year = req.query.year ? parseInt(req.query.year as string) : undefined;
+    const month = req.query.month ? parseInt(req.query.month as string) : undefined;
 
-    const products = await adminServices.getTopSellingProducts(limit);
+    const products = await adminServices.getTopSellingProducts(limit, year, month);
 
     sendResponse(res, {
         statusCode: 200,
@@ -151,9 +179,10 @@ const getTopSellingProducts = catchAsync(async (req: Request, res: Response) => 
     });
 });
 
-// Get referral performance
 const getReferralPerformance = catchAsync(async (req: Request, res: Response) => {
-    const performance = await adminServices.getReferralPerformance();
+    const tier = req.query.tier as string | undefined;
+
+    const performance = await adminServices.getReferralPerformance(tier);
 
     sendResponse(res, {
         statusCode: 200,
