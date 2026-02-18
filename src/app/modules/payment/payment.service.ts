@@ -1501,7 +1501,7 @@ export class StripeService {
             const userId = session.metadata?.userId;
             const storeCreditUsed = parseFloat(session.metadata?.storeCreditUsed || "0");
 
-            // Restore store credit
+            // Restore store credit if used
             if (storeCreditUsed > 0 && userId) {
                 await prisma.user.update({
                     where: { id: userId },
@@ -1513,13 +1513,23 @@ export class StripeService {
                 });
             }
 
-            await prisma.checkoutSession.update({
+            // Check if session exists before updating
+            const existingSession = await prisma.checkoutSession.findUnique({
                 where: { stripeSessionId: session.id },
-                data: {
-                    paymentStatus: "FAILED",
-                    updatedAt: new Date(),
-                },
             });
+
+            if (existingSession) {
+                await prisma.checkoutSession.update({
+                    where: { stripeSessionId: session.id },
+                    data: {
+                        paymentStatus: "FAILED",
+                        updatedAt: new Date(),
+                    },
+                });
+                console.log(`✅ Checkout session ${session.id} marked as expired`);
+            } else {
+                console.log(`ℹ️ Checkout session ${session.id} not found in database - likely from test/abandoned cart`);
+            }
         } catch (error) {
             console.error("Error handling expired session:", error);
         }
@@ -1543,23 +1553,28 @@ export class StripeService {
                 });
             }
 
-            await prisma.checkoutSession.update({
-                where: { stripeSessionId: session.id },
-                data: {
-                    paymentStatus: "FAILED",
-                    updatedAt: new Date(),
-                },
-            });
-
-            const checkoutSession = await prisma.checkoutSession.findUnique({
+            // Check if session exists
+            const existingSession = await prisma.checkoutSession.findUnique({
                 where: { stripeSessionId: session.id },
             });
 
-            if (checkoutSession?.orderId) {
-                await prisma.order.update({
-                    where: { id: checkoutSession.orderId },
-                    data: { status: "FAILED" },
+            if (existingSession) {
+                await prisma.checkoutSession.update({
+                    where: { stripeSessionId: session.id },
+                    data: {
+                        paymentStatus: "FAILED",
+                        updatedAt: new Date(),
+                    },
                 });
+
+                if (existingSession.orderId) {
+                    await prisma.order.update({
+                        where: { id: existingSession.orderId },
+                        data: { status: "FAILED" },
+                    });
+                }
+            } else {
+                console.log(`ℹ️ Checkout session ${session.id} not found in database - likely from test/abandoned cart`);
             }
         } catch (error) {
             console.error("Error handling async payment failed:", error);
