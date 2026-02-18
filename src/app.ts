@@ -12,7 +12,7 @@ const app: Application = express();
 app.post("/api/payment/webhook", express.raw({ type: "application/json" }), WebhookController.handleStripeWebhook);
 
 const corsOptions = {
-    origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://31.220.52.82:3050", "http://127.0.0.1:5500"],
+    origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://31.220.52.82:3050", "http://127.0.0.1:5500", "http://10.10.7.7:3000"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

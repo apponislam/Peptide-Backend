@@ -17,6 +17,9 @@ async function main() {
         // await sendEmail();
 
         // Start server
+        // app.listen(PORT, process.env.IP!, () => {
+        //     console.log(`🚀 Server running on port ${PORT}`);
+        // });
         app.listen(PORT, () => {
             console.log(`🚀 Server running on port ${PORT}`);
         });

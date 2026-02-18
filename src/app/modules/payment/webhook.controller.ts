@@ -15,7 +15,6 @@ export class WebhookController {
             // Construct the event from Stripe
             const event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET!);
 
-            // Process the event in the stripe service
             await stripeService.processWebhookEvent(event);
 
             res.json({ received: true });
