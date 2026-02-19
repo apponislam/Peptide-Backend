@@ -904,7 +904,6 @@ export const UserScalarFieldEnum = {
   deletedAt: 'deletedAt',
   storeCredit: 'storeCredit',
   referralCount: 'referralCount',
-  shippingCredit: 'shippingCredit',
   isReferralValid: 'isReferralValid',
   referrerId: 'referrerId',
   createdAt: 'createdAt',

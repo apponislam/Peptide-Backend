@@ -60,7 +60,7 @@ model User {
   referralCount    Int      @default(0)
 
     // Shipping Credit System - ONLY used for Members
-  shippingCredit   Float    @default(150.00)
+  // shippingCredit   Float    @default(150.00)
 
   isReferralValid  Boolean  @default(false)
   referrerId       String?

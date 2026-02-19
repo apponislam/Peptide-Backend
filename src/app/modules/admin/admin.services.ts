@@ -161,7 +161,6 @@ const getOrderById = async (orderId: string) => {
                     email: true,
                     tier: true,
                     storeCredit: true,
-                    shippingCredit: true,
                 },
             },
             items: {
@@ -281,7 +280,6 @@ const getAllUsers = async (params: { page?: number; limit?: number; search?: str
                 storeCredit: true,
                 referralCount: true,
                 createdAt: true,
-                shippingCredit: true,
                 role: true,
                 orders: {
                     select: {
@@ -364,7 +362,6 @@ const getUserById = async (id: string) => {
             isReferralValid: true,
             referrerId: true,
             createdAt: true,
-            shippingCredit: true,
             updatedAt: true,
             referrer: {
                 select: {
