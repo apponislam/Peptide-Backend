@@ -3,6 +3,70 @@ import ApiError from "../../../errors/ApiError";
 import { OrderStatus, Prisma } from "../../../generated/prisma/client";
 
 // Get order by ID - USER CAN ONLY SEE THEIR OWN
+// const getOrderById = async (orderId: string, userId: string) => {
+//     const order = await prisma.order.findUnique({
+//         where: { id: orderId },
+//         include: {
+//             user: {
+//                 select: {
+//                     id: true,
+//                     name: true,
+//                     email: true,
+//                     tier: true,
+//                 },
+//             },
+//             items: {
+//                 include: {
+//                     product: {
+//                         select: {
+//                             id: true,
+//                             name: true,
+//                             sizes: true,
+//                         },
+//                     },
+//                 },
+//             },
+//             commissions: {
+//                 include: {
+//                     referrer: {
+//                         select: {
+//                             id: true,
+//                             name: true,
+//                             email: true,
+//                         },
+//                     },
+//                     buyer: {
+//                         select: {
+//                             id: true,
+//                             name: true,
+//                             email: true,
+//                         },
+//                     },
+//                 },
+//             },
+//             checkoutSessions: {
+//                 select: {
+//                     id: true,
+//                     stripeSessionId: true,
+//                     paymentStatus: true,
+//                     createdAt: true,
+//                 },
+//             },
+//         },
+//     });
+
+//     if (!order) {
+//         throw new ApiError(404, "Order not found");
+//     }
+
+//     // USER CAN ONLY SEE THEIR OWN ORDER
+//     if (order.userId !== userId) {
+//         throw new ApiError(403, "You are not authorized to view this order");
+//     }
+
+//     return order;
+// };
+
 const getOrderById = async (orderId: string, userId: string) => {
     const order = await prisma.order.findUnique({
         where: { id: orderId },
@@ -21,6 +85,7 @@ const getOrderById = async (orderId: string, userId: string) => {
                         select: {
                             id: true,
                             name: true,
+                            sizes: true,
                         },
                     },
                 },
@@ -63,8 +128,111 @@ const getOrderById = async (orderId: string, userId: string) => {
         throw new ApiError(403, "You are not authorized to view this order");
     }
 
-    return order;
+    // Process isRepeat for the single order
+    let isRepeat = true;
+
+    for (const item of order.items) {
+        if (item.product && item.product.sizes) {
+            // Parse the sizes JSON array
+            const sizes = item.product.sizes as Array<{
+                mg: number;
+                price: number;
+                quantity: number;
+            }>;
+
+            // Find the specific size that matches the ordered size
+            const sizeInfo = sizes.find((s) => s.mg === item.size);
+
+            if (sizeInfo) {
+                // If ordered quantity is greater than available quantity
+                // then it's NOT a repeat (false)
+                if (item.quantity > sizeInfo.quantity) {
+                    isRepeat = false;
+                    break; // Exit loop once we find a non-repeat item
+                }
+            }
+        }
+    }
+
+    // Add isRepeat to the order object
+    return {
+        ...order,
+        isRepeat,
+    };
 };
+
+// Get orders with filters - USER CAN ONLY SEE THEIR OWN ORDERS
+// const getOrders = async (userId: string, params: { page?: number; limit?: number; status?: OrderStatus; startDate?: string; endDate?: string; sortBy?: string; sortOrder?: "asc" | "desc" }) => {
+//     const page = params.page || 1;
+//     const limit = params.limit || 10;
+//     const skip = (page - 1) * limit;
+
+//     const where: Prisma.OrderWhereInput = {
+//         userId: userId, // ALWAYS filter by logged-in user
+//     };
+
+//     // Status filter
+//     if (params.status) {
+//         where.status = params.status;
+//     }
+
+//     // Date range filter
+//     if (params.startDate || params.endDate) {
+//         where.createdAt = {};
+//         if (params.startDate) {
+//             where.createdAt.gte = new Date(params.startDate);
+//         }
+//         if (params.endDate) {
+//             where.createdAt.lte = new Date(params.endDate);
+//         }
+//     }
+
+//     // Sorting
+//     const orderBy: Prisma.OrderOrderByWithRelationInput = { createdAt: "desc" };
+//     if (params.sortBy) {
+//         const allowedSortFields = ["createdAt", "total", "status"];
+//         if (allowedSortFields.includes(params.sortBy)) {
+//             const sortField = params.sortBy as keyof Prisma.OrderOrderByWithRelationInput;
+//             orderBy[sortField] = params.sortOrder || "desc";
+//         }
+//     }
+
+//     // Get orders with pagination
+//     const [orders, total] = await Promise.all([
+//         prisma.order.findMany({
+//             where,
+//             include: {
+//                 items: {
+//                     include: {
+//                         product: {
+//                             select: {
+//                                 id: true,
+//                                 name: true,
+//                                 sizes: true,
+//                             },
+//                         },
+//                     },
+//                 },
+//             },
+//             orderBy,
+//             skip,
+//             take: limit,
+//         }),
+//         prisma.order.count({ where }),
+//     ]);
+
+//     const totalPages = Math.ceil(total / limit);
+
+//     return {
+//         orders,
+//         meta: {
+//             page,
+//             limit,
+//             total,
+//             totalPages,
+//         },
+//     };
+// };
 
 // Get orders with filters - USER CAN ONLY SEE THEIR OWN ORDERS
 const getOrders = async (userId: string, params: { page?: number; limit?: number; status?: OrderStatus; startDate?: string; endDate?: string; sortBy?: string; sortOrder?: "asc" | "desc" }) => {
@@ -73,7 +241,7 @@ const getOrders = async (userId: string, params: { page?: number; limit?: number
     const skip = (page - 1) * limit;
 
     const where: Prisma.OrderWhereInput = {
-        userId: userId, // ALWAYS filter by logged-in user
+        userId: userId,
     };
 
     // Status filter
@@ -113,6 +281,7 @@ const getOrders = async (userId: string, params: { page?: number; limit?: number
                             select: {
                                 id: true,
                                 name: true,
+                                sizes: true,
                             },
                         },
                     },
@@ -125,10 +294,45 @@ const getOrders = async (userId: string, params: { page?: number; limit?: number
         prisma.order.count({ where }),
     ]);
 
+    // Process orders to add isRepeat field
+    const ordersWithRepeatStatus = orders.map((order) => {
+        // Default to true (assuming all items have sufficient stock)
+        let isRepeat = true;
+
+        for (const item of order.items) {
+            if (item.product && item.product.sizes) {
+                // Parse the sizes JSON array
+                const sizes = item.product.sizes as Array<{
+                    mg: number;
+                    price: number;
+                    quantity: number;
+                }>;
+
+                // Find the specific size that matches the ordered size
+                const sizeInfo = sizes.find((s) => s.mg === item.size);
+
+                if (sizeInfo) {
+                    // If ordered quantity is greater than available quantity
+                    // then it's NOT a repeat (false)
+                    if (item.quantity > sizeInfo.quantity) {
+                        isRepeat = false;
+                        break; // Exit loop once we find a non-repeat item
+                    }
+                }
+            }
+        }
+
+        // Add isRepeat at the order level
+        return {
+            ...order,
+            isRepeat, // true if all items have ordered quantity <= available quantity
+        };
+    });
+
     const totalPages = Math.ceil(total / limit);
 
     return {
-        orders,
+        orders: ordersWithRepeatStatus,
         meta: {
             page,
             limit,
