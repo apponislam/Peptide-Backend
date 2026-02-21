@@ -56,7 +56,8 @@ export const ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   CheckoutSession: 'CheckoutSession',
-  Commission: 'Commission'
+  Commission: 'Commission',
+  OrderPreview: 'OrderPreview'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -186,6 +187,20 @@ export const CommissionScalarFieldEnum = {
 } as const
 
 export type CommissionScalarFieldEnum = (typeof CommissionScalarFieldEnum)[keyof typeof CommissionScalarFieldEnum]
+
+
+export const OrderPreviewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  items: 'items',
+  subtotal: 'subtotal',
+  shipping: 'shipping',
+  total: 'total',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderPreviewScalarFieldEnum = (typeof OrderPreviewScalarFieldEnum)[keyof typeof OrderPreviewScalarFieldEnum]
 
 
 export const SortOrder = {

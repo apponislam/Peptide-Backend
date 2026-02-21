@@ -47,3 +47,8 @@ export type CheckoutSession = Prisma.CheckoutSessionModel
  * 
  */
 export type Commission = Prisma.CommissionModel
+/**
+ * Model OrderPreview
+ * 
+ */
+export type OrderPreview = Prisma.OrderPreviewModel

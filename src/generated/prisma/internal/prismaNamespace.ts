@@ -389,7 +389,8 @@ export const ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   CheckoutSession: 'CheckoutSession',
-  Commission: 'Commission'
+  Commission: 'Commission',
+  OrderPreview: 'OrderPreview'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "product" | "order" | "orderItem" | "checkoutSession" | "commission"
+    modelProps: "user" | "product" | "order" | "orderItem" | "checkoutSession" | "commission" | "orderPreview"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +854,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OrderPreview: {
+      payload: Prisma.$OrderPreviewPayload<ExtArgs>
+      fields: Prisma.OrderPreviewFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrderPreviewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrderPreviewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload>
+        }
+        findFirst: {
+          args: Prisma.OrderPreviewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrderPreviewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload>
+        }
+        findMany: {
+          args: Prisma.OrderPreviewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload>[]
+        }
+        create: {
+          args: Prisma.OrderPreviewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload>
+        }
+        createMany: {
+          args: Prisma.OrderPreviewCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrderPreviewCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload>[]
+        }
+        delete: {
+          args: Prisma.OrderPreviewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload>
+        }
+        update: {
+          args: Prisma.OrderPreviewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrderPreviewDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrderPreviewUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrderPreviewUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrderPreviewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPreviewPayload>
+        }
+        aggregate: {
+          args: Prisma.OrderPreviewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrderPreview>
+        }
+        groupBy: {
+          args: Prisma.OrderPreviewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderPreviewGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrderPreviewCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderPreviewCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1003,6 +1078,20 @@ export const CommissionScalarFieldEnum = {
 } as const
 
 export type CommissionScalarFieldEnum = (typeof CommissionScalarFieldEnum)[keyof typeof CommissionScalarFieldEnum]
+
+
+export const OrderPreviewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  items: 'items',
+  subtotal: 'subtotal',
+  shipping: 'shipping',
+  total: 'total',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderPreviewScalarFieldEnum = (typeof OrderPreviewScalarFieldEnum)[keyof typeof OrderPreviewScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1306,6 +1395,7 @@ export type GlobalOmitConfig = {
   orderItem?: Prisma.OrderItemOmit
   checkoutSession?: Prisma.CheckoutSessionOmit
   commission?: Prisma.CommissionOmit
+  orderPreview?: Prisma.OrderPreviewOmit
 }
 
 /* Types for Logging */

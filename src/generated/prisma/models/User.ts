@@ -306,6 +306,7 @@ export type UserWhereInput = {
   commissionsEarned?: Prisma.CommissionListRelationFilter
   commissionsFrom?: Prisma.CommissionListRelationFilter
   checkoutSessions?: Prisma.CheckoutSessionListRelationFilter
+  orderPreviews?: Prisma.OrderPreviewListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -330,6 +331,7 @@ export type UserOrderByWithRelationInput = {
   commissionsEarned?: Prisma.CommissionOrderByRelationAggregateInput
   commissionsFrom?: Prisma.CommissionOrderByRelationAggregateInput
   checkoutSessions?: Prisma.CheckoutSessionOrderByRelationAggregateInput
+  orderPreviews?: Prisma.OrderPreviewOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -357,6 +359,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   commissionsEarned?: Prisma.CommissionListRelationFilter
   commissionsFrom?: Prisma.CommissionListRelationFilter
   checkoutSessions?: Prisma.CheckoutSessionListRelationFilter
+  orderPreviews?: Prisma.OrderPreviewListRelationFilter
 }, "id" | "email" | "referralCode">
 
 export type UserOrderByWithAggregationInput = {
@@ -424,6 +427,7 @@ export type UserCreateInput = {
   commissionsEarned?: Prisma.CommissionCreateNestedManyWithoutReferrerInput
   commissionsFrom?: Prisma.CommissionCreateNestedManyWithoutBuyerInput
   checkoutSessions?: Prisma.CheckoutSessionCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -447,6 +451,7 @@ export type UserUncheckedCreateInput = {
   commissionsEarned?: Prisma.CommissionUncheckedCreateNestedManyWithoutReferrerInput
   commissionsFrom?: Prisma.CommissionUncheckedCreateNestedManyWithoutBuyerInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -470,6 +475,7 @@ export type UserUpdateInput = {
   commissionsEarned?: Prisma.CommissionUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -493,6 +499,7 @@ export type UserUncheckedUpdateInput = {
   commissionsEarned?: Prisma.CommissionUncheckedUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUncheckedUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -790,6 +797,20 @@ export type UserUpdateOneRequiredWithoutCommissionsFromNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommissionsFromInput, Prisma.UserUpdateWithoutCommissionsFromInput>, Prisma.UserUncheckedUpdateWithoutCommissionsFromInput>
 }
 
+export type UserCreateNestedOneWithoutOrderPreviewsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrderPreviewsInput, Prisma.UserUncheckedCreateWithoutOrderPreviewsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrderPreviewsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOrderPreviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrderPreviewsInput, Prisma.UserUncheckedCreateWithoutOrderPreviewsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrderPreviewsInput
+  upsert?: Prisma.UserUpsertWithoutOrderPreviewsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrderPreviewsInput, Prisma.UserUpdateWithoutOrderPreviewsInput>, Prisma.UserUncheckedUpdateWithoutOrderPreviewsInput>
+}
+
 export type UserCreateWithoutReferralsInput = {
   id?: string
   email: string
@@ -810,6 +831,7 @@ export type UserCreateWithoutReferralsInput = {
   commissionsEarned?: Prisma.CommissionCreateNestedManyWithoutReferrerInput
   commissionsFrom?: Prisma.CommissionCreateNestedManyWithoutBuyerInput
   checkoutSessions?: Prisma.CheckoutSessionCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReferralsInput = {
@@ -832,6 +854,7 @@ export type UserUncheckedCreateWithoutReferralsInput = {
   commissionsEarned?: Prisma.CommissionUncheckedCreateNestedManyWithoutReferrerInput
   commissionsFrom?: Prisma.CommissionUncheckedCreateNestedManyWithoutBuyerInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReferralsInput = {
@@ -859,6 +882,7 @@ export type UserCreateWithoutReferrerInput = {
   commissionsEarned?: Prisma.CommissionCreateNestedManyWithoutReferrerInput
   commissionsFrom?: Prisma.CommissionCreateNestedManyWithoutBuyerInput
   checkoutSessions?: Prisma.CheckoutSessionCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReferrerInput = {
@@ -881,6 +905,7 @@ export type UserUncheckedCreateWithoutReferrerInput = {
   commissionsEarned?: Prisma.CommissionUncheckedCreateNestedManyWithoutReferrerInput
   commissionsFrom?: Prisma.CommissionUncheckedCreateNestedManyWithoutBuyerInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReferrerInput = {
@@ -924,6 +949,7 @@ export type UserUpdateWithoutReferralsInput = {
   commissionsEarned?: Prisma.CommissionUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -946,6 +972,7 @@ export type UserUncheckedUpdateWithoutReferralsInput = {
   commissionsEarned?: Prisma.CommissionUncheckedUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUncheckedUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutReferrerInput = {
@@ -1005,6 +1032,7 @@ export type UserCreateWithoutOrdersInput = {
   commissionsEarned?: Prisma.CommissionCreateNestedManyWithoutReferrerInput
   commissionsFrom?: Prisma.CommissionCreateNestedManyWithoutBuyerInput
   checkoutSessions?: Prisma.CheckoutSessionCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrdersInput = {
@@ -1027,6 +1055,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   commissionsEarned?: Prisma.CommissionUncheckedCreateNestedManyWithoutReferrerInput
   commissionsFrom?: Prisma.CommissionUncheckedCreateNestedManyWithoutBuyerInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrdersInput = {
@@ -1065,6 +1094,7 @@ export type UserUpdateWithoutOrdersInput = {
   commissionsEarned?: Prisma.CommissionUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -1087,6 +1117,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   commissionsEarned?: Prisma.CommissionUncheckedUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUncheckedUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCheckoutSessionsInput = {
@@ -1109,6 +1140,7 @@ export type UserCreateWithoutCheckoutSessionsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   commissionsEarned?: Prisma.CommissionCreateNestedManyWithoutReferrerInput
   commissionsFrom?: Prisma.CommissionCreateNestedManyWithoutBuyerInput
+  orderPreviews?: Prisma.OrderPreviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCheckoutSessionsInput = {
@@ -1131,6 +1163,7 @@ export type UserUncheckedCreateWithoutCheckoutSessionsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   commissionsEarned?: Prisma.CommissionUncheckedCreateNestedManyWithoutReferrerInput
   commissionsFrom?: Prisma.CommissionUncheckedCreateNestedManyWithoutBuyerInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCheckoutSessionsInput = {
@@ -1169,6 +1202,7 @@ export type UserUpdateWithoutCheckoutSessionsInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   commissionsEarned?: Prisma.CommissionUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUpdateManyWithoutBuyerNestedInput
+  orderPreviews?: Prisma.OrderPreviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCheckoutSessionsInput = {
@@ -1191,6 +1225,7 @@ export type UserUncheckedUpdateWithoutCheckoutSessionsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   commissionsEarned?: Prisma.CommissionUncheckedUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUncheckedUpdateManyWithoutBuyerNestedInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommissionsEarnedInput = {
@@ -1213,6 +1248,7 @@ export type UserCreateWithoutCommissionsEarnedInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   commissionsFrom?: Prisma.CommissionCreateNestedManyWithoutBuyerInput
   checkoutSessions?: Prisma.CheckoutSessionCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommissionsEarnedInput = {
@@ -1235,6 +1271,7 @@ export type UserUncheckedCreateWithoutCommissionsEarnedInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   commissionsFrom?: Prisma.CommissionUncheckedCreateNestedManyWithoutBuyerInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommissionsEarnedInput = {
@@ -1262,6 +1299,7 @@ export type UserCreateWithoutCommissionsFromInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   commissionsEarned?: Prisma.CommissionCreateNestedManyWithoutReferrerInput
   checkoutSessions?: Prisma.CheckoutSessionCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommissionsFromInput = {
@@ -1284,6 +1322,7 @@ export type UserUncheckedCreateWithoutCommissionsFromInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   commissionsEarned?: Prisma.CommissionUncheckedCreateNestedManyWithoutReferrerInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedCreateNestedManyWithoutUserInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommissionsFromInput = {
@@ -1322,6 +1361,7 @@ export type UserUpdateWithoutCommissionsEarnedInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   commissionsFrom?: Prisma.CommissionUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommissionsEarnedInput = {
@@ -1344,6 +1384,7 @@ export type UserUncheckedUpdateWithoutCommissionsEarnedInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   commissionsFrom?: Prisma.CommissionUncheckedUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutCommissionsFromInput = {
@@ -1377,6 +1418,7 @@ export type UserUpdateWithoutCommissionsFromInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   commissionsEarned?: Prisma.CommissionUpdateManyWithoutReferrerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommissionsFromInput = {
@@ -1398,6 +1440,115 @@ export type UserUncheckedUpdateWithoutCommissionsFromInput = {
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   commissionsEarned?: Prisma.CommissionUncheckedUpdateManyWithoutReferrerNestedInput
+  checkoutSessions?: Prisma.CheckoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutOrderPreviewsInput = {
+  id?: string
+  email: string
+  name: string
+  password: string
+  referralCode: string
+  tier?: $Enums.UserTier
+  role?: $Enums.UserRole
+  isActive?: boolean
+  deletedAt?: Date | string | null
+  storeCredit?: number
+  referralCount?: number
+  isReferralValid?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referrer?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferrerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  commissionsEarned?: Prisma.CommissionCreateNestedManyWithoutReferrerInput
+  commissionsFrom?: Prisma.CommissionCreateNestedManyWithoutBuyerInput
+  checkoutSessions?: Prisma.CheckoutSessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutOrderPreviewsInput = {
+  id?: string
+  email: string
+  name: string
+  password: string
+  referralCode: string
+  tier?: $Enums.UserTier
+  role?: $Enums.UserRole
+  isActive?: boolean
+  deletedAt?: Date | string | null
+  storeCredit?: number
+  referralCount?: number
+  isReferralValid?: boolean
+  referrerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferrerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  commissionsEarned?: Prisma.CommissionUncheckedCreateNestedManyWithoutReferrerInput
+  commissionsFrom?: Prisma.CommissionUncheckedCreateNestedManyWithoutBuyerInput
+  checkoutSessions?: Prisma.CheckoutSessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutOrderPreviewsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrderPreviewsInput, Prisma.UserUncheckedCreateWithoutOrderPreviewsInput>
+}
+
+export type UserUpsertWithoutOrderPreviewsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOrderPreviewsInput, Prisma.UserUncheckedUpdateWithoutOrderPreviewsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrderPreviewsInput, Prisma.UserUncheckedCreateWithoutOrderPreviewsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOrderPreviewsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOrderPreviewsInput, Prisma.UserUncheckedUpdateWithoutOrderPreviewsInput>
+}
+
+export type UserUpdateWithoutOrderPreviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
+  referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrer?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferrerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  commissionsEarned?: Prisma.CommissionUpdateManyWithoutReferrerNestedInput
+  commissionsFrom?: Prisma.CommissionUpdateManyWithoutBuyerNestedInput
+  checkoutSessions?: Prisma.CheckoutSessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOrderPreviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumUserTierFieldUpdateOperationsInput | $Enums.UserTier
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
+  referralCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  commissionsEarned?: Prisma.CommissionUncheckedUpdateManyWithoutReferrerNestedInput
+  commissionsFrom?: Prisma.CommissionUncheckedUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1438,6 +1589,7 @@ export type UserUpdateWithoutReferrerInput = {
   commissionsEarned?: Prisma.CommissionUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReferrerInput = {
@@ -1460,6 +1612,7 @@ export type UserUncheckedUpdateWithoutReferrerInput = {
   commissionsEarned?: Prisma.CommissionUncheckedUpdateManyWithoutReferrerNestedInput
   commissionsFrom?: Prisma.CommissionUncheckedUpdateManyWithoutBuyerNestedInput
   checkoutSessions?: Prisma.CheckoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  orderPreviews?: Prisma.OrderPreviewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutReferrerInput = {
@@ -1490,6 +1643,7 @@ export type UserCountOutputType = {
   commissionsEarned: number
   commissionsFrom: number
   checkoutSessions: number
+  orderPreviews: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1498,6 +1652,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   commissionsEarned?: boolean | UserCountOutputTypeCountCommissionsEarnedArgs
   commissionsFrom?: boolean | UserCountOutputTypeCountCommissionsFromArgs
   checkoutSessions?: boolean | UserCountOutputTypeCountCheckoutSessionsArgs
+  orderPreviews?: boolean | UserCountOutputTypeCountOrderPreviewsArgs
 }
 
 /**
@@ -1545,6 +1700,13 @@ export type UserCountOutputTypeCountCheckoutSessionsArgs<ExtArgs extends runtime
   where?: Prisma.CheckoutSessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOrderPreviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderPreviewWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1568,6 +1730,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   commissionsEarned?: boolean | Prisma.User$commissionsEarnedArgs<ExtArgs>
   commissionsFrom?: boolean | Prisma.User$commissionsFromArgs<ExtArgs>
   checkoutSessions?: boolean | Prisma.User$checkoutSessionsArgs<ExtArgs>
+  orderPreviews?: boolean | Prisma.User$orderPreviewsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1635,6 +1798,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   commissionsEarned?: boolean | Prisma.User$commissionsEarnedArgs<ExtArgs>
   commissionsFrom?: boolean | Prisma.User$commissionsFromArgs<ExtArgs>
   checkoutSessions?: boolean | Prisma.User$checkoutSessionsArgs<ExtArgs>
+  orderPreviews?: boolean | Prisma.User$orderPreviewsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1653,6 +1817,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     commissionsEarned: Prisma.$CommissionPayload<ExtArgs>[]
     commissionsFrom: Prisma.$CommissionPayload<ExtArgs>[]
     checkoutSessions: Prisma.$CheckoutSessionPayload<ExtArgs>[]
+    orderPreviews: Prisma.$OrderPreviewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2070,6 +2235,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   commissionsEarned<T extends Prisma.User$commissionsEarnedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commissionsEarnedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   commissionsFrom<T extends Prisma.User$commissionsFromArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commissionsFromArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checkoutSessions<T extends Prisma.User$checkoutSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$checkoutSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckoutSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  orderPreviews<T extends Prisma.User$orderPreviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$orderPreviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPreviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2646,6 +2812,30 @@ export type User$checkoutSessionsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.CheckoutSessionScalarFieldEnum | Prisma.CheckoutSessionScalarFieldEnum[]
+}
+
+/**
+ * User.orderPreviews
+ */
+export type User$orderPreviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderPreview
+   */
+  select?: Prisma.OrderPreviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrderPreview
+   */
+  omit?: Prisma.OrderPreviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderPreviewInclude<ExtArgs> | null
+  where?: Prisma.OrderPreviewWhereInput
+  orderBy?: Prisma.OrderPreviewOrderByWithRelationInput | Prisma.OrderPreviewOrderByWithRelationInput[]
+  cursor?: Prisma.OrderPreviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderPreviewScalarFieldEnum | Prisma.OrderPreviewScalarFieldEnum[]
 }
 
 /**
