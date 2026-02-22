@@ -5,7 +5,7 @@ CREATE TYPE "UserRole" AS ENUM ('USER', 'ADMIN');
 CREATE TYPE "UserTier" AS ENUM ('Member', 'Founder', 'VIP');
 
 -- CreateEnum
-CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'PAID', 'SHIPPED', 'CANCELLED');
+CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'FAILED', 'CANCELLED', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'RETURNED', 'REFUNDED');
 
 -- CreateEnum
 CREATE TYPE "StripePaymentStatus" AS ENUM ('PENDING', 'PAID', 'FAILED');
@@ -43,6 +43,8 @@ CREATE TABLE "Product" (
     "details" TEXT NOT NULL,
     "references" JSONB NOT NULL,
     "coa" JSONB,
+    "image" TEXT,
+    "inStock" BOOLEAN NOT NULL DEFAULT true,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "deletedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -54,6 +56,7 @@ CREATE TABLE "Product" (
 -- CreateTable
 CREATE TABLE "Order" (
     "id" TEXT NOT NULL,
+    "paymentIntentId" TEXT NOT NULL DEFAULT 'no-payment',
     "userId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -87,6 +90,7 @@ CREATE TABLE "OrderItem" (
     "id" TEXT NOT NULL,
     "orderId" TEXT NOT NULL,
     "productId" INTEGER,
+    "size" INTEGER,
     "quantity" INTEGER NOT NULL,
     "unitPrice" DOUBLE PRECISION NOT NULL,
     "discountedPrice" DOUBLE PRECISION NOT NULL,
@@ -101,6 +105,7 @@ CREATE TABLE "CheckoutSession" (
     "orderId" TEXT,
     "stripeSessionId" TEXT NOT NULL,
     "paymentStatus" "StripePaymentStatus" NOT NULL DEFAULT 'PENDING',
+    "storeCreditUsed" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -119,6 +124,20 @@ CREATE TABLE "Commission" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Commission_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "OrderPreview" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "items" TEXT NOT NULL,
+    "subtotal" DOUBLE PRECISION NOT NULL,
+    "shipping" DOUBLE PRECISION NOT NULL,
+    "total" DOUBLE PRECISION NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "OrderPreview_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -164,6 +183,9 @@ CREATE INDEX "Order_email_idx" ON "Order"("email");
 CREATE INDEX "Order_shipstationOrderId_idx" ON "Order"("shipstationOrderId");
 
 -- CreateIndex
+CREATE INDEX "Order_paymentIntentId_idx" ON "Order"("paymentIntentId");
+
+-- CreateIndex
 CREATE INDEX "OrderItem_orderId_idx" ON "OrderItem"("orderId");
 
 -- CreateIndex
@@ -199,6 +221,12 @@ CREATE INDEX "Commission_status_idx" ON "Commission"("status");
 -- CreateIndex
 CREATE INDEX "Commission_createdAt_idx" ON "Commission"("createdAt");
 
+-- CreateIndex
+CREATE INDEX "OrderPreview_userId_idx" ON "OrderPreview"("userId");
+
+-- CreateIndex
+CREATE INDEX "OrderPreview_expiresAt_idx" ON "OrderPreview"("expiresAt");
+
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_referrerId_fkey" FOREIGN KEY ("referrerId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -225,3 +253,6 @@ ALTER TABLE "Commission" ADD CONSTRAINT "Commission_referrerId_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "Commission" ADD CONSTRAINT "Commission_buyerId_fkey" FOREIGN KEY ("buyerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "OrderPreview" ADD CONSTRAINT "OrderPreview_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

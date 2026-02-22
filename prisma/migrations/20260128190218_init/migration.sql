@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "User" ADD COLUMN     "shippingCredit" DOUBLE PRECISION NOT NULL DEFAULT 150.00;
