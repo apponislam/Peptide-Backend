@@ -21,6 +21,8 @@ router.post("/reset-password", authControllers.resetPassword);
 
 //Get user referrals with pagination
 router.get("/my-referrals", auth, authControllers.getMyReferrals);
+router.patch("/update-profile", auth, authControllers.updateProfile);
+router.patch("/change-password", auth, authControllers.changePassword);
 
 // Admin
 

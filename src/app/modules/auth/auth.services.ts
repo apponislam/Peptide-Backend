@@ -456,6 +456,86 @@ const getMyReferrals = async (userId: string, page: number = 1, limit: number = 
     };
 };
 
+// Update Profile
+const updateProfile = async (userId: string, data: { name?: string; email?: string }) => {
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+    });
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    // If email is being updated, check if it's already taken
+    if (data.email && data.email !== user.email) {
+        const existingUser = await prisma.user.findUnique({
+            where: { email: data.email },
+        });
+
+        if (existingUser) {
+            throw new ApiError(400, "Email already in use");
+        }
+    }
+
+    // Update user
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+            name: data.name || user.name,
+            email: data.email || user.email,
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            referralCode: true,
+            tier: true,
+            storeCredit: true,
+            referralCount: true,
+            createdAt: true,
+        },
+    });
+
+    return updatedUser;
+};
+
+// Change Password
+const changePassword = async (userId: string, currentPassword: string, newPassword: string) => {
+    // Get user with password
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+            id: true,
+            password: true,
+        },
+    });
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    // Verify current password
+    const isValidPassword = await bcrypt.compare(currentPassword, user.password);
+    if (!isValidPassword) {
+        throw new ApiError(401, "Current password is incorrect");
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, Number(config.bcrypt_salt_rounds));
+
+    // Update password
+    await prisma.user.update({
+        where: { id: userId },
+        data: {
+            password: hashedPassword,
+        },
+    });
+
+    return { message: "Password changed successfully" };
+};
+
 export const authServices = {
     register,
     login,
@@ -469,4 +549,6 @@ export const authServices = {
     verifyOTP,
     resetPassword,
     getMyReferrals,
+    updateProfile,
+    changePassword,
 };

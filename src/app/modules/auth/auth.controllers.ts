@@ -230,6 +230,36 @@ const getMyReferrals = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// Update Profile (name & email)
+const updateProfile = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user?.id || (req.user as any)?.userId;
+    const { name, email } = req.body;
+
+    const result = await authServices.updateProfile(userId, { name, email });
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Profile updated successfully",
+        data: result,
+    });
+});
+
+// Change Password
+const changePassword = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user?.id || (req.user as any)?.userId;
+    const { currentPassword, newPassword } = req.body;
+
+    const result = await authServices.changePassword(userId, currentPassword, newPassword);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Password changed successfully",
+        data: result,
+    });
+});
+
 export const authControllers = {
     register,
     login,
@@ -243,4 +273,6 @@ export const authControllers = {
     verifyOTP,
     resetPassword,
     getMyReferrals,
+    updateProfile,
+    changePassword,
 };
