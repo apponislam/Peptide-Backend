@@ -24,23 +24,23 @@ export const getPasswordResetEmail = (data: { name: string; otp: string; resetTo
         .otp-label { color: #1e40af; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
         .otp-code { font-size: 48px; font-weight: 700; color: #1e40af; letter-spacing: 8px; background: white; padding: 20px 25px; border-radius: 12px; display: inline-block; border: 2px solid #dbeafe; font-family: monospace; }
         
-        {/* Direct Link Box */}
+        /* Direct Link Box */
         .link-box { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 2px solid #10b981; border-radius: 16px; padding: 30px; text-align: center; margin: 25px 0; }
         .link-label { color: #065f46; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
         .reset-button { display: inline-block; background: #10b981; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; margin: 20px 0; transition: all 0.3s; }
         .reset-button:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
         
-        {/* Divider */}
+        /* Divider */
         .divider { display: flex; align-items: center; text-align: center; margin: 30px 0; }
         .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #e2e8f0; }
         .divider span { padding: 0 10px; color: #94a3b8; font-size: 14px; }
         
-        {/* Expiry Notice */}
+        /* Expiry Notice */
         .expiry-notice { background: #fef3c7; border-radius: 8px; padding: 15px; margin-top: 25px; border-left: 4px solid #f59e0b; }
         .expiry-title { color: #92400e; font-weight: 600; margin-bottom: 5px; }
         .expiry-text { color: #92400e; font-size: 14px; }
         
-        {/* Warning */}
+        /* Warning */
         .warning-box { background: #fee2e2; border-radius: 8px; padding: 15px; margin-top: 20px; border-left: 4px solid #ef4444; }
         .warning-text { color: #991b1b; font-size: 14px; margin: 0; }
         
@@ -50,49 +50,49 @@ export const getPasswordResetEmail = (data: { name: string; otp: string; resetTo
 </head>
 <body>
     <div class="container">
-        {/* Header */}
+        <!-- Header -->
         <div class="header">
             <h1>🔐 Password Reset Request</h1>
             <p>Reset your password for PEPTIDE.CLUB</p>
         </div>
         
-        {/* Content */}
+        <!-- Content -->
         <div class="content">
             <p style="font-size: 16px; color: #475569; margin-bottom: 25px;">Hello <strong>${data.name}</strong>,</p>
             <p style="font-size: 16px; color: #475569; margin-bottom: 25px;">We received a request to reset your password. Choose one of the methods below:</p>
             
-            {/* Direct Reset Link (Primary) */}
+            <!-- Direct Reset Link (Primary) -->
             <div class="link-box">
                 <div class="link-label">🔗 Direct Reset Link</div>
                 <a href="${data.directResetLink}" class="reset-button">Reset Password Now</a>
                 <p style="color: #065f46; margin-top: 15px;">Click the button above to reset your password instantly</p>
             </div>
             
-            {/* Divider */}
+            <!-- Divider -->
             <div class="divider">
                 <span>OR</span>
             </div>
             
-            {/* OTP Code */}
+            <!-- OTP Code -->
             <div class="otp-box">
                 <div class="otp-label">📱 Use Verification Code</div>
                 <div class="otp-code">${data.otp}</div>
                 <p style="color: #1e40af; margin-top: 15px;">Enter this 6-digit code on the password reset page</p>
             </div>
             
-            {/* Expiry Notice */}
+            <!-- Expiry Notice -->
             <div class="expiry-notice">
                 <div class="expiry-title">⏰ This will expire in ${expiryTime} minutes</div>
                 <p class="expiry-text">For your security, both the link and code are valid for ${expiryTime} minutes only.</p>
             </div>
             
-            {/* Warning */}
+            <!-- Warning -->
             <div class="warning-box">
                 <p class="warning-text">⚠️ If you didn't request this password reset, please ignore this email or contact support if you're concerned.</p>
             </div>
         </div>
         
-        {/* Footer */}
+        <!-- Footer -->
         <div class="footer">
             <div class="logo">PEPTIDE.CLUB</div>
             <p>Premium peptides, delivered with care.</p>

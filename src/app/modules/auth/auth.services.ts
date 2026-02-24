@@ -312,7 +312,7 @@ const forgotPassword = async (email: string) => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) throw new ApiError(404, "User not found");
 
-    // Generate OTP inside the function
+    // Generate OTP inside function
     const generateOTP = (): string => {
         return Math.floor(100000 + Math.random() * 900000).toString();
     };
@@ -331,7 +331,7 @@ const forgotPassword = async (email: string) => {
         },
     });
 
-    const directResetLink = `${config.frontend_url}/auth/reset-password?token=${resetToken}`;
+    const directResetLink = `${process.env.FRONTEND_URL}/auth/reset-password?token=${resetToken}`;
 
     await sendPasswordResetEmail(email, {
         name: user.name,
@@ -341,15 +341,17 @@ const forgotPassword = async (email: string) => {
         expiryMinutes: 10,
     });
 
-    return { message: "Password reset email sent" };
+    return { message: "Password reset OTP sent to your email" };
 };
 
+// 2. Verify OTP - Returns only token
 const verifyOTP = async (email: string, otp: string) => {
     const user = await prisma.user.findUnique({
         where: { email },
         select: {
             resetPasswordOtp: true,
             resetPasswordOtpExpiry: true,
+            resetPasswordToken: true,
         },
     });
 
@@ -364,33 +366,29 @@ const verifyOTP = async (email: string, otp: string) => {
         throw new ApiError(400, "Invalid OTP");
     }
 
-    return { message: "OTP verified", email };
+    // Return ONLY the token
+    return {
+        token: user.resetPasswordToken,
+    };
 };
 
-const resetPassword = async (email: string, otp: string, newPassword: string) => {
-    const user = await prisma.user.findUnique({
-        where: { email },
-        select: {
-            resetPasswordOtp: true,
-            resetPasswordOtpExpiry: true,
+// 3. Reset Password
+const resetPassword = async (token: string, newPassword: string) => {
+    const user = await prisma.user.findFirst({
+        where: {
+            resetPasswordToken: token,
+            resetPasswordTokenExpiry: {
+                gt: new Date(),
+            },
         },
     });
 
-    if (!user) throw new ApiError(404, "User not found");
-    if (!user.resetPasswordOtp || !user.resetPasswordOtpExpiry) {
-        throw new ApiError(400, "No OTP found. Request a new one");
-    }
-    if (new Date() > user.resetPasswordOtpExpiry) {
-        throw new ApiError(400, "OTP expired. Request a new one");
-    }
-    if (user.resetPasswordOtp !== otp) {
-        throw new ApiError(400, "Invalid OTP");
-    }
+    if (!user) throw new ApiError(400, "Invalid or expired token");
 
     const hashedPassword = await bcrypt.hash(newPassword, Number(config.bcrypt_salt_rounds));
 
     await prisma.user.update({
-        where: { email },
+        where: { id: user.id },
         data: {
             password: hashedPassword,
             resetPasswordOtp: null,

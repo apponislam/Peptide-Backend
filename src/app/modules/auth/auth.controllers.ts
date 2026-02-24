@@ -196,13 +196,13 @@ const verifyOTP = catchAsync(async (req: Request, res: Response) => {
         statusCode: 200,
         success: true,
         message: "OTP verified successfully",
-        data: result,
+        data: result, // { token: "..." }
     });
 });
 
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
-    const { email, otp, newPassword } = req.body;
-    const result = await authServices.resetPassword(email, otp, newPassword);
+    const { token, newPassword } = req.body;
+    const result = await authServices.resetPassword(token, newPassword);
 
     sendResponse(res, {
         statusCode: 200,
