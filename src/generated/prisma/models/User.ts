@@ -50,6 +50,10 @@ export type UserMinAggregateOutputType = {
   referralCount: number | null
   isReferralValid: boolean | null
   referrerId: string | null
+  resetPasswordOtp: string | null
+  resetPasswordOtpExpiry: Date | null
+  resetPasswordToken: string | null
+  resetPasswordTokenExpiry: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -68,6 +72,10 @@ export type UserMaxAggregateOutputType = {
   referralCount: number | null
   isReferralValid: boolean | null
   referrerId: string | null
+  resetPasswordOtp: string | null
+  resetPasswordOtpExpiry: Date | null
+  resetPasswordToken: string | null
+  resetPasswordTokenExpiry: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -86,6 +94,10 @@ export type UserCountAggregateOutputType = {
   referralCount: number
   isReferralValid: number
   referrerId: number
+  resetPasswordOtp: number
+  resetPasswordOtpExpiry: number
+  resetPasswordToken: number
+  resetPasswordTokenExpiry: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -116,6 +128,10 @@ export type UserMinAggregateInputType = {
   referralCount?: true
   isReferralValid?: true
   referrerId?: true
+  resetPasswordOtp?: true
+  resetPasswordOtpExpiry?: true
+  resetPasswordToken?: true
+  resetPasswordTokenExpiry?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -134,6 +150,10 @@ export type UserMaxAggregateInputType = {
   referralCount?: true
   isReferralValid?: true
   referrerId?: true
+  resetPasswordOtp?: true
+  resetPasswordOtpExpiry?: true
+  resetPasswordToken?: true
+  resetPasswordTokenExpiry?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -152,6 +172,10 @@ export type UserCountAggregateInputType = {
   referralCount?: true
   isReferralValid?: true
   referrerId?: true
+  resetPasswordOtp?: true
+  resetPasswordOtpExpiry?: true
+  resetPasswordToken?: true
+  resetPasswordTokenExpiry?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -257,6 +281,10 @@ export type UserGroupByOutputType = {
   referralCount: number
   isReferralValid: boolean
   referrerId: string | null
+  resetPasswordOtp: string | null
+  resetPasswordOtpExpiry: Date | null
+  resetPasswordToken: string | null
+  resetPasswordTokenExpiry: Date | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -298,6 +326,10 @@ export type UserWhereInput = {
   referralCount?: Prisma.IntFilter<"User"> | number
   isReferralValid?: Prisma.BoolFilter<"User"> | boolean
   referrerId?: Prisma.StringNullableFilter<"User"> | string | null
+  resetPasswordOtp?: Prisma.StringNullableFilter<"User"> | string | null
+  resetPasswordOtpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  resetPasswordToken?: Prisma.StringNullableFilter<"User"> | string | null
+  resetPasswordTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   referrer?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -323,6 +355,10 @@ export type UserOrderByWithRelationInput = {
   referralCount?: Prisma.SortOrder
   isReferralValid?: Prisma.SortOrder
   referrerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetPasswordOtp?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetPasswordOtpExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetPasswordToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetPasswordTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   referrer?: Prisma.UserOrderByWithRelationInput
@@ -351,6 +387,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   referralCount?: Prisma.IntFilter<"User"> | number
   isReferralValid?: Prisma.BoolFilter<"User"> | boolean
   referrerId?: Prisma.StringNullableFilter<"User"> | string | null
+  resetPasswordOtp?: Prisma.StringNullableFilter<"User"> | string | null
+  resetPasswordOtpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  resetPasswordToken?: Prisma.StringNullableFilter<"User"> | string | null
+  resetPasswordTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   referrer?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -376,6 +416,10 @@ export type UserOrderByWithAggregationInput = {
   referralCount?: Prisma.SortOrder
   isReferralValid?: Prisma.SortOrder
   referrerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetPasswordOtp?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetPasswordOtpExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetPasswordToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetPasswordTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -402,6 +446,10 @@ export type UserScalarWhereWithAggregatesInput = {
   referralCount?: Prisma.IntWithAggregatesFilter<"User"> | number
   isReferralValid?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   referrerId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  resetPasswordOtp?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  resetPasswordOtpExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  resetPasswordToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  resetPasswordTokenExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -419,6 +467,10 @@ export type UserCreateInput = {
   storeCredit?: number
   referralCount?: number
   isReferralValid?: boolean
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrer?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -444,6 +496,10 @@ export type UserUncheckedCreateInput = {
   referralCount?: number
   isReferralValid?: boolean
   referrerId?: string | null
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferrerInput
@@ -467,6 +523,10 @@ export type UserUpdateInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrer?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -492,6 +552,10 @@ export type UserUncheckedUpdateInput = {
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
@@ -516,6 +580,10 @@ export type UserCreateManyInput = {
   referralCount?: number
   isReferralValid?: boolean
   referrerId?: string | null
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -533,6 +601,10 @@ export type UserUpdateManyMutationInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -551,6 +623,10 @@ export type UserUncheckedUpdateManyInput = {
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -584,6 +660,10 @@ export type UserCountOrderByAggregateInput = {
   referralCount?: Prisma.SortOrder
   isReferralValid?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
+  resetPasswordOtp?: Prisma.SortOrder
+  resetPasswordOtpExpiry?: Prisma.SortOrder
+  resetPasswordToken?: Prisma.SortOrder
+  resetPasswordTokenExpiry?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -607,6 +687,10 @@ export type UserMaxOrderByAggregateInput = {
   referralCount?: Prisma.SortOrder
   isReferralValid?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
+  resetPasswordOtp?: Prisma.SortOrder
+  resetPasswordOtpExpiry?: Prisma.SortOrder
+  resetPasswordToken?: Prisma.SortOrder
+  resetPasswordTokenExpiry?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -625,6 +709,10 @@ export type UserMinOrderByAggregateInput = {
   referralCount?: Prisma.SortOrder
   isReferralValid?: Prisma.SortOrder
   referrerId?: Prisma.SortOrder
+  resetPasswordOtp?: Prisma.SortOrder
+  resetPasswordOtpExpiry?: Prisma.SortOrder
+  resetPasswordToken?: Prisma.SortOrder
+  resetPasswordTokenExpiry?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -695,6 +783,10 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
@@ -721,10 +813,6 @@ export type UserUpdateManyWithoutReferrerNestedInput = {
   update?: Prisma.UserUpdateWithWhereUniqueWithoutReferrerInput | Prisma.UserUpdateWithWhereUniqueWithoutReferrerInput[]
   updateMany?: Prisma.UserUpdateManyWithWhereWithoutReferrerInput | Prisma.UserUpdateManyWithWhereWithoutReferrerInput[]
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
 }
 
 export type UserUncheckedUpdateManyWithoutReferrerNestedInput = {
@@ -824,6 +912,10 @@ export type UserCreateWithoutReferralsInput = {
   storeCredit?: number
   referralCount?: number
   isReferralValid?: boolean
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrer?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -848,6 +940,10 @@ export type UserUncheckedCreateWithoutReferralsInput = {
   referralCount?: number
   isReferralValid?: boolean
   referrerId?: string | null
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
@@ -875,6 +971,10 @@ export type UserCreateWithoutReferrerInput = {
   storeCredit?: number
   referralCount?: number
   isReferralValid?: boolean
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserCreateNestedManyWithoutReferrerInput
@@ -898,6 +998,10 @@ export type UserUncheckedCreateWithoutReferrerInput = {
   storeCredit?: number
   referralCount?: number
   isReferralValid?: boolean
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferrerInput
@@ -942,6 +1046,10 @@ export type UserUpdateWithoutReferralsInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrer?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -966,6 +1074,10 @@ export type UserUncheckedUpdateWithoutReferralsInput = {
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -1008,6 +1120,10 @@ export type UserScalarWhereInput = {
   referralCount?: Prisma.IntFilter<"User"> | number
   isReferralValid?: Prisma.BoolFilter<"User"> | boolean
   referrerId?: Prisma.StringNullableFilter<"User"> | string | null
+  resetPasswordOtp?: Prisma.StringNullableFilter<"User"> | string | null
+  resetPasswordOtpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  resetPasswordToken?: Prisma.StringNullableFilter<"User"> | string | null
+  resetPasswordTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
@@ -1025,6 +1141,10 @@ export type UserCreateWithoutOrdersInput = {
   storeCredit?: number
   referralCount?: number
   isReferralValid?: boolean
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrer?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -1049,6 +1169,10 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   referralCount?: number
   isReferralValid?: boolean
   referrerId?: string | null
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferrerInput
@@ -1087,6 +1211,10 @@ export type UserUpdateWithoutOrdersInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrer?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -1111,6 +1239,10 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
@@ -1133,6 +1265,10 @@ export type UserCreateWithoutCheckoutSessionsInput = {
   storeCredit?: number
   referralCount?: number
   isReferralValid?: boolean
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrer?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -1157,6 +1293,10 @@ export type UserUncheckedCreateWithoutCheckoutSessionsInput = {
   referralCount?: number
   isReferralValid?: boolean
   referrerId?: string | null
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferrerInput
@@ -1195,6 +1335,10 @@ export type UserUpdateWithoutCheckoutSessionsInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrer?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -1219,6 +1363,10 @@ export type UserUncheckedUpdateWithoutCheckoutSessionsInput = {
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
@@ -1241,6 +1389,10 @@ export type UserCreateWithoutCommissionsEarnedInput = {
   storeCredit?: number
   referralCount?: number
   isReferralValid?: boolean
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrer?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -1265,6 +1417,10 @@ export type UserUncheckedCreateWithoutCommissionsEarnedInput = {
   referralCount?: number
   isReferralValid?: boolean
   referrerId?: string | null
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferrerInput
@@ -1292,6 +1448,10 @@ export type UserCreateWithoutCommissionsFromInput = {
   storeCredit?: number
   referralCount?: number
   isReferralValid?: boolean
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrer?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -1316,6 +1476,10 @@ export type UserUncheckedCreateWithoutCommissionsFromInput = {
   referralCount?: number
   isReferralValid?: boolean
   referrerId?: string | null
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferrerInput
@@ -1354,6 +1518,10 @@ export type UserUpdateWithoutCommissionsEarnedInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrer?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -1378,6 +1546,10 @@ export type UserUncheckedUpdateWithoutCommissionsEarnedInput = {
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
@@ -1411,6 +1583,10 @@ export type UserUpdateWithoutCommissionsFromInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrer?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -1435,6 +1611,10 @@ export type UserUncheckedUpdateWithoutCommissionsFromInput = {
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
@@ -1457,6 +1637,10 @@ export type UserCreateWithoutOrderPreviewsInput = {
   storeCredit?: number
   referralCount?: number
   isReferralValid?: boolean
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrer?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -1481,6 +1665,10 @@ export type UserUncheckedCreateWithoutOrderPreviewsInput = {
   referralCount?: number
   isReferralValid?: boolean
   referrerId?: string | null
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferrerInput
@@ -1519,6 +1707,10 @@ export type UserUpdateWithoutOrderPreviewsInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrer?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -1543,6 +1735,10 @@ export type UserUncheckedUpdateWithoutOrderPreviewsInput = {
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   referrerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
@@ -1565,6 +1761,10 @@ export type UserCreateManyReferrerInput = {
   storeCredit?: number
   referralCount?: number
   isReferralValid?: boolean
+  resetPasswordOtp?: string | null
+  resetPasswordOtpExpiry?: Date | string | null
+  resetPasswordToken?: string | null
+  resetPasswordTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1582,6 +1782,10 @@ export type UserUpdateWithoutReferrerInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUpdateManyWithoutReferrerNestedInput
@@ -1605,6 +1809,10 @@ export type UserUncheckedUpdateWithoutReferrerInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferrerNestedInput
@@ -1628,6 +1836,10 @@ export type UserUncheckedUpdateManyWithoutReferrerInput = {
   storeCredit?: Prisma.FloatFieldUpdateOperationsInput | number
   referralCount?: Prisma.IntFieldUpdateOperationsInput | number
   isReferralValid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordOtp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1722,6 +1934,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   referralCount?: boolean
   isReferralValid?: boolean
   referrerId?: boolean
+  resetPasswordOtp?: boolean
+  resetPasswordOtpExpiry?: boolean
+  resetPasswordToken?: boolean
+  resetPasswordTokenExpiry?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   referrer?: boolean | Prisma.User$referrerArgs<ExtArgs>
@@ -1748,6 +1964,10 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   referralCount?: boolean
   isReferralValid?: boolean
   referrerId?: boolean
+  resetPasswordOtp?: boolean
+  resetPasswordOtpExpiry?: boolean
+  resetPasswordToken?: boolean
+  resetPasswordTokenExpiry?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   referrer?: boolean | Prisma.User$referrerArgs<ExtArgs>
@@ -1767,6 +1987,10 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   referralCount?: boolean
   isReferralValid?: boolean
   referrerId?: boolean
+  resetPasswordOtp?: boolean
+  resetPasswordOtpExpiry?: boolean
+  resetPasswordToken?: boolean
+  resetPasswordTokenExpiry?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   referrer?: boolean | Prisma.User$referrerArgs<ExtArgs>
@@ -1786,11 +2010,15 @@ export type UserSelectScalar = {
   referralCount?: boolean
   isReferralValid?: boolean
   referrerId?: boolean
+  resetPasswordOtp?: boolean
+  resetPasswordOtpExpiry?: boolean
+  resetPasswordToken?: boolean
+  resetPasswordTokenExpiry?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "password" | "referralCode" | "tier" | "role" | "isActive" | "deletedAt" | "storeCredit" | "referralCount" | "isReferralValid" | "referrerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "password" | "referralCode" | "tier" | "role" | "isActive" | "deletedAt" | "storeCredit" | "referralCount" | "isReferralValid" | "referrerId" | "resetPasswordOtp" | "resetPasswordOtpExpiry" | "resetPasswordToken" | "resetPasswordTokenExpiry" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   referrer?: boolean | Prisma.User$referrerArgs<ExtArgs>
   referrals?: boolean | Prisma.User$referralsArgs<ExtArgs>
@@ -1833,6 +2061,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     referralCount: number
     isReferralValid: boolean
     referrerId: string | null
+    resetPasswordOtp: string | null
+    resetPasswordOtpExpiry: Date | null
+    resetPasswordToken: string | null
+    resetPasswordTokenExpiry: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -2278,6 +2510,10 @@ export interface UserFieldRefs {
   readonly referralCount: Prisma.FieldRef<"User", 'Int'>
   readonly isReferralValid: Prisma.FieldRef<"User", 'Boolean'>
   readonly referrerId: Prisma.FieldRef<"User", 'String'>
+  readonly resetPasswordOtp: Prisma.FieldRef<"User", 'String'>
+  readonly resetPasswordOtpExpiry: Prisma.FieldRef<"User", 'DateTime'>
+  readonly resetPasswordToken: Prisma.FieldRef<"User", 'String'>
+  readonly resetPasswordTokenExpiry: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

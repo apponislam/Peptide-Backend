@@ -28,6 +28,10 @@ CREATE TABLE "User" (
     "referralCount" INTEGER NOT NULL DEFAULT 0,
     "isReferralValid" BOOLEAN NOT NULL DEFAULT false,
     "referrerId" TEXT,
+    "resetPasswordOtp" TEXT,
+    "resetPasswordOtpExpiry" TIMESTAMP(3),
+    "resetPasswordToken" TEXT,
+    "resetPasswordTokenExpiry" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

@@ -14,6 +14,11 @@ router.get("/me", auth, authControllers.getCurrentUser);
 router.patch("/update-referral-code", auth, authControllers.updateReferralCode);
 router.get("/check-referral-code/:code", authControllers.checkReferralCode);
 
+// Password reset routes
+router.post("/forgot-password", authControllers.forgotPassword);
+router.post("/verify-otp", authControllers.verifyOTP);
+router.post("/reset-password", authControllers.resetPassword);
+
 // Admin
 
 router.post("/admin/login", authControllers.adminLogin);

@@ -174,6 +174,44 @@ const adminLogin = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// forgot password
+
+const forgotPassword = catchAsync(async (req: Request, res: Response) => {
+    const { email } = req.body;
+    const result = await authServices.forgotPassword(email);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Password reset OTP sent to your email",
+        data: result,
+    });
+});
+
+const verifyOTP = catchAsync(async (req: Request, res: Response) => {
+    const { email, otp } = req.body;
+    const result = await authServices.verifyOTP(email, otp);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "OTP verified successfully",
+        data: result,
+    });
+});
+
+const resetPassword = catchAsync(async (req: Request, res: Response) => {
+    const { email, otp, newPassword } = req.body;
+    const result = await authServices.resetPassword(email, otp, newPassword);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Password reset successful",
+        data: result,
+    });
+});
+
 export const authControllers = {
     register,
     login,
@@ -183,4 +221,7 @@ export const authControllers = {
     updateReferralCode,
     checkReferralCode,
     adminLogin,
+    forgotPassword,
+    verifyOTP,
+    resetPassword,
 };

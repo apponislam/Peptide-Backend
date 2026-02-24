@@ -981,6 +981,10 @@ export const UserScalarFieldEnum = {
   referralCount: 'referralCount',
   isReferralValid: 'isReferralValid',
   referrerId: 'referrerId',
+  resetPasswordOtp: 'resetPasswordOtp',
+  resetPasswordOtpExpiry: 'resetPasswordOtpExpiry',
+  resetPasswordToken: 'resetPasswordToken',
+  resetPasswordTokenExpiry: 'resetPasswordTokenExpiry',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -3,6 +3,8 @@ import { prisma } from "../../../lib/prisma";
 import config from "../../../config";
 import { jwtHelper } from "../../../utils/jwtHelpers";
 import ApiError from "../../../errors/ApiError";
+import { sendPasswordResetEmail } from "../../../utils/templates/resetPassTemplate";
+import crypto from "crypto";
 
 const register = async (name: string, email: string, password: string, referralCode?: string) => {
     const existing = await prisma.user.findUnique({ where: { email } });
@@ -304,6 +306,103 @@ const adminLogin = async (email: string, password: string) => {
     };
 };
 
+// forgot password
+
+const forgotPassword = async (email: string) => {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) throw new ApiError(404, "User not found");
+
+    // Generate OTP inside the function
+    const generateOTP = (): string => {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    };
+
+    const otp = generateOTP();
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    await prisma.user.update({
+        where: { email },
+        data: {
+            resetPasswordOtp: otp,
+            resetPasswordOtpExpiry: expiry,
+            resetPasswordToken: resetToken,
+            resetPasswordTokenExpiry: expiry,
+        },
+    });
+
+    const directResetLink = `${config.frontend_url}/auth/reset-password?token=${resetToken}`;
+
+    await sendPasswordResetEmail(email, {
+        name: user.name,
+        otp,
+        resetToken,
+        directResetLink,
+        expiryMinutes: 10,
+    });
+
+    return { message: "Password reset email sent" };
+};
+
+const verifyOTP = async (email: string, otp: string) => {
+    const user = await prisma.user.findUnique({
+        where: { email },
+        select: {
+            resetPasswordOtp: true,
+            resetPasswordOtpExpiry: true,
+        },
+    });
+
+    if (!user) throw new ApiError(404, "User not found");
+    if (!user.resetPasswordOtp || !user.resetPasswordOtpExpiry) {
+        throw new ApiError(400, "No OTP found. Request a new one");
+    }
+    if (new Date() > user.resetPasswordOtpExpiry) {
+        throw new ApiError(400, "OTP expired. Request a new one");
+    }
+    if (user.resetPasswordOtp !== otp) {
+        throw new ApiError(400, "Invalid OTP");
+    }
+
+    return { message: "OTP verified", email };
+};
+
+const resetPassword = async (email: string, otp: string, newPassword: string) => {
+    const user = await prisma.user.findUnique({
+        where: { email },
+        select: {
+            resetPasswordOtp: true,
+            resetPasswordOtpExpiry: true,
+        },
+    });
+
+    if (!user) throw new ApiError(404, "User not found");
+    if (!user.resetPasswordOtp || !user.resetPasswordOtpExpiry) {
+        throw new ApiError(400, "No OTP found. Request a new one");
+    }
+    if (new Date() > user.resetPasswordOtpExpiry) {
+        throw new ApiError(400, "OTP expired. Request a new one");
+    }
+    if (user.resetPasswordOtp !== otp) {
+        throw new ApiError(400, "Invalid OTP");
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, Number(config.bcrypt_salt_rounds));
+
+    await prisma.user.update({
+        where: { email },
+        data: {
+            password: hashedPassword,
+            resetPasswordOtp: null,
+            resetPasswordOtpExpiry: null,
+            resetPasswordToken: null,
+            resetPasswordTokenExpiry: null,
+        },
+    });
+
+    return { message: "Password reset successful" };
+};
+
 export const authServices = {
     register,
     login,
@@ -313,4 +412,7 @@ export const authServices = {
     updateReferralCode,
     checkReferralCodeAvailability,
     adminLogin,
+    forgotPassword,
+    verifyOTP,
+    resetPassword,
 };
