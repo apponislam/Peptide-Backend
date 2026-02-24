@@ -67,6 +67,12 @@ model User {
   referrer         User?    @relation("UserReferrals", fields: [referrerId], references: [id])
   referrals        User[]   @relation("UserReferrals")
 
+  // Password reset fields
+  resetPasswordOtp        String?
+  resetPasswordOtpExpiry  DateTime?
+  resetPasswordToken      String?
+  resetPasswordTokenExpiry DateTime?
+
   // Relations
   orders            Order[]
   commissionsEarned Commission[] @relation("ReferrerCommissions")
