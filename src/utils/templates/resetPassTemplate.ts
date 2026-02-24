@@ -12,100 +12,64 @@ export const getPasswordResetEmail = (data: { name: string; otp: string; resetTo
     <title>Password Reset - PEPTIDE.CLUB</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background: #f5f7fa; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .header { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 40px 20px; text-align: center; }
-        .header h1 { font-size: 32px; font-weight: 600; margin-bottom: 10px; }
-        .header p { opacity: 0.9; font-size: 16px; }
-        .content { padding: 40px 30px; }
-        
-        /* OTP Box */
-        .otp-box { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #3b82f6; border-radius: 16px; padding: 30px; text-align: center; margin: 25px 0; }
-        .otp-label { color: #1e40af; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .otp-code { font-size: 48px; font-weight: 700; color: #1e40af; letter-spacing: 8px; background: white; padding: 20px 25px; border-radius: 12px; display: inline-block; border: 2px solid #dbeafe; font-family: monospace; }
-        
-        /* Direct Link Box */
-        .link-box { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 2px solid #10b981; border-radius: 16px; padding: 30px; text-align: center; margin: 25px 0; }
-        .link-label { color: #065f46; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .reset-button { display: inline-block; background: #10b981; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; margin: 20px 0; transition: all 0.3s; }
-        .reset-button:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
-        
-        /* Divider */
-        .divider { display: flex; align-items: center; text-align: center; margin: 30px 0; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #e2e8f0; }
-        .divider span { padding: 0 10px; color: #94a3b8; font-size: 14px; }
-        
-        /* Expiry Notice */
-        .expiry-notice { background: #fef3c7; border-radius: 8px; padding: 15px; margin-top: 25px; border-left: 4px solid #f59e0b; }
-        .expiry-title { color: #92400e; font-weight: 600; margin-bottom: 5px; }
-        .expiry-text { color: #92400e; font-size: 14px; }
-        
-        /* Warning */
-        .warning-box { background: #fee2e2; border-radius: 8px; padding: 15px; margin-top: 20px; border-left: 4px solid #ef4444; }
-        .warning-text { color: #991b1b; font-size: 14px; margin: 0; }
-        
-        .footer { text-align: center; padding: 30px; background: #f8fafc; color: #64748b; font-size: 14px; border-top: 1px solid #e2e8f0; }
-        .logo { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px; letter-spacing: 1px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 25px 20px; text-align: center; }
+        .header h1 { font-size: 24px; margin-bottom: 5px; }
+        .content { padding: 25px; }
+        .link-box, .otp-box { border-radius: 10px; padding: 20px; text-align: center; margin: 15px 0; }
+        .link-box { background: #f0fdf4; border: 1px solid #10b981; }
+        .otp-box { background: #f0f9ff; border: 1px solid #3b82f6; }
+        .reset-button { display: inline-block; background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 10px 0; }
+        .otp-code { font-size: 36px; font-weight: 700; color: #1e40af; letter-spacing: 6px; background: white; padding: 10px 15px; border-radius: 8px; display: inline-block; border: 1px solid #dbeafe; font-family: monospace; margin: 10px 0; }
+        .divider { text-align: center; margin: 15px 0; color: #94a3b8; position: relative; }
+        .divider span { background: white; padding: 0 10px; }
+        .divider:before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e2e8f0; z-index: -1; }
+        .expiry-notice { background: #fef3c7; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; margin: 15px 0; font-size: 14px; }
+        .warning { color: #991b1b; font-size: 13px; margin: 15px 0; }
+        .footer { text-align: center; padding: 20px; background: #f8fafc; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
-            <h1>🔐 Password Reset Request</h1>
-            <p>Reset your password for PEPTIDE.CLUB</p>
+            <h1>🔐 Password Reset</h1>
+            <p>PEPTIDE.CLUB</p>
         </div>
         
-        <!-- Content -->
         <div class="content">
-            <p style="font-size: 16px; color: #475569; margin-bottom: 25px;">Hello <strong>${data.name}</strong>,</p>
-            <p style="font-size: 16px; color: #475569; margin-bottom: 25px;">We received a request to reset your password. Choose one of the methods below:</p>
+            <p style="margin-bottom: 15px;">Hello <strong>${data.name}</strong>,</p>
             
-            <!-- Direct Reset Link (Primary) -->
             <div class="link-box">
-                <div class="link-label">🔗 Direct Reset Link</div>
+                <div style="font-weight: 600; color: #065f46; margin-bottom: 10px;">🔗 Direct Reset Link</div>
                 <a href="${data.directResetLink}" class="reset-button">Reset Password Now</a>
-                <p style="color: #065f46; margin-top: 15px;">Click the button above to reset your password instantly</p>
             </div>
             
-            <!-- Divider -->
-            <div class="divider">
-                <span>OR</span>
-            </div>
+            <div class="divider"><span>OR</span></div>
             
-            <!-- OTP Code -->
             <div class="otp-box">
-                <div class="otp-label">📱 Use Verification Code</div>
+                <div style="font-weight: 600; color: #1e40af; margin-bottom: 10px;">📱 Use Code</div>
                 <div class="otp-code">${data.otp}</div>
-                <p style="color: #1e40af; margin-top: 15px;">Enter this 6-digit code on the password reset page</p>
             </div>
             
-            <!-- Expiry Notice -->
             <div class="expiry-notice">
-                <div class="expiry-title">⏰ This will expire in ${expiryTime} minutes</div>
-                <p class="expiry-text">For your security, both the link and code are valid for ${expiryTime} minutes only.</p>
+                ⏰ Expires in ${expiryTime} minutes
             </div>
             
-            <!-- Warning -->
-            <div class="warning-box">
-                <p class="warning-text">⚠️ If you didn't request this password reset, please ignore this email or contact support if you're concerned.</p>
+            <div class="warning">
+                ⚠️ Ignore this email if you didn't request this.
             </div>
         </div>
         
-        <!-- Footer -->
         <div class="footer">
-            <div class="logo">PEPTIDE.CLUB</div>
-            <p>Premium peptides, delivered with care.</p>
-            <p style="margin-top: 15px; font-size: 12px; color: #94a3b8;">
-                © ${new Date().getFullYear()} PEPTIDE.CLUB. All rights reserved.
-            </p>
+            <div style="font-weight: 700; margin-bottom: 5px;">PEPTIDE.CLUB</div>
+            <p>© ${new Date().getFullYear()} All rights reserved.</p>
         </div>
     </div>
 </body>
 </html>`;
 };
 
-// Email sending function
 export async function sendPasswordResetEmail(
     to: string,
     data: {
@@ -119,7 +83,7 @@ export async function sendPasswordResetEmail(
     process.nextTick(async () => {
         try {
             const html = getPasswordResetEmail(data);
-            await sendEmail(to, `🔐 Password Reset Request - PEPTIDE.CLUB`, html);
+            await sendEmail(to, `🔐 Password Reset - PEPTIDE.CLUB`, html);
             console.log(`✅ Password reset email sent to ${to}`);
         } catch (error) {
             console.error("❌ Failed to send password reset email:", error);
