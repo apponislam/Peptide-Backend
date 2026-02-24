@@ -212,6 +212,24 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// my reffaarrals
+
+const getMyReferrals = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user?.id || (req.user as any)?.userId;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const result = await authServices.getMyReferrals(userId, page, limit);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Referrals fetched successfully",
+        data: result.referrals,
+        meta: result.meta,
+    });
+});
+
 export const authControllers = {
     register,
     login,
@@ -224,4 +242,5 @@ export const authControllers = {
     forgotPassword,
     verifyOTP,
     resetPassword,
+    getMyReferrals,
 };

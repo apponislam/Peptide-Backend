@@ -401,6 +401,61 @@ const resetPassword = async (token: string, newPassword: string) => {
     return { message: "Password reset successful" };
 };
 
+// my reffarrals
+
+const getMyReferrals = async (userId: string, page: number = 1, limit: number = 10) => {
+    // Calculate skip for pagination
+    const skip = (page - 1) * limit;
+
+    // Get total count for pagination metadata
+    const total = await prisma.user.count({
+        where: {
+            referrerId: userId,
+        },
+    });
+
+    // Get paginated referrals
+    const referrals = await prisma.user.findMany({
+        where: {
+            referrerId: userId,
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            isReferralValid: true,
+            createdAt: true,
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+        skip,
+        take: limit,
+    });
+
+    // Transform data - status based on isReferralValid
+    const formattedReferrals = referrals.map((ref) => ({
+        id: ref.id,
+        name: ref.name,
+        email: ref.email,
+        status: ref.isReferralValid ? "Confirmed" : "Pending",
+        joinedAt: ref.createdAt,
+    }));
+
+    // Calculate total pages
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+        referrals: formattedReferrals,
+        meta: {
+            page,
+            limit,
+            total,
+            totalPages,
+        },
+    };
+};
+
 export const authServices = {
     register,
     login,
@@ -413,4 +468,5 @@ export const authServices = {
     forgotPassword,
     verifyOTP,
     resetPassword,
+    getMyReferrals,
 };
