@@ -304,7 +304,11 @@ export async function seedProducts() {
             return;
         }
 
-        // Create products
+        // If no products exist, truncate and reset ID sequence
+        await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE;`;
+        console.log("🧹 Cleared existing products and reset ID sequence");
+
+        // Create products with all fields
         for (const product of PRODUCTS) {
             await prisma.product.create({
                 data: {
@@ -314,6 +318,7 @@ export async function seedProducts() {
                     references: product.references as any,
                     sizes: product.sizes as any,
                     coa: (product.coa as any) || null,
+                    image: product.image,
                     inStock: true,
                 },
             });
