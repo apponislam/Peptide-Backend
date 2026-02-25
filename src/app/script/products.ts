@@ -10,9 +10,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/", title: "PubMed Research Database" }],
         coa: {
             url: "/uploads/coa/coa-249933-3493.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
         image: "/uploads/product-images/product-937078-8430.webp",
     },
@@ -35,9 +35,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/16839319/", title: "Effect on subjective sexual response in premenopausal women with sexual arousal disorder by bremelanotide" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
         image: "/uploads/product-images/product-994399-38.webp",
     },
@@ -50,9 +50,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/36707132/", title: "The antioxidant glutathione" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
         image: "/uploads/product-images/product-028160-1131.webp",
     },
@@ -65,9 +65,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/40141333/", title: "Overview of Epitalon-Highly Bioactive Pineal Tetrapeptide with Promising Properties" }],
         coa: {
             url: "/uploads/coa/coa-431947-51.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
         image: "/uploads/product-images/product-983010-4836.webp",
     },
@@ -80,9 +80,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/37739806/", title: "A Synthetic ERR Agonist Alleviates Metabolic Syndrome" }],
         coa: {
             url: "/uploads/coa/coa-899237-77.webp",
+            size: 7005604,
             filename: "1547 S 2120 E-5.jpg",
             mimetype: "image/webp",
-            size: 7005604,
         },
         image: "/uploads/product-images/product-899134-3614.webp",
     },
@@ -95,9 +95,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/32580520/", title: "Novel insights into protective properties of ACTH(4-7)PGP semax peptide at transcriptome level following cerebral ischemia-reperfusion" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
         image: "/uploads/product-images/product-065284-6742.webp",
     },
@@ -110,9 +110,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/25738459/", title: "The mitochondrial-derived peptide MOTS-c promotes metabolic homeostasis and reduces obesity and insulin resistance" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
         image: "/uploads/product-images/product-076926-9142.webp",
     },
@@ -125,9 +125,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/23050815/", title: "The regenerative peptide thymosin β4 accelerates the rate of dermal healing in preclinical animal models and in patients" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
         image: "/uploads/product-images/product-094420-1541.webp",
     },
@@ -140,9 +140,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/16293341/", title: "Effect of Melanotan on melanin synthesis in humans with MC1R variant alleles" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
         image: "/uploads/product-images/product-105632-867.webp",
     },
@@ -155,9 +155,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/3169264/", title: "Stimulation of collagen synthesis in fibroblast cultures by tripeptide-copper complex" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
         image: "/uploads/product-images/product-125801-6447.webp",
     },
@@ -170,9 +170,9 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/33353981/", title: "NAD+ metabolism and its roles in cellular processes during ageing" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
         image: "/uploads/product-images/product-143490-3750.webp",
     },
@@ -185,11 +185,11 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/20101189/", title: "Effects of tesamorelin in HIV-infected patients with excess abdominal fat" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
-        image: "/uploads/product-images/product-tesamorelin.webp",
+        image: "/uploads/product-images/product-161095-5395.webp", // Need correct image for Tesamorelin
     },
     {
         id: 4,
@@ -200,11 +200,11 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/9849822/", title: "Ipamorelin, the first selective growth hormone secretagogue" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
-        image: "/uploads/product-images/product-ipamorelin.webp",
+        image: "/uploads/product-images/product-173678-3741.webp",
     },
     {
         id: 3,
@@ -215,11 +215,11 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/18061177/", title: "PepT1-mediated tripeptide KPV uptake reduces intestinal inflammation" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
-        image: "/uploads/product-images/product-kpv.webp",
+        image: "/uploads/product-images/product-186453-9174.webp",
     },
     {
         id: 2,
@@ -230,11 +230,11 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/40131143/", title: "Safety of Intravenous Infusion of BPC157 in Humans" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
-        image: "/uploads/product-images/product-bpc157.webp",
+        image: "/uploads/product-images/product-197735-4391.webp",
     },
     {
         id: 1,
@@ -245,11 +245,11 @@ const PRODUCTS = [
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/37366315/", title: "Triple-Hormone-Receptor Agonist Retatrutide for Obesity" }],
         coa: {
             url: "/uploads/coa/coa-766060-4142.pdf",
+            size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
-            size: 18810,
         },
-        image: "/uploads/product-images/product-retatrutide.webp",
+        image: "/uploads/product-images/product-212288-2117.webp",
     },
 ];
 
