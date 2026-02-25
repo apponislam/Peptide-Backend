@@ -226,9 +226,9 @@ export async function seedProducts() {
                     name: product.name,
                     desc: product.desc,
                     details: product.details,
-                    references: product.references as any, // Cast to any for JSON
-                    sizes: product.sizes as any, // Cast to any for JSON
-                    coa: (product.coa as any) || null, // Cast to any for JSON
+                    references: product.references as any,
+                    sizes: product.sizes as any,
+                    coa: (product.coa as any) || null,
                     inStock: true,
                 },
             });
@@ -250,17 +250,5 @@ export async function seedProducts() {
         throw error;
     }
 }
-
-// Run if called directly
-// if (require.main === module) {
-//     seedProducts()
-//         .catch((error) => {
-//             console.error("❌ Seeding failed:", error);
-//             process.exit(1);
-//         })
-//         .finally(async () => {
-//             await prisma.$disconnect();
-//         });
-// }
 
 export default seedProducts;
