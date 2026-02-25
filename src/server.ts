@@ -13,7 +13,7 @@ async function main() {
         console.log("✅ Database connected successfully");
 
         await createAdmin();
-        // await seedProducts();
+        await seedProducts();
         // await sendEmail();
 
         // Start server
