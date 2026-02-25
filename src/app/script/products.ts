@@ -34,7 +34,7 @@ const PRODUCTS = [
         details: "PT-141 is a synthetic research peptide used in laboratory settings.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/16839319/", title: "Effect on subjective sexual response in premenopausal women with sexual arousal disorder by bremelanotide" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -49,7 +49,7 @@ const PRODUCTS = [
         details: "Glutathione is a synthetic tripeptide compound used in laboratory research.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/36707132/", title: "The antioxidant glutathione" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -94,7 +94,7 @@ const PRODUCTS = [
         details: "Semax is a synthetic heptapeptide (7 amino acids) used in laboratory research settings.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/32580520/", title: "Novel insights into protective properties of ACTH(4-7)PGP semax peptide at transcriptome level following cerebral ischemia-reperfusion" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -109,7 +109,7 @@ const PRODUCTS = [
         details: "MOTS-c is a synthetic research peptide used in laboratory settings.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/25738459/", title: "The mitochondrial-derived peptide MOTS-c promotes metabolic homeostasis and reduces obesity and insulin resistance" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -124,7 +124,7 @@ const PRODUCTS = [
         details: "TB-500 (Thymosin Beta-4 analog) is a synthetic peptide composed of 43 amino acids used in laboratory research settings.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/23050815/", title: "The regenerative peptide thymosin β4 accelerates the rate of dermal healing in preclinical animal models and in patients" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -139,7 +139,7 @@ const PRODUCTS = [
         details: "Melanotan I is a synthetic research peptide analog used in laboratory settings.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/16293341/", title: "Effect of Melanotan on melanin synthesis in humans with MC1R variant alleles" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -154,7 +154,7 @@ const PRODUCTS = [
         details: "GHK-Cu is a synthetic copper tripeptide complex used in laboratory research.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/3169264/", title: "Stimulation of collagen synthesis in fibroblast cultures by tripeptide-copper complex" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -169,7 +169,7 @@ const PRODUCTS = [
         details: "NAD+ (Nicotinamide Adenine Dinucleotide) is a synthetic coenzyme used extensively in laboratory research settings.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/33353981/", title: "NAD+ metabolism and its roles in cellular processes during ageing" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -184,7 +184,7 @@ const PRODUCTS = [
         details: "Tesamorelin is a synthetic research peptide analog used in laboratory settings.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/20101189/", title: "Effects of tesamorelin in HIV-infected patients with excess abdominal fat" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -199,7 +199,7 @@ const PRODUCTS = [
         details: "Ipamorelin is a synthetic pentapeptide used in laboratory research settings.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/9849822/", title: "Ipamorelin, the first selective growth hormone secretagogue" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -214,7 +214,7 @@ const PRODUCTS = [
         details: "KPV is a synthetic tripeptide used in laboratory research applications.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/18061177/", title: "PepT1-mediated tripeptide KPV uptake reduces intestinal inflammation" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -229,7 +229,7 @@ const PRODUCTS = [
         details: "BPC-157 is a synthetic peptide composed of 15 amino acids used in laboratory research settings.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/40131143/", title: "Safety of Intravenous Infusion of BPC157 in Humans" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
@@ -244,7 +244,7 @@ const PRODUCTS = [
         details: "Retatrutide (LY3437943) is a synthetic research peptide used in laboratory settings only.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/37366315/", title: "Triple-Hormone-Receptor Agonist Retatrutide for Obesity" }],
         coa: {
-            url: "/uploads/coa/coa-766060-4142.pdf",
+            url: "/uploads/coa/coa-249933-3493.pdf",
             size: 18810,
             filename: "sample.pdf",
             mimetype: "application/pdf",
