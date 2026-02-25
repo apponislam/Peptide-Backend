@@ -202,7 +202,6 @@ const PRODUCTS = [
         desc: "Sterile bacteriostatic water for research.",
         details: "Bacteriostatic Water (3mL) is sterile water containing 0.9% benzyl alcohol used for reconstituting research peptides.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/", title: "PubMed Research Database" }],
-        // No COA for BAC Water
     },
     {
         name: "BAC Water 10mL",
@@ -210,7 +209,6 @@ const PRODUCTS = [
         desc: "Sterile bacteriostatic water for research.",
         details: "Bacteriostatic Water (10mL) is sterile water containing 0.9% benzyl alcohol used for reconstituting multiple research peptide vials.",
         references: [{ url: "https://pubmed.ncbi.nlm.nih.gov/", title: "PubMed Research Database" }],
-        // No COA for BAC Water
     },
 ];
 
