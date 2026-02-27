@@ -7,7 +7,9 @@ import { sendPasswordResetEmail } from "../../../utils/templates/resetPassTempla
 import crypto from "crypto";
 
 const register = async (name: string, email: string, password: string, referralCode?: string) => {
-    const existing = await prisma.user.findUnique({ where: { email } });
+    const normalizedEmail = email.toLowerCase();
+
+    const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
     if (existing) {
         throw new ApiError(400, "Email already registered");
     }
@@ -28,7 +30,7 @@ const register = async (name: string, email: string, password: string, referralC
     const user = await prisma.user.create({
         data: {
             name,
-            email,
+            email: normalizedEmail,
             password: hashedPassword,
             referralCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
             referrerId,
@@ -64,8 +66,12 @@ const register = async (name: string, email: string, password: string, referralC
 
 const login = async (email: string, password: string) => {
     // console.log(email, password);
+    const normalizedEmail = email.toLowerCase();
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({
+        where: { email: normalizedEmail },
+    });
+
     if (!user) {
         throw new ApiError(401, "Invalid email or password");
     }
@@ -266,7 +272,8 @@ const checkReferralCodeAvailability = async (code: string) => {
 // Admin
 
 const adminLogin = async (email: string, password: string) => {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const normalizedEmail = email.toLowerCase();
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
 
     if (!user) {
         throw new ApiError(401, "Invalid email or password");
@@ -309,7 +316,11 @@ const adminLogin = async (email: string, password: string) => {
 // forgot password
 
 const forgotPassword = async (email: string) => {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const normalizedEmail = email.toLowerCase();
+
+    const user = await prisma.user.findUnique({
+        where: { email: normalizedEmail },
+    });
     if (!user) throw new ApiError(404, "User not found");
 
     // Generate OTP inside function
@@ -322,7 +333,7 @@ const forgotPassword = async (email: string) => {
     const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     await prisma.user.update({
-        where: { email },
+        where: { email: normalizedEmail },
         data: {
             resetPasswordOtp: otp,
             resetPasswordOtpExpiry: expiry,
@@ -333,7 +344,7 @@ const forgotPassword = async (email: string) => {
 
     const directResetLink = `${process.env.FRONTEND_URL}/auth/reset-password?token=${resetToken}`;
 
-    await sendPasswordResetEmail(email, {
+    await sendPasswordResetEmail(normalizedEmail, {
         name: user.name,
         otp,
         resetToken,
