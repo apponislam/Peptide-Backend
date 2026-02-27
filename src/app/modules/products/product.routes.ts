@@ -19,6 +19,7 @@ router.get("/:id", productControllers.getSingleProduct);
 // Protected routes (admin only)
 router.post("/", auth, uploadProductFiles, productControllers.createProduct);
 router.patch("/:id", auth, uploadProductFiles, productControllers.updateProduct);
+router.patch("/:id/remove", auth, productControllers.removeProductItem);
 router.delete("/:id", auth, productControllers.deleteProduct);
 
 // Admin only - manage deleted products

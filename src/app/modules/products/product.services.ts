@@ -170,6 +170,62 @@ const updateProduct = async (id: number, data: UpdateProductData) => {
     return product;
 };
 
+const removeProductItem = async (productId: number, type: "image" | "coa" | "size", mg?: number) => {
+    // Check if product exists
+    const product = await prisma.product.findFirst({
+        where: {
+            id: productId,
+            isDeleted: false,
+        },
+    });
+
+    if (!product) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+    }
+
+    let updateData: any = {};
+
+    switch (type) {
+        case "image":
+            updateData.image = null;
+            break;
+
+        case "coa":
+            updateData.coa = null;
+            break;
+
+        case "size":
+            if (!mg) {
+                throw new ApiError(httpStatus.BAD_REQUEST, "mg is required for removing a size");
+            }
+
+            // Get current sizes
+            const currentSizes = (product.sizes as any[]) || [];
+
+            // Check if size with this mg exists
+            const sizeExists = currentSizes.some((size) => size.mg === mg);
+            if (!sizeExists) {
+                throw new ApiError(httpStatus.NOT_FOUND, `Size with ${mg}mg not found`);
+            }
+
+            // Filter out the size with matching mg
+            const updatedSizes = currentSizes.filter((size) => size.mg !== mg);
+            updateData.sizes = updatedSizes;
+            break;
+
+        default:
+            throw new ApiError(httpStatus.BAD_REQUEST, "Invalid removal type. Must be 'image', 'coa', or 'size'");
+    }
+
+    // Update the product
+    const updatedProduct = await prisma.product.update({
+        where: { id: productId },
+        data: updateData,
+    });
+
+    return updatedProduct;
+};
+
 // Soft delete product
 const deleteProduct = async (id: number) => {
     const existingProduct = await prisma.product.findFirst({
@@ -338,6 +394,7 @@ export const productServices = {
     getAllProducts,
     getSingleProduct,
     updateProduct,
+    removeProductItem,
     deleteProduct,
     getDeletedProducts,
     restoreProduct,
