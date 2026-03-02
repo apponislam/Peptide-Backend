@@ -126,6 +126,22 @@ const updateProduct = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const removeProductItem = catchAsync(async (req: Request, res: Response) => {
+    const productId = parseInt(req.params.id as string);
+    const { type, mg } = req.body; // type: 'image' | 'coa' | 'size'
+
+    const result = await productServices.removeProductItem(productId, type, mg);
+
+    const message = type === "size" ? `Product size (${mg}mg) removed successfully` : `Product ${type} removed successfully`;
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message,
+        data: result,
+    });
+});
+
 // Delete product
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {
     const id = parseInt(req.params.id as string);
@@ -237,6 +253,7 @@ export const productControllers = {
     getAllProducts,
     getSingleProduct,
     updateProduct,
+    removeProductItem,
     deleteProduct,
     getDeletedProducts,
     restoreProduct,
