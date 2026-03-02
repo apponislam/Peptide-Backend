@@ -90,17 +90,6 @@ export class StripeService {
             }
 
             // Reserve store credit immediately
-            if (storeCreditUsed > 0) {
-                await prisma.user.update({
-                    where: { id: userId },
-                    data: {
-                        storeCredit: {
-                            decrement: parseFloat(storeCreditUsed.toFixed(2)),
-                        },
-                    },
-                });
-            }
-
             // IMPORTANT: Extract orderPreviewId from metadata before spreading
             const { orderPreviewId, ...otherMetadata } = metadata;
 
@@ -158,20 +147,6 @@ export class StripeService {
             };
         } catch (error: any) {
             // Restore store credit if failed
-            if (storeCreditUsed > 0 && userId) {
-                try {
-                    await prisma.user.update({
-                        where: { id: userId },
-                        data: {
-                            storeCredit: {
-                                increment: storeCreditUsed,
-                            },
-                        },
-                    });
-                } catch (restoreError) {
-                    console.error("Failed to restore store credit:", restoreError);
-                }
-            }
             throw new Error(`Failed to create checkout session: ${error.message}`);
         }
     }
@@ -251,6 +226,18 @@ export class StripeService {
                     updatedAt: new Date(),
                 },
             });
+
+            if (storeCreditUsed > 0) {
+                await prisma.user.update({
+                    where: { id: userId },
+                    data: {
+                        storeCredit: {
+                            decrement: storeCreditUsed,
+                        },
+                    },
+                });
+                console.log(`✅ Store credit $${storeCreditUsed} deducted after successful payment`);
+            }
 
             // 3. CREATE ORDER USING FULL ITEMS FROM DATABASE
             const order = await this.createOrderFromSession(session, userId, null, shippingCost, storeCreditUsed, fullItems);
@@ -349,17 +336,6 @@ export class StripeService {
         } catch (error) {
             console.error("Error handling checkout session completed:", error);
             // Restore store credit if order creation fails
-            const storeCreditUsed = parseFloat(session.metadata?.storeCreditUsed || "0");
-            if (storeCreditUsed > 0 && userId) {
-                await prisma.user.update({
-                    where: { id: userId },
-                    data: {
-                        storeCredit: {
-                            increment: storeCreditUsed,
-                        },
-                    },
-                });
-            }
             throw error;
         }
     }
@@ -597,20 +573,8 @@ export class StripeService {
     // Restore store credit on cancel/expire
     private async handleCheckoutSessionExpired(session: EnhancedStripeSession) {
         try {
-            const userId = session.metadata?.userId;
-            const storeCreditUsed = parseFloat(session.metadata?.storeCreditUsed || "0");
-
-            // Restore store credit if used
-            if (storeCreditUsed > 0 && userId) {
-                await prisma.user.update({
-                    where: { id: userId },
-                    data: {
-                        storeCredit: {
-                            increment: storeCreditUsed,
-                        },
-                    },
-                });
-            }
+            // const userId = session.metadata?.userId;
+            // const storeCreditUsed = parseFloat(session.metadata?.storeCreditUsed || "0");
 
             // Check if session exists before updating
             const existingSession = await prisma.checkoutSession.findUnique({
@@ -637,20 +601,20 @@ export class StripeService {
     // Restore store credit on payment failure
     private async handleAsyncPaymentFailed(session: EnhancedStripeSession) {
         try {
-            const userId = session.metadata?.userId;
-            const storeCreditUsed = parseFloat(session.metadata?.storeCreditUsed || "0");
+            // const userId = session.metadata?.userId;
+            // const storeCreditUsed = parseFloat(session.metadata?.storeCreditUsed || "0");
 
             // Restore store credit
-            if (storeCreditUsed > 0 && userId) {
-                await prisma.user.update({
-                    where: { id: userId },
-                    data: {
-                        storeCredit: {
-                            increment: storeCreditUsed,
-                        },
-                    },
-                });
-            }
+            // if (storeCreditUsed > 0 && userId) {
+            //     await prisma.user.update({
+            //         where: { id: userId },
+            //         data: {
+            //             storeCredit: {
+            //                 increment: storeCreditUsed,
+            //             },
+            //         },
+            //     });
+            // }
 
             // Check if session exists
             const existingSession = await prisma.checkoutSession.findUnique({
