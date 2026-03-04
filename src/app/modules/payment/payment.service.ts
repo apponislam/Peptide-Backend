@@ -466,19 +466,19 @@ export class StripeService {
 
     private async processCommissions(order: any) {
         try {
-            console.log("=== PROCESSING COMMISSIONS START ===");
-            console.log("Order ID:", order.id);
-            console.log("Order Subtotal:", order.subtotal);
-            console.log("Store Credit Used:", order.creditApplied);
+            // console.log("=== PROCESSING COMMISSIONS START ===");
+            // console.log("Order ID:", order.id);
+            // console.log("Order Subtotal:", order.subtotal);
+            // console.log("Store Credit Used:", order.creditApplied);
 
             const user = await prisma.user.findUnique({
                 where: { id: order.userId },
                 include: { referrer: true },
             });
 
-            console.log("User found:", user?.id);
-            console.log("User isReferralValid BEFORE:", user?.isReferralValid);
-            console.log("User referrer:", user?.referrer?.id);
+            // console.log("User found:", user?.id);
+            // console.log("User isReferralValid BEFORE:", user?.isReferralValid);
+            // console.log("User referrer:", user?.referrer?.id);
 
             if (user?.referrer) {
                 const isFirstPurchase = !user.isReferralValid;
