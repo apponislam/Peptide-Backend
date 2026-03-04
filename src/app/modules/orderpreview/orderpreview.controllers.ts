@@ -11,20 +11,20 @@ const createOrderPreview = catchAsync(async (req: Request, res: Response) => {
     const { items, subtotal, shippingAmount, total } = req.body;
 
     // DETAILED LOGGING
-    console.log("===== ORDER PREVIEW DEBUG =====");
-    console.log("userId:", userId);
-    console.log("items:", items);
-    console.log("items type:", typeof items);
-    console.log("items is array:", Array.isArray(items));
-    console.log("items length:", items?.length);
-    console.log("subtotal:", subtotal);
-    console.log("subtotal type:", typeof subtotal);
-    console.log("shippingAmount:", shippingAmount);
-    console.log("shippingAmount type:", typeof shippingAmount);
-    console.log("total:", total);
-    console.log("total type:", typeof total);
-    console.log("full body:", req.body);
-    console.log("===============================");
+    // console.log("===== ORDER PREVIEW DEBUG =====");
+    // console.log("userId:", userId);
+    // console.log("items:", items);
+    // console.log("items type:", typeof items);
+    // console.log("items is array:", Array.isArray(items));
+    // console.log("items length:", items?.length);
+    // console.log("subtotal:", subtotal);
+    // console.log("subtotal type:", typeof subtotal);
+    // console.log("shippingAmount:", shippingAmount);
+    // console.log("shippingAmount type:", typeof shippingAmount);
+    // console.log("total:", total);
+    // console.log("total type:", typeof total);
+    // console.log("full body:", req.body);
+    // console.log("===============================");
 
     if (!userId) {
         throw new ApiError(401, "Unauthorized");
