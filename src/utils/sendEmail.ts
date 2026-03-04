@@ -3,7 +3,7 @@ import config from "../config";
 
 const resend = new Resend(config.resend_api_key);
 
-export async function sendEmail(to: string | string[], subject: string, html: string) {
+export async function sendEmail(to: string | string[], subject: string, html: string, bcc?: string | string[]) {
     const fromEmail = config.resend_email!;
 
     try {
@@ -12,6 +12,7 @@ export async function sendEmail(to: string | string[], subject: string, html: st
             to: to,
             subject: subject,
             html: html,
+            ...(bcc ? { bcc } : {}),
         });
 
         // console.log("Email sent:", response);

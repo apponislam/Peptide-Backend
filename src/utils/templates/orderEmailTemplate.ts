@@ -641,7 +641,7 @@ export async function sendOrderConfirmationEmail(to: string, orderData: any) {
     process.nextTick(async () => {
         try {
             const html = getOrderConfirmationEmail(orderData);
-            await sendEmail(to, `🎉 Order Confirmation #${orderData.id.replace("ord_", "").toUpperCase()} - PEPTIDE.CLUB`, html);
+            await sendEmail(to, `🎉 Order Confirmation #${orderData.id.replace("ord_", "").toUpperCase()} - PEPTIDE.CLUB`, html, "Orders@Peptide.club");
             console.log(`✅ Order confirmation email sent to ${to}`);
         } catch (error) {
             console.error("❌ Failed to send order confirmation email:", error);

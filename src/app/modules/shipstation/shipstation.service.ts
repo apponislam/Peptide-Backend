@@ -73,6 +73,8 @@ const createOrder = async (orderId: string) => {
             throw new ApiError(400, `Order ${orderId} is missing shipping address fields`);
         }
 
+        const totalWeight = (order.items.length || 1) * 0.03125;
+
         // Prepare items for ShipStation
         const shipStationItems = order.items.map((item, index) => ({
             lineItemKey: item.id,
@@ -81,7 +83,7 @@ const createOrder = async (orderId: string) => {
             quantity: item.quantity,
             unitPrice: item.unitPrice,
             weight: {
-                value: 1, // Default weight
+                value: 0.03125,
                 units: "pounds" as const,
             },
         }));
@@ -123,7 +125,7 @@ const createOrder = async (orderId: string) => {
 
             // Required weight field
             weight: {
-                value: order.items.length || 1,
+                value: totalWeight,
                 units: "pounds" as const,
             },
         };
