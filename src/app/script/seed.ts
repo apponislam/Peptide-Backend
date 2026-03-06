@@ -6,8 +6,8 @@ export async function createAdmin() {
     try {
         const adminEmail = config.admin_email || "master@peptide.club";
 
-        const existingAdmin = await prisma.user.findUnique({
-            where: { email: adminEmail },
+        const existingAdmin = await prisma.user.findFirst({
+            where: { role: "ADMIN" },
         });
 
         if (existingAdmin) {
