@@ -4,7 +4,7 @@ import { prisma } from "../../lib/prisma";
 
 export async function createAdmin() {
     try {
-        const adminEmail = config.admin_email || "master@peptide.club";
+        const adminEmail = config.admin_email!;
 
         const existingAdmin = await prisma.user.findFirst({
             where: { role: "ADMIN" },
@@ -26,7 +26,7 @@ export async function createAdmin() {
                 role: "ADMIN",
                 tier: "Founder",
                 storeCredit: 0,
-                referralCount: 99999999,
+                referralCount: 0,
             },
         });
 
